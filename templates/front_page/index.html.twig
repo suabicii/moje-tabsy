@@ -3,14 +3,152 @@
 {% block title %}Strona startowa – Moje-Tabsy.pl{% endblock %}
 
 {% block body %}
+    <body class="position-relative">
+    <header>
+        <nav id="frontpage-navbar" class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand fst-italic" href="#">Moje-Tabsy.pl <i class="fa-solid fa-pills"></i></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/opt/lampp/htdocs/symf-app/src/Controller/FrontPageController.php'|file_link(0) }}">src/Controller/FrontPageController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/opt/lampp/htdocs/symf-app/templates/front_page/index.html.twig'|file_link(0) }}">templates/front_page/index.html.twig</a></code></li>
-    </ul>
-</div>
+                <div class="collapse navbar-collapse text-center" id="navbarColor01">
+                    <ul class="navbar-nav m-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Jak to działa?</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">O autorze</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://dev.michaelslabikovsky.pl/portfolio" class="nav-link" target="_blank">Pozostałe
+                                projekty
+                                autora</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-column flex-lg-row">
+                        <a href="register.html" class="btn btn-outline-light">Załóż konto</a>
+                        <a href="login.html" class="btn btn-info fw-bold">Zaloguj się</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main data-bs-spy="scroll" data-bs-target="#frontpage-navbar">
+        <section class="welcome position-relative">
+            <div
+                    class="welcome__overlay position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-75  p-3 text-center">
+                <h1 class="text-uppercase text-light">Witaj! 🤩</h1>
+                <p class="text-info lead fs-3">Czy zdarza Ci się zapomnieć przyjąć leków bądź suplementów, które musisz
+                    brać
+                    regularnie? 🙁</p>
+                <p class="text-secondary fs-5">Albo zbyt późno przypomnieć sobie o kończących się zapasach? 😨</p>
+                <p class="text-danger fs-5">A może nie jesteś pewny(-a) czy dany lek/suplement już zażyłeś(-aś) i
+                    obawiasz, że przyjmiesz zbyt dużą dawkę? 😟</p>
+            </div>
+        </section>
+        <section class="shine mt-2">
+            <div class="container text-center">
+                <h2>Jeśli odpowiedziałeś(-aś) <span class="bg-dark text-bg-dark px-2">TAK</span> na
+                    co
+                    najmniej
+                    jedno z
+                    pytań...</h2>
+                <div class="row py-3">
+                    <div class="shine__its-for-u col-lg-6">
+                        <p class="text-info">Ta strona jest właśnie dla <span
+                                    class="bg-warning text-bg-dark">CIEBIE!</span>
+                            😃
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="{{ asset('build/img/success.jpg') }}" class="img-fluid rounded thumb-up" alt="thumb-up">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="features" class="features bg-secondary py-3">
+            <div class="container">
+                <h2 class="text-center text-light">Oto jak Ci pomogę</h2>
+                <div class="row row-cols-1 row-cols-md-2 g-4 pt-2">
+                    <div class="col">
+                        <div class="card features__card-row-1 py-3">
+                            <img src="{{ asset('build/img/arrow-right-to-bracket-solid.svg')  }}"
+                                 class="card-img-top features__icon" alt="fa-arrow-right-to-bracket">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Utwórz konto lub zaloguj się</h5>
+                                <p class="card-text lead text-success">Utworzenie konta jest bardzo proste! <i
+                                            class="fa-solid fa-thumbs-up"></i> Wystarczy, że podasz swoje imię, adres
+                                    e-mail
+                                    i hasło, a w ciągu minuty Twoje konto będzie gotowe do użycia <i
+                                            class="fa-solid fa-face-smile"></i>.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card features__card-row-1 py-3">
+                            <img src="{{ asset('build/img/pills-solid.svg') }}" class="card-img-top features__icon"
+                                 alt="pills-solid">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Dodaj lek lub suplement</h5>
+                                <p class="card-text lead text-success">Podaj nazwę leku/suplementu, jego ilość,
+                                    dawkowanie i odstępy czasowe, w których masz przyjmować zalecaną dawkę. Od teraz
+                                    program będzie za Ciebie monitorował czy
+                                    dany lek/suplement zażywasz zgodnie z zaleceniami <i class="fa-solid fa-eye"></i>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card features__card-row-2 py-3">
+                            <img src="{{ asset('build/img/message-solid.svg') }}" class="card-img-top features__icon"
+                                 alt="message-solid">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Czekaj na wiadomość SMS lub na Messengerze od
+                                    chatbota</h5>
+                                <p class="card-text text-success lead">Specjalny chatbot <i
+                                            class="fa-solid fa-robot"></i> będzie Ci na bieżąco przypominał o dawce leku
+                                    lub
+                                    suplementu oraz poinformuje Cię o stanie zapasów <i class="fa-solid fa-box"></i>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card features__card-row-2 py-3">
+                            <img src="{{ asset('build/img/bell-solid.svg') }}" class="card-img-top features__icon"
+                                 alt="bell-solid">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Kończą Ci się zapasy?</h5>
+                                <p class="card-text text-success lead">Chatbot również Ci o tym przypomni, dzięki czemu
+                                    tym razem uzupełnisz je na czas <i class="fa-regular fa-clock"></i>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="call-to-action py-3 position-relative">
+            <div class="container text-center position-absolute top-50 start-50 translate-middle">
+                <h2 class="text-white">Załóż konto już teraz!</h2>
+                <a href="register.html" class="btn btn-info">Zarejestruj się <i class="fa-solid fa-user-plus"></i></a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container-fluid bg-primary pt-2 mt-5 position-absolute bottom-0">
+            <div class="row">
+                <div class="col">
+                    <h6 class="text-light text-center py-2">Copyright © 2022 <a href="https://dev.michaelslabikovsky.pl"
+                                                                                class="text-light" target="_blank">Rabbit
+                            IT Michael Slabikovsky</a></h6>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+    </body>
 {% endblock %}

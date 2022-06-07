@@ -1,0 +1,120 @@
+.welcome {
+    background: url('../../../img/background/pills-welcome.jpg') center fixed;
+    height: 36rem;
+
+    h1 {
+        font-size: $font-size-xl;
+    }
+}
+
+.welcome__overlay {
+    border-radius: 5px;
+    min-width: 300px;
+}
+
+.shine {
+    min-height: 25rem;
+
+    p {
+        font-size: $font-size-xl;
+    }
+}
+
+.features {
+    min-height: 90rem;
+}
+
+.features__icon {
+    height: 4rem;
+}
+
+.call-to-action {
+    background: url('../../../img/background/pills-call-to-action.jpg') center fixed;
+    min-height: 36rem;
+
+    h2 {
+        font-size: $font-size-xl;
+        text-shadow: 2px 0px 10px rgb(0, 0, 0);
+    }
+}
+
+/** SIGN UP AND SIGN IN PAGES */
+.sign-in,
+.sign-up {
+    background: url('../../../img/background/signin-bg.jpg') center;
+    height: 100vh;
+}
+
+.sign-in__overlay,
+.sign-up__overlay {
+    width: 20rem;
+}
+
+/*
+To taka ściągawka – usuń to później :)
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px)
+*/
+
+@media (min-width: 768px) {
+    .welcome {
+        h1 {
+            font-size: $font-size-xxl;
+        }
+    }
+
+    .shine {
+        min-height: 20rem;
+    }
+
+    .features {
+        min-height: 32rem;
+    }
+
+    .features__card-row-1 {
+        height: 400px;
+    }
+
+    .features__card-row-2 {
+        height: 350px;
+    }
+
+    .call-to-action {
+
+        h2 {
+            font-size: $font-size-xxl;
+        }
+    }
+
+    /** SIGN UP AND SIGN IN PAGES */
+    .sign-in__overlay,
+    .sign-up__overlay {
+        width: 32rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .shine__its-for-u {
+        position: relative;
+
+        p {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .features__card-row-1 {
+        height: 300px;
+    }
+
+    .features__card-row-2 {
+        height: 250px;
+    }
+}

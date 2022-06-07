@@ -1,0 +1,18 @@
+.dashboard {
+  background: #f5f7fb;
+}
+
+.dashboard__search {
+  min-width: 225px;
+}
+
+.card {
+  min-height: 200px;
+}
+
+@media (min-width: 992px) {
+  .dashboard__main {
+    margin-top: 58px;
+    padding-left: 240px;
+  }
+}

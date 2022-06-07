@@ -10,3 +10,8 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+import './styles/scss/style.scss';
+
+const iconSupportComment = document.createComment('Pills icon (https://icons8.com/icon/TVnUXgvxP4uk/pills) by Icons8 (https://icons8.com)');
+document.querySelector('html').append(iconSupportComment);
