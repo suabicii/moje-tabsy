@@ -28,7 +28,7 @@
                         </li>
                     </ul>
                     <div class="d-flex flex-column flex-lg-row">
-                        <a href="register.html" class="btn btn-outline-light">Załóż konto</a>
+                        <a href="{{ path('register_page') }}" class="btn btn-outline-light">Załóż konto</a>
                         <a href="{{ path('login_page') }}" class="btn btn-info fw-bold">Zaloguj się</a>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
         <section class="call-to-action py-3 position-relative">
             <div class="container text-center position-absolute top-50 start-50 translate-middle">
                 <h2 class="text-white">Załóż konto już teraz!</h2>
-                <a href="register.html" class="btn btn-info">Zarejestruj się <i class="fa-solid fa-user-plus"></i></a>
+                <a href="{{ path('register_page') }}" class="btn btn-info">Zarejestruj się <i class="fa-solid fa-user-plus"></i></a>
             </div>
         </section>
     </main>

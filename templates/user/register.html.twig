@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <body>
+    <main>
+        <section class="sign-up position-relative">
+            <div class="sign-up__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
+                <h1>Rejestracja</h1>
+                <a href="{{ path('front_page') }}">Powrót do strony głównej</a>
+                <form class="mt-2">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingName" placeholder="Imię">
+                        <label for="floatingName">Imię</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+                        <label for="floatingEmail">Email</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło">
+                        <label for="floatingPassword">Hasło</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPasswordRepeat" placeholder="Powtórz hasło">
+                        <label for="floatingPasswordRepeat">Powtórz hasło</label>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary mt-2">Zarejestruj się <i class="fa-solid fa-user-plus"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="grid">
+                    <a href="{{ path('login_page') }}" class="mt-2">Masz już konto? Zaloguj się!</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    </body>
+{% endblock %}
