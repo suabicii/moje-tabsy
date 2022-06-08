@@ -15,19 +15,33 @@
                         <label for="floatingName">Imię</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com" required>
+                        <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com"
+                               required>
                         <label for="floatingEmail">Email</label>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group input-group--prefix-number">
+                            <span class="input-group-text">+</span>
+                            <select aria-label="Prefix" class="form-select">
+                                <option value="48">48 🇵🇱</option>
+                                <option value="371">371 🇱🇻</option>
+                            </select>
+                        </div>
+                        <input type="tel" aria-label="Numer telefonu" class="form-control" id="floatingTel"
+                               placeholder="Numer telefonu (opcjonalnie)">
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło" required>
                         <label for="floatingPassword">Hasło</label>
                     </div>
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPasswordRepeat" placeholder="Powtórz hasło" required>
+                        <input type="password" class="form-control" id="floatingPasswordRepeat"
+                               placeholder="Powtórz hasło" required>
                         <label for="floatingPasswordRepeat">Powtórz hasło</label>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary mt-2">Zarejestruj się <i class="fa-solid fa-user-plus"></i>
+                        <button type="submit" class="btn btn-primary mt-2">Zarejestruj się <i
+                                    class="fa-solid fa-user-plus"></i>
                         </button>
                     </div>
                 </form>
