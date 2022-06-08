@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zaloguj się – Moje-Tabsy.pl{% endblock %}
+
+{% block body %}
+    <body>
+    <main>
+        <section class="sign-in position-relative">
+            <div class="sign-in__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
+                <h1>Logowanie</h1>
+                <a href="{{ path('front_page') }}">Powrót do strony głównej</a>
+                <form action="dashboard.html" class="mt-2">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <label for="floatingInput">Email</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło">
+                        <label for="floatingPassword">Hasło</label>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary mt-2">Zaloguj się <i
+                                    class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                    </div>
+                </form>
+                <div class="grid">
+                    <a href="#" class="mt-2">Nie pamiętam hasła</a>
+                    <a href="register.html" class="mt-2">Nie masz jeszcze konta? Zarejestruj się!</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+    </body>
+{% endblock %}

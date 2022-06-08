@@ -1,0 +1,13 @@
+/*!
+ * Pico.css v1.5.2 (https://picocss.com)
+ * Copyright 2019-2022 - Licensed under MIT
+ */
+
+// Config
+@import "variables";
+
+// Layout
+@import "layout/grid"; // .grid
+
+// Utilities
+@import "utilities/loading"; // aria-busy=true

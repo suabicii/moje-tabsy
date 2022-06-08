@@ -6,13 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FrontPageController extends AbstractController
+class FrontController extends AbstractController
 {
-    #[Route('/', name: 'app_front_page')]
+    #[Route('/', name: 'front_page')]
     public function index(): Response
     {
-        return $this->render('front_page/index.html.twig', [
-            'controller_name' => 'FrontPageController',
-        ]);
+        return $this->render('front_page/index.html.twig');
     }
 }
