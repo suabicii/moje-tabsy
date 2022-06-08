@@ -11,19 +11,19 @@
                 <a href="{{ path('front_page') }}">Powrót do strony głównej</a>
                 <form class="mt-2">
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingName" placeholder="Imię">
+                        <input type="email" class="form-control" id="floatingName" placeholder="Imię" required>
                         <label for="floatingName">Imię</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+                        <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com" required>
                         <label for="floatingEmail">Email</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło" required>
                         <label for="floatingPassword">Hasło</label>
                     </div>
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPasswordRepeat" placeholder="Powtórz hasło">
+                        <input type="password" class="form-control" id="floatingPasswordRepeat" placeholder="Powtórz hasło" required>
                         <label for="floatingPasswordRepeat">Powtórz hasło</label>
                     </div>
                     <div class="d-grid">
@@ -37,5 +37,8 @@
             </div>
         </section>
     </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
     </body>
 {% endblock %}
