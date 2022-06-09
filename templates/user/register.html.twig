@@ -8,43 +8,31 @@
         <section class="sign-up position-relative">
             <div class="sign-up__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
                 <h1>Rejestracja</h1>
-                <a href="{{ path('front_page') }}">Powrót do strony głównej</a>
-                <form class="mt-2">
-                    <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingName" placeholder="Imię" required>
-                        <label for="floatingName">Imię</label>
+                <a href="{{ path('front_page') }}" class="mb-2">Powrót do strony głównej</a>
+                {{ form_start(form, {'attr': {'class': 'mt-2'}}) }}
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Imię', 'required': 'true'}}) }}
+                    <label for="register_form_name">Imię</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email', 'required': 'true'}}) }}
+                    <label for="register_form_email">Email</label>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group input-group--prefix-number">
+                        <span class="input-group-text">+</span>
+                        {{ form_widget(form.tel_prefix, {'attr': {'class': 'form-select', 'aria-label': 'Prefix'}}) }}
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com"
-                               required>
-                        <label for="floatingEmail">Email</label>
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group input-group--prefix-number">
-                            <span class="input-group-text">+</span>
-                            <select aria-label="Prefix" class="form-select">
-                                <option value="48">48 🇵🇱</option>
-                                <option value="371">371 🇱🇻</option>
-                            </select>
-                        </div>
-                        <input type="tel" aria-label="Numer telefonu" class="form-control" id="floatingTel"
-                               placeholder="Numer telefonu (opcjonalnie)">
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło" required>
-                        <label for="floatingPassword">Hasło</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPasswordRepeat"
-                               placeholder="Powtórz hasło" required>
-                        <label for="floatingPasswordRepeat">Powtórz hasło</label>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary mt-2">Zarejestruj się <i
-                                    class="fa-solid fa-user-plus"></i>
-                        </button>
-                    </div>
-                </form>
+                    {{ form_widget(form.tel, {'attr': {'class': 'form-control rounded-start', 'placeholder': 'Nr tel (opcjonalnie)'}}) }}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Hasło', 'required': 'true'}}) }}
+                    <label for="register_form_password">Hasło</label>
+                </div>
+                <div class="d-grid">
+                    {{ form_widget(form.save) }}
+                </div>
+                {{ form_end(form) }}
                 <div class="grid">
                     <a href="{{ path('login_page') }}" class="mt-2">Masz już konto? Zaloguj się!</a>
                 </div>
