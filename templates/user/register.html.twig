@@ -9,7 +9,7 @@
             <div class="sign-up__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
                 <h1>Rejestracja</h1>
                 <a href="{{ path('front_page') }}" class="mb-2">Powrót do strony głównej</a>
-                {{ form_start(form, {'attr': {'class': 'mt-2'}}) }}
+                {{ form_start(form, {'attr': {'class': 'mt-2', 'novalidate': 'novalidate'}}) }}
                 <div class="form-floating mb-3">
                     {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Imię'}}) }}
                     <label for="register_form_name">Imię</label>
@@ -29,6 +29,18 @@
                     {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Hasło'}}) }}
                     <label for="register_form_password">Hasło</label>
                 </div>
+                {% if not form.vars.valid %}
+                <div class="alert alert-danger" role="alert">
+                    <i class="fa-solid fa-circle-exclamation" aria-label="Danger:"></i>
+                    <div>
+                       <ul class="list-unstyled">
+                           {% for error in form.vars.errors.form.getErrors(true) %}
+                               <li>{{ error.message }}</li>
+                           {% endfor %}
+                       </ul>
+                    </div>
+                </div>
+                {% endif %}
                 <div class="d-grid">
                     {{ form_widget(form.save) }}
                 </div>

@@ -16,11 +16,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    #[Assert\NotBlank(message: "Please enter a name")]
+    #[Assert\NotBlank(message: "Podaj imię.")]
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[Assert\NotBlank(message: "Please enter a valid email address.")]
+    #[Assert\NotBlank(message: "Podaj prawidłowy adres e-mail.")]
     #[Assert\Email]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $email;
@@ -28,7 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    #[Assert\NotBlank(message: "Please enter a valid password.")]
+    #[Assert\NotBlank(message: "Podaj hasło.")]
     #[ORM\Column(type: 'string')]
     private string $password;
 
