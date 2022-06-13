@@ -18,10 +18,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank(message: "Podaj imię.")]
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
-    #[Assert\NotBlank(message: "Podaj prawidłowy adres e-mail.")]
-    #[Assert\Email]
+    #[Assert\NotBlank(message: "Podaj adres e-mail.")]
+    #[Assert\Email(message: "Podaj prawidłowy adres e-mail.")]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $email;
 
@@ -29,6 +29,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[Assert\NotBlank(message: "Podaj hasło.")]
+    #[Assert\Length(min: 8, minMessage: 'Hasło musi zawierać co najmniej 8 znaków.')]
+    #[Assert\Regex('/[a-z]+/', message: 'Hasło musi zawierać co najmniej jedną małą literę')]
+    #[Assert\Regex('/[A-Z]+/', message: 'Hasło musi zawierać co najmniej jedną wielką literę')]
+    #[Assert\Regex('/[0-9]+/', message: 'Hasło musi zawierać co najmniej jedną cyfrę')]
+    #[Assert\Regex('/[!@#$%^&*]+/', message: 'Hasło musi zawierać co najmniej jeden znak specjalny')]
     #[ORM\Column(type: 'string')]
     private string $password;
 
