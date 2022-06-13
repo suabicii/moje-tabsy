@@ -26,20 +26,24 @@
                     {{ form_widget(form.tel, {'attr': {'class': 'form-control rounded-start', 'placeholder': 'Nr tel (opcjonalnie)'}, 'required': false}) }}
                 </div>
                 <div class="form-floating mb-3">
-                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Hasło'}}) }}
-                    <label for="register_form_password">Hasło</label>
+                    {{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'placeholder': 'Hasło'}}) }}
+                    <label for="register_form_password_first">Hasło</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.password.second, {'attr': {'class': 'form-control', 'placeholder': 'Potwierdź hasło'}}) }}
+                    <label for="register_form_password_second">Potwierdź hasło</label>
                 </div>
                 {% if not form.vars.valid %}
-                <div class="alert alert-danger" role="alert">
-                    <i class="fa-solid fa-circle-exclamation" aria-label="Danger:"></i>
-                    <div>
-                       <ul class="list-unstyled">
-                           {% for error in form.vars.errors.form.getErrors(true) %}
-                               <li>{{ error.message }}</li>
-                           {% endfor %}
-                       </ul>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fa-solid fa-circle-exclamation" aria-label="Błędy:"></i>
+                        <div>
+                            <ul class="list-unstyled">
+                                {% for error in form.vars.errors.form.getErrors(true) %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
-                </div>
                 {% endif %}
                 <div class="d-grid">
                     {{ form_widget(form.save) }}
