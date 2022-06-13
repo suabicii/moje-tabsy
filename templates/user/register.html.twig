@@ -35,8 +35,8 @@
                 </div>
                 {% if not form.vars.valid %}
                     <div class="alert alert-danger" role="alert">
-                        <i class="fa-solid fa-circle-exclamation" aria-label="Błędy:"></i>
                         <div>
+                            <p class="lead text-white"><i class="fa-solid fa-circle-exclamation"></i> Błędy:</p>
                             <ul class="list-unstyled">
                                 {% for error in form.vars.errors.form.getErrors(true) %}
                                     <li>{{ error.message }}</li>
