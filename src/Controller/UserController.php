@@ -47,6 +47,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(['ROLE_USER']);
+            $user->setActivated(false);
             $password = $form->get('password')->getData();
             $tel = $form->get('tel')->getData();
             if ($tel === null) {
@@ -56,6 +57,7 @@ class UserController extends AbstractController
             $user->setPassword($hashed_password);
             $entityManager->persist($user);
             $entityManager->flush();
+            exit('The user was added to database');
         }
     }
 }

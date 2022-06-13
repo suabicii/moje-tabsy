@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 9, nullable: true)]
     private ?string $tel;
 
+    #[ORM\Column(type: 'boolean')]
+    private $activated;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -146,6 +149,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function isActivated(): ?bool
+    {
+        return $this->activated;
+    }
+
+    public function setActivated(bool $activated): self
+    {
+        $this->activated = $activated;
 
         return $this;
     }
