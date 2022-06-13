@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegisterFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -26,9 +27,23 @@ class UserController extends AbstractController
         $form = $this->createForm(RegisterFormType::class, $user);
         $form->handleRequest($request);
 
+        $this->createUser($doctrine, $form, $user, $passwordHasher);
+
+        return $this->render('user/register.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param ManagerRegistry $doctrine
+     * @param FormInterface $form
+     * @param User $user
+     * @param UserPasswordHasherInterface $passwordHasher
+     * @return void
+     */
+    private function createUser(ManagerRegistry $doctrine, FormInterface $form, User $user, UserPasswordHasherInterface $passwordHasher): void
+    {
         $entityManager = $doctrine->getManager();
-        $users = $entityManager->getRepository(User::class)->findAll();
-        dump($users);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setRoles(['ROLE_USER']);
@@ -42,9 +57,5 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
         }
-
-        return $this->render('user/register.html.twig', [
-            'form' => $form->createView()
-        ]);
     }
 }
