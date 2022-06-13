@@ -9,7 +9,7 @@
             <div class="sign-up__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
                 <h1>Rejestracja</h1>
                 <a href="{{ path('front_page') }}" class="mb-2">Powrót do strony głównej</a>
-                {{ form_start(form, {'attr': {'class': 'mt-2', 'novalidate': 'novalidate'}}) }}
+                {{ form_start(form, {'attr': {'class': 'mt-2'}}) }}
                 <div class="form-floating mb-3">
                     {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Imię'}}) }}
                     <label for="register_form_name">Imię</label>
