@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <body>
+    <main>
+        <section class="user-info position-relative">
+            <div class="user-info__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
+                <h1 class="display-3">Dziękuję za rejestrację! 🤩</h1>
+                <p class="lead">Żeby móc w pełni korzystać z serwisu musisz jeszcze <strong>aktywować</strong> swoje konto.</p>
+                <p>Aby to zrobić, wystarczy, że klikniesz link aktywacyjny umieszczony w wiadomości e-mail <i class="fa-solid fa-envelope"></i>.</p>
+                <p class="text-info">Jeśli nie możesz znaleźć maila aktywacyjnego w swojej skrzynce odbiorczej <i class="fa-solid fa-inbox"></i>, sprawdź folder SPAM.</p>
+                <div class="grid mt-2">
+                    <a href="{{ path('front_page') }}">Powrót do strony głównej</a>
+                    <a href="{{ path('login_page') }}" class="mt-1 mt-lg-0">Zaloguj się</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+    </body>
+{% endblock %}

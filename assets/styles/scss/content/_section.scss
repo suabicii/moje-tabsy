@@ -1,3 +1,4 @@
+/** FRONT PAGE */
 .welcome {
     background: url('../../../img/background/pills-welcome.jpg') center fixed;
     height: 36rem;
@@ -34,7 +35,7 @@
 
     h2 {
         font-size: $font-size-xl;
-        text-shadow: 2px 0px 10px rgb(0, 0, 0);
+        text-shadow: 2px 0 10px rgb(0, 0, 0);
     }
 }
 
@@ -50,6 +51,16 @@
     width: 20rem;
 }
 
+/** USER INFO – INFO ABOUT CREATING ACCOUNT CONFIRMATION, ACCOUNT ACTIVATION OR REQUESTS (E.G. RESET PASSWORD) */
+.user-info {
+    background: url('../../../img/background/user-info-bg.jpg') center;
+    height: 100vh;
+}
+
+.user-info__overlay {
+    width: 20rem;
+}
+
 /* TODO: delete the comment below after the project is finished
 To taka ściągawka – usuń to później :)
 $grid-breakpoints: (
@@ -62,6 +73,7 @@ $grid-breakpoints: (
 */
 
 @media (min-width: 768px) {
+    /** FRONT PAGE */
     .welcome {
         h1 {
             font-size: $font-size-xxl;
@@ -96,9 +108,15 @@ $grid-breakpoints: (
     .sign-up__overlay {
         width: 32rem;
     }
+
+    /** USER INFO – INFO ABOUT CREATING ACCOUNT CONFIRMATION, ACCOUNT ACTIVATION OR REQUESTS (E.G. RESET PASSWORD) */
+    .user-info__overlay {
+        width: 30rem;
+    }
 }
 
 @media (min-width: 992px) {
+    /** FRONT PAGE */
     .shine__its-for-u {
         position: relative;
 

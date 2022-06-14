@@ -45,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $tel;
 
     #[ORM\Column(type: 'boolean')]
-    private $activated;
+    private ?bool $activated;
 
     public function getId(): ?int
     {

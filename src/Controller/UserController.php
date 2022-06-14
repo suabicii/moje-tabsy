@@ -7,6 +7,7 @@ use App\Form\RegisterFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -27,11 +28,20 @@ class UserController extends AbstractController
         $form = $this->createForm(RegisterFormType::class, $user);
         $form->handleRequest($request);
 
-        $this->createUser($doctrine, $form, $user, $passwordHasher);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->createUser($doctrine, $form, $user, $passwordHasher);
+            return $this->redirectToRoute('account_created');
+        }
 
         return $this->render('user/register.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/account-created', name: 'account_created')]
+    public function account_created_page(): Response
+    {
+        return $this->render('user/account_created.html.twig');
     }
 
     /**
@@ -44,20 +54,16 @@ class UserController extends AbstractController
     private function createUser(ManagerRegistry $doctrine, FormInterface $form, User $user, UserPasswordHasherInterface $passwordHasher): void
     {
         $entityManager = $doctrine->getManager();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles(['ROLE_USER']);
-            $user->setActivated(false);
-            $password = $form->get('password')->getData();
-            $tel = $form->get('tel')->getData();
-            if ($tel === null) {
-                $user->setTelPrefix(null);
-            }
-            $hashed_password = $passwordHasher->hashPassword($user, $password);
-            $user->setPassword($hashed_password);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            exit('The user was added to database');
+        $user->setRoles(['ROLE_USER']);
+        $user->setActivated(false);
+        $password = $form->get('password')->getData();
+        $tel = $form->get('tel')->getData();
+        if ($tel === null) {
+            $user->setTelPrefix(null);
         }
+        $hashed_password = $passwordHasher->hashPassword($user, $password);
+        $user->setPassword($hashed_password);
+        $entityManager->persist($user);
+        $entityManager->flush();
     }
 }
