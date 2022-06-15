@@ -4,17 +4,28 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterFormType;
+use App\Service\EmailService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @property ManagerRegistry $doctrine
+ * @property EmailService $emailService
+ */
 class UserController extends AbstractController
 {
+    public function __construct(ManagerRegistry $doctrine, EmailService $emailService)
+    {
+        $this->doctrine = $doctrine;
+        $this->emailService = $emailService;
+    }
+
     #[Route('/login', name: 'login_page')]
     public function login_page(): Response
     {
@@ -22,14 +33,18 @@ class UserController extends AbstractController
     }
 
     #[Route('/register', name: 'register_page')]
-    public function register_page(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
+    public function register_page(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->createUser($doctrine, $form, $user, $passwordHasher);
+            try {
+                $this->createUser($form, $user, $passwordHasher);
+            } catch (TransportExceptionInterface $e) {
+                exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+            }
             return $this->redirectToRoute('account_created');
         }
 
@@ -45,15 +60,15 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param ManagerRegistry $doctrine
      * @param FormInterface $form
      * @param User $user
      * @param UserPasswordHasherInterface $passwordHasher
      * @return void
+     * @throws TransportExceptionInterface
      */
-    private function createUser(ManagerRegistry $doctrine, FormInterface $form, User $user, UserPasswordHasherInterface $passwordHasher): void
+    private function createUser(FormInterface $form, User $user, UserPasswordHasherInterface $passwordHasher): void
     {
-        $entityManager = $doctrine->getManager();
+        $entityManager = $this->doctrine->getManager();
         $user->setRoles(['ROLE_USER']);
         $user->setActivated(false);
         $password = $form->get('password')->getData();
@@ -63,6 +78,12 @@ class UserController extends AbstractController
         }
         $hashed_password = $passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed_password);
+        $this->emailService->sendMessageToUser(
+            $user,
+            'Moje-Tabsy.pl – aktywacja konta',
+            'Dziękuję za rejestrację. Kliknij tutaj, aby dokończyć rejestrację.',
+            '<h1>Dziękuję za rejestrację</h1><p>Kliknij tutaj, aby dokończyć rejestrację</p>'
+        );
         $entityManager->persist($user);
         $entityManager->flush();
     }
