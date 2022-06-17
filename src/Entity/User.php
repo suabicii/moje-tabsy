@@ -47,6 +47,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private ?bool $activated;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $token;
+
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $token_expired;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $token_expiration_date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -161,6 +170,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActivated(bool $activated): self
     {
         $this->activated = $activated;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function isTokenExpired(): ?bool
+    {
+        return $this->token_expired;
+    }
+
+    public function setTokenExpired(bool $token_expired): self
+    {
+        $this->token_expired = $token_expired;
+
+        return $this;
+    }
+
+    public function getTokenExpirationDate(): ?\DateTimeInterface
+    {
+        return $this->token_expiration_date;
+    }
+
+    public function setTokenExpirationDate(?\DateTimeInterface $token_expiration_date): self
+    {
+        $this->token_expiration_date = $token_expiration_date;
 
         return $this;
     }

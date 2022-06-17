@@ -75,6 +75,7 @@ class UserController extends AbstractController
     private function createUser(FormInterface $form, User $user, UserPasswordHasherInterface $passwordHasher): void
     {
         $entityManager = $this->doctrine->getManager();
+        $token = $this->generateToken();
         $user->setRoles(['ROLE_USER']);
         $user->setActivated(false);
         $password = $form->get('password')->getData();
@@ -84,14 +85,26 @@ class UserController extends AbstractController
         }
         $hashed_password = $passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed_password);
+        $user->setToken($token);
+        $user->setTokenExpired(false);
+        $user->setTokenExpirationDate((new \DateTime())->modify('+2 hours'));
         $this->emailService->sendMessageToUser(
             $user,
             'Moje-Tabsy.pl – aktywacja konta',
             'emails/signup_confirmation.txt.twig',
             'emails/signup_confirmation.html.twig',
-            ['activation_url' => $_ENV['HOST_URL'] . '/activated/abc1234xyz#&qwerty452']
+            ['activation_url' => $_ENV['HOST_URL'] . '/activated/' . $token]
         );
         $entityManager->persist($user);
         $entityManager->flush();
+    }
+
+    /**
+     * @return string
+     */
+    private function generateToken(): string
+    {
+        $rand_token = openssl_random_pseudo_bytes(16);
+        return bin2hex($rand_token);
     }
 }
