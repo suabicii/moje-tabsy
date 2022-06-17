@@ -6,6 +6,8 @@
 parameters:
 
 services:
+    Symfony\Component\Mime\BodyRendererInterface: '@twig.mime_body_renderer'
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

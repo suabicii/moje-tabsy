@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Twoje konto jest aktywne!{% endblock %}
+
+{% block body %}
+    <body>
+    <main>
+        <section class="user-info position-relative">
+            <div class="user-info__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
+                <h1 class="display-4">Twoje konto zostało aktywowane! 😎 👍</h1>
+                <p class="lead">Teraz możesz się zalogować. <i class="fa-solid fa-face-smile-beam"></i></p>
+                <div class="d-grid mt-2">
+                    <a href="{{ path('login_page') }}" class="btn btn-primary mt-2">Przejdź do strony logowania <i
+                                class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    </body>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}

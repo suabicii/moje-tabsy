@@ -59,6 +59,12 @@ class UserController extends AbstractController
         return $this->render('user/account_created.html.twig');
     }
 
+    #[Route('/activated/{token}', name: 'account_activated')]
+    public function account_activated_page(string $token): Response
+    {
+        return $this->render('user/account_activated.html.twig');
+    }
+
     /**
      * @param FormInterface $form
      * @param User $user
@@ -81,8 +87,9 @@ class UserController extends AbstractController
         $this->emailService->sendMessageToUser(
             $user,
             'Moje-Tabsy.pl – aktywacja konta',
-            'Dziękuję za rejestrację. Kliknij tutaj, aby dokończyć rejestrację.',
-            '<h1>Dziękuję za rejestrację</h1><p>Kliknij tutaj, aby dokończyć rejestrację</p>'
+            'emails/signup_confirmation.txt.twig',
+            'emails/signup_confirmation.html.twig',
+            ['activation_url' => $_ENV['HOST_URL'] . '/activated/abc1234xyz#&qwerty452']
         );
         $entityManager->persist($user);
         $entityManager->flush();
