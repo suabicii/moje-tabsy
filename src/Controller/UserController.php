@@ -76,6 +76,27 @@ class UserController extends AbstractController
     {
         $entityManager = $this->doctrine->getManager();
         $token = $this->generateToken();
+        $this->setUserData($user, $form, $passwordHasher, $token);
+        $this->emailService->sendMessageToUser(
+            $user,
+            'Moje-Tabsy.pl – aktywacja konta',
+            'emails/signup_confirmation.txt.twig',
+            'emails/signup_confirmation.html.twig',
+            ['activation_url' => $_ENV['HOST_URL'] . '/activated/' . $token]
+        );
+        $entityManager->persist($user);
+        $entityManager->flush();
+    }
+
+    /**
+     * @param User $user
+     * @param FormInterface $form
+     * @param UserPasswordHasherInterface $passwordHasher
+     * @param string $token
+     * @return void
+     */
+    public function setUserData(User $user, FormInterface $form, UserPasswordHasherInterface $passwordHasher, string $token): void
+    {
         $user->setRoles(['ROLE_USER']);
         $user->setActivated(false);
         $password = $form->get('password')->getData();
@@ -88,15 +109,6 @@ class UserController extends AbstractController
         $user->setToken($token);
         $user->setTokenExpired(false);
         $user->setTokenExpirationDate((new \DateTime())->modify('+2 hours'));
-        $this->emailService->sendMessageToUser(
-            $user,
-            'Moje-Tabsy.pl – aktywacja konta',
-            'emails/signup_confirmation.txt.twig',
-            'emails/signup_confirmation.html.twig',
-            ['activation_url' => $_ENV['HOST_URL'] . '/activated/' . $token]
-        );
-        $entityManager->persist($user);
-        $entityManager->flush();
     }
 
     /**
