@@ -19,6 +19,11 @@ class EmailService
     }
 
     /**
+     * @param User $user
+     * @param string $subject
+     * @param string $textTemplate
+     * @param string $htmlTemplate
+     * @param array|null $context Variables for Twig templates
      * @throws TransportExceptionInterface
      */
     public function sendMessageToUser(User $user, string $subject, string $textTemplate, string $htmlTemplate, array $context = null): void
