@@ -50,9 +50,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $token;
 
-    #[ORM\Column(type: 'boolean')]
-    private ?bool $token_expired;
-
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $token_expiration_date;
 
@@ -182,18 +179,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
-
-        return $this;
-    }
-
-    public function isTokenExpired(): ?bool
-    {
-        return $this->token_expired;
-    }
-
-    public function setTokenExpired(bool $token_expired): self
-    {
-        $this->token_expired = $token_expired;
 
         return $this;
     }

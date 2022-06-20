@@ -65,6 +65,11 @@ class UserController extends AbstractController
         $user = $this->doctrine->getRepository(User::class)->findBy(['token' => $token]);
 
         if ($user) {
+            $entityManager = $this->doctrine->getManager();
+            $user[0]->setActivated(true);
+            $user[0]->setToken(null);
+            $entityManager->persist($user[0]);
+            $entityManager->flush();
             return $this->render('user/account_activated.html.twig');
         } else {
             throw $this->createNotFoundException('The user does not exist');
