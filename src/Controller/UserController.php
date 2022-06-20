@@ -62,7 +62,13 @@ class UserController extends AbstractController
     #[Route('/activated/{token}', name: 'account_activated')]
     public function account_activated_page(string $token): Response
     {
-        return $this->render('user/account_activated.html.twig');
+        $user = $this->doctrine->getRepository(User::class)->findBy(['token' => $token]);
+
+        if ($user) {
+            return $this->render('user/account_activated.html.twig');
+        } else {
+            throw $this->createNotFoundException('The user does not exist');
+        }
     }
 
     /**
@@ -107,8 +113,6 @@ class UserController extends AbstractController
         $hashed_password = $passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed_password);
         $user->setToken($token);
-        $user->setTokenExpired(false);
-        $user->setTokenExpirationDate((new \DateTime())->modify('+2 hours'));
     }
 
     /**
