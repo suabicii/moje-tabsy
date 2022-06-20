@@ -106,7 +106,7 @@ class UserController extends AbstractController
      * @param string $token
      * @return void
      */
-    public function setUserData(User $user, FormInterface $form, UserPasswordHasherInterface $passwordHasher, string $token): void
+    private function setUserData(User $user, FormInterface $form, UserPasswordHasherInterface $passwordHasher, string $token): void
     {
         $user->setRoles(['ROLE_USER']);
         $user->setActivated(false);
