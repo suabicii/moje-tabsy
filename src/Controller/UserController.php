@@ -77,7 +77,7 @@ class UserController extends AbstractController
             $entityManager->flush();
             return $this->render('user/account_activated.html.twig');
         } else {
-            throw $this->createNotFoundException('The user was not found');
+            throw $this->createNotFoundException('The user account is activated or does not exist');
         }
     }
 

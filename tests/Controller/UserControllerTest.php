@@ -39,7 +39,7 @@ class UserControllerTest extends WebTestCase
         $users = $this->entityManager->getRepository(User::class)->findAll();
 
         $this->assertResponseRedirects();
-        $this->assertCount(1, $users);
+        $this->assertCount(2, $users);
     }
 
     public function testRenderAccountCreatedPageForNewAccountOnly(): void
@@ -53,7 +53,22 @@ class UserControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/account-created/this-should-fail');
 
-        $this->assertResponseStatusCodeSame(404, 'The user was not found');
+        $this->assertResponseStatusCodeSame(404, 'The user account is activated or does not exist');
+    }
+
+    public function testActivateAccount(): void
+    {
+        $crawler = $this->client->request('GET', '/activated/123xyz456abc');
+        $user = $this->entityManager->getRepository(User::class)->findBy(['email' => 'dummy@email.com']);
+
+        $this->assertEquals(true, $user[0]->isActivated());
+    }
+
+    public function testThrowNotFoundExceptionInActivatePageWhenTokenWasNotFound(): void
+    {
+        $crawler = $this->client->request('GET', '/activated/this-should-fail');
+
+        $this->assertResponseStatusCodeSame(404, 'The user account is activated or does not exist');
     }
 
     protected function tearDown(): void
