@@ -30,6 +30,8 @@ class UserControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/register');
 
+        $users = $this->entityManager->getRepository(User::class)->findAll();
+        $usersCountBeforeFormSubmission = sizeof($users);
         $crawler = $this->client->submitForm('register_form_submit', [
             'register_form[name]' => 'Adam',
             'register_form[email]' => 'some.dummy@email.com',
@@ -37,9 +39,10 @@ class UserControllerTest extends WebTestCase
             'register_form[password][second]' => 'Qwerty1!'
         ]);
         $users = $this->entityManager->getRepository(User::class)->findAll();
+        $usersCountAfterFormSubmission = sizeof($users);
 
         $this->assertResponseRedirects();
-        $this->assertCount(2, $users);
+        $this->assertGreaterThan($usersCountBeforeFormSubmission, $usersCountAfterFormSubmission);
     }
 
     public function testRenderAccountCreatedPageForNewAccountOnly(): void
