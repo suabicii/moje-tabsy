@@ -45,7 +45,7 @@ class UserController extends AbstractController
             } catch (TransportExceptionInterface $e) {
                 exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
             }
-            return $this->redirectToRoute('account_created');
+            return $this->redirectToRoute('account_created', ['token' => $user->getToken()]);
         }
 
         return $this->render('user/register.html.twig', [
@@ -53,10 +53,15 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/account-created', name: 'account_created')]
-    public function account_created_page(): Response
+    #[Route('/account-created/{token}', name: 'account_created')]
+    public function account_created_page(string $token): Response
     {
-        return $this->render('user/account_created.html.twig');
+        $user = $this->doctrine->getRepository(User::class)->findBy(['token' => $token]);
+        if ($user && !$user[0]->isActivated()) {
+            return $this->render('user/account_created.html.twig');
+        } else {
+            throw $this->createNotFoundException('The user account is activated or does not exist');
+        }
     }
 
     #[Route('/activated/{token}', name: 'account_activated')]
@@ -72,7 +77,7 @@ class UserController extends AbstractController
             $entityManager->flush();
             return $this->render('user/account_activated.html.twig');
         } else {
-            throw $this->createNotFoundException('The user does not exist');
+            throw $this->createNotFoundException('The user was not found');
         }
     }
 

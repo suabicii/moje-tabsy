@@ -36,10 +36,18 @@ class UserControllerTest extends WebTestCase
             'register_form[password][first]' => 'Qwerty1!',
             'register_form[password][second]' => 'Qwerty1!'
         ]);
-
         $users = $this->entityManager->getRepository(User::class)->findAll();
+
         $this->assertResponseRedirects();
         $this->assertCount(1, $users);
+    }
+
+    public function testRenderAccountCreatedPageForNewAccountOnly(): void
+    {
+        $user = $this->entityManager->getRepository(User::class)->findBy(['email' => 'dummy@email.com']); // email taken from DataFixtures/UserFixtures
+        $crawler = $this->client->request('GET', '/account-created/123xyz456abc'); // token too
+
+        $this->assertResponseIsSuccessful();
     }
 
     protected function tearDown(): void
