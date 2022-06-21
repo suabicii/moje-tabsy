@@ -44,10 +44,16 @@ class UserControllerTest extends WebTestCase
 
     public function testRenderAccountCreatedPageForNewAccountOnly(): void
     {
-        $user = $this->entityManager->getRepository(User::class)->findBy(['email' => 'dummy@email.com']); // email taken from DataFixtures/UserFixtures
-        $crawler = $this->client->request('GET', '/account-created/123xyz456abc'); // token too
+        $crawler = $this->client->request('GET', '/account-created/123xyz456abc'); // token taken from DataFixtures/UserFixtures
 
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testThrowNotFoundExceptionInAccountCreatedPageWhenTokenWasNotFound(): void
+    {
+        $crawler = $this->client->request('GET', '/account-created/this-should-fail');
+
+        $this->assertResponseStatusCodeSame(404, 'The user was not found');
     }
 
     protected function tearDown(): void
