@@ -67,8 +67,8 @@ class UserController extends AbstractController
     #[Route('/account-created/{token}', name: 'account_created')]
     public function account_created_page(string $token): Response
     {
-        $user = $this->doctrine->getRepository(User::class)->findBy(['token' => $token]);
-        if ($user && !$user[0]->isActivated()) {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['token' => $token]);
+        if ($user && !$user->isActivated()) {
             return $this->render('user/account_created.html.twig');
         } else {
             throw $this->createNotFoundException('The user account is activated or does not exist');
@@ -78,13 +78,13 @@ class UserController extends AbstractController
     #[Route('/activated/{token}', name: 'account_activated')]
     public function account_activated_page(string $token): Response
     {
-        $user = $this->doctrine->getRepository(User::class)->findBy(['token' => $token]);
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['token' => $token]);
 
         if ($user) {
             $entityManager = $this->doctrine->getManager();
-            $user[0]->setActivated(true);
-            $user[0]->setToken(null);
-            $entityManager->persist($user[0]);
+            $user->setActivated(true);
+            $user->setToken(null);
+            $entityManager->persist($user);
             $entityManager->flush();
             return $this->render('user/account_activated.html.twig');
         } else {

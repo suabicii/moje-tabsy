@@ -62,9 +62,9 @@ class UserControllerTest extends WebTestCase
     public function testActivateAccount(): void
     {
         $crawler = $this->client->request('GET', '/activated/123xyz456abc');
-        $user = $this->entityManager->getRepository(User::class)->findBy(['email' => 'dummy@email.com']);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email.com']);
 
-        $this->assertEquals(true, $user[0]->isActivated());
+        $this->assertEquals(true, $user->isActivated());
     }
 
     public function testThrowNotFoundExceptionInActivatePageWhenTokenWasNotFound(): void
