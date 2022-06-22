@@ -30,13 +30,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/login', name: 'login_page')]
-    public function login_page(Request $request): Response
+    public function login_page(): Response
     {
-        $user = new User();
-        $form = $this->createForm(LoginFormType::class, $user);
-        return $this->render('user/login.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->render('user/login.html.twig');
     }
 
     #[Route('/register', name: 'register_page')]
