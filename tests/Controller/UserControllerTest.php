@@ -82,6 +82,18 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form[name="login_form"]'));
     }
 
+    public function testLoginUser(): void
+    {
+        self::ensureKernelShutdown(); // avoid LogicException
+        $client = static::createClient();
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email.com']);
+
+        $client->loginUser($user);
+
+        $client->request('GET', '/'); // TODO: Change URI to dashboard
+        $this->assertResponseIsSuccessful();
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
