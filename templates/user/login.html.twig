@@ -9,20 +9,31 @@
             <div class="sign-in__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
                 <h1>Logowanie</h1>
                 <a href="{{ path('front_page') }}">Powrót do strony głównej</a>
-                <form action="dashboard.html" class="mt-2">
-                    <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">Email</label>
+                {{ form_start(form, {'attr': {'class': 'mt-2'}}) }}
+                <div class="form-floating mb-3">
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                    <label for="login_form_email">Email</label>
+                </div>
+                <div class="form-floating">
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Hasło'}}) }}
+                    <label for="login_form_password">Hasło</label>
+                </div>
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger" role="alert">
+                        <div>
+                            <p class="lead text-white"><i class="fa-solid fa-circle-exclamation"></i> Błędy:</p>
+                            <ul class="list-unstyled">
+                                {% for error in form.vars.errors.form.getErrors(true) %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Hasło">
-                        <label for="floatingPassword">Hasło</label>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary mt-2">Zaloguj się <i
-                                    class="fa-solid fa-arrow-right-to-bracket"></i></button>
-                    </div>
-                </form>
+                {% endif %}
+                <div class="d-grid">
+                    {{ form_widget(form.submit) }}
+                </div>
+                {{ form_end(form) }}
                 <div class="grid">
                     <a href="#" class="mt-2">Nie pamiętam hasła</a>
                     <a href="{{ path('register_page') }}" class="mt-2">Nie masz jeszcze konta? Zarejestruj się!</a>

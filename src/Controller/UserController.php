@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
 use App\Service\EmailService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,9 +28,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/login', name: 'login_page')]
-    public function login_page(): Response
+    public function login_page(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
-        return $this->render('user/login.html.twig');
+        $user = new User();
+        $form = $this->createForm(LoginFormType::class, $user);
+        return $this->render('user/login.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     #[Route('/register', name: 'register_page')]

@@ -74,6 +74,14 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(404, 'The user account is activated or does not exist');
     }
 
+    public function testRenderLoginForm(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(1, $crawler->filter('form[name="login_form"]'));
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
