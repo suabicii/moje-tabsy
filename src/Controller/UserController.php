@@ -17,18 +17,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @property ManagerRegistry $doctrine
+ * @property UserPasswordHasherInterface $passwordHasher
  * @property EmailService $emailService
  */
 class UserController extends AbstractController
 {
-    public function __construct(ManagerRegistry $doctrine, EmailService $emailService)
+    public function __construct(ManagerRegistry $doctrine, EmailService $emailService, UserPasswordHasherInterface $passwordHasher)
     {
         $this->doctrine = $doctrine;
+        $this->passwordHasher = $passwordHasher;
         $this->emailService = $emailService;
     }
 
     #[Route('/login', name: 'login_page')]
-    public function login_page(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function login_page(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(LoginFormType::class, $user);
@@ -38,7 +40,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/register', name: 'register_page')]
-    public function register_page(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function register_page(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterFormType::class, $user);
@@ -46,7 +48,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $this->createUser($form, $user, $passwordHasher);
+                $this->createUser($form, $user);
             } catch (TransportExceptionInterface $e) {
                 exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
             }
@@ -89,15 +91,14 @@ class UserController extends AbstractController
     /**
      * @param FormInterface $form
      * @param User $user
-     * @param UserPasswordHasherInterface $passwordHasher
      * @return void
      * @throws TransportExceptionInterface
      */
-    private function createUser(FormInterface $form, User $user, UserPasswordHasherInterface $passwordHasher): void
+    private function createUser(FormInterface $form, User $user): void
     {
         $entityManager = $this->doctrine->getManager();
         $token = $this->generateToken();
-        $this->setUserData($user, $form, $passwordHasher, $token);
+        $this->setUserData($user, $form, $token);
         $this->emailService->sendMessageToUser(
             $user,
             'Moje-Tabsy.pl – aktywacja konta',
@@ -112,11 +113,10 @@ class UserController extends AbstractController
     /**
      * @param User $user
      * @param FormInterface $form
-     * @param UserPasswordHasherInterface $passwordHasher
      * @param string $token
      * @return void
      */
-    private function setUserData(User $user, FormInterface $form, UserPasswordHasherInterface $passwordHasher, string $token): void
+    private function setUserData(User $user, FormInterface $form, string $token): void
     {
         $user->setRoles(['ROLE_USER']);
         $user->setActivated(false);
@@ -125,7 +125,7 @@ class UserController extends AbstractController
         if ($tel === null) {
             $user->setTelPrefix(null);
         }
-        $hashed_password = $passwordHasher->hashPassword($user, $password);
+        $hashed_password = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed_password);
         $user->setToken($token);
     }
