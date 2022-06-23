@@ -20,6 +20,8 @@ security:
                 login_path: login_page
                 check_path: login_page
                 enable_csrf: true
+                default_target_path: app_dashboard
+                always_use_default_target_path: true
             logout:
                 path: app_logout
                 target: login_page

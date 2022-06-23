@@ -4,6 +4,8 @@ namespace App\Tests\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -82,16 +84,28 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form[name="login_form"]'));
     }
 
-    public function testLoginUser(): void
+    public function testLoginUserWhenAccountIsActive(): void
     {
         self::ensureKernelShutdown(); // avoid LogicException
+        $client = static::createClient();
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email2.com']);
+
+        $client->loginUser($user);
+        $client->request('GET', '/dashboard');
+
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testRedirectUserFromDashboardToLogoutRouteWhenAccountIsInactive(): void
+    {
+        self::ensureKernelShutdown();
         $client = static::createClient();
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email.com']);
 
         $client->loginUser($user);
+        $client->request('GET', '/dashboard');
 
-        $client->request('GET', '/'); // TODO: Change URI to dashboard
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseRedirects('/logout');
     }
 
     protected function tearDown(): void
