@@ -27,11 +27,11 @@
                              class="mt-2 text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
                     {% if inactive_account_error %}
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger mb-1" role="alert">
                             <div>
                                 <p class="lead text-white"><i class="fa-solid fa-circle-exclamation"></i> Błędy:</p>
                                 <p class="text-white">{{ inactive_account_error }}</p>
-                                <p>Kliknij <a href="#">tutaj</a>, aby wysłać ponownie wiadomość email z linkiem aktywacyjnym.</p>
+                                <p>Kliknij <a href="{{ path('resend_activation_email_page') }}">tutaj</a>, aby wysłać ponownie wiadomość email z linkiem aktywacyjnym.</p>
                             </div>
                         </div>
                     {% endif %}

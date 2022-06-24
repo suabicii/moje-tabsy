@@ -101,6 +101,33 @@ class UserController extends AbstractController
         }
     }
 
+    #[Route('/resend-activation-email', name: 'resend_activation_email_page')]
+    #[Route('/resend-activation-email/submit', name: 'resend_activation_email_submit', methods: ['POST'])]
+    public function resend_activation_email_page(Request $request): Response
+    {
+        $route = $request->get('_route');
+        $error = $request->get('error');
+
+        if ($route === 'resend_activation_email_page') {
+            return $this->render('user/resend_activation_email.html.twig', [
+                'error' => $error
+            ]);
+        } else {
+            $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $request->get('email')]);
+            $token = $user->getToken();
+            if ($token && !$user->isActivated()) {
+                try {
+                    $this->sendActivationEmail($user->getEmail(), $token);
+                } catch (TransportExceptionInterface $e) {
+                    return $this->redirectToRoute('resend_activation_email_page', ['error' => $e->getCode()]);
+                }
+                return $this->redirectToRoute('account_created', ['token' => $token]);
+            } else {
+                return $this->redirectToRoute('resend_activation_email_page', ['error' => 'Konto o podanym adresie email nie istnieje lub zostało aktywowane.']);
+            }
+        }
+    }
+
     /**
      * @param FormInterface $form
      * @param User $user
@@ -112,15 +139,26 @@ class UserController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $token = $this->generateToken();
         $this->setUserData($user, $form, $token);
+        $this->sendActivationEmail($user->getEmail(), $token);
+        $entityManager->persist($user);
+        $entityManager->flush();
+    }
+
+    /**
+     * @param string $emailAddress
+     * @param string $token
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    public function sendActivationEmail(string $emailAddress, string $token): void
+    {
         $this->emailService->sendMessageToUser(
-            $user,
+            $emailAddress,
             'Moje-Tabsy.pl – aktywacja konta',
             'emails/signup_confirmation.txt.twig',
             'emails/signup_confirmation.html.twig',
             ['activation_url' => $_ENV['HOST_URL'] . '/activated/' . $token]
         );
-        $entityManager->persist($user);
-        $entityManager->flush();
     }
 
     /**

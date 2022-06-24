@@ -106,6 +106,25 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseRedirects('/logout');
     }
 
+    public function testRenderResendActivationEmailPage(): void
+    {
+        $crawler = $this->client->request('GET', '/resend-activation-email');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(1, $crawler->filter('form[name="resend_activation_email_form"]'));
+    }
+
+    public function testSubmitResendActivationEmailForm(): void
+    {
+        $crawler = $this->client->request('GET', '/resend-activation-email');
+
+        $crawler = $this->client->submitForm('submit', [
+            'email' => 'dummy@email.com'
+        ]);
+
+        $this->assertResponseRedirects();
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();

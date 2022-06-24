@@ -19,18 +19,18 @@ class EmailService
     }
 
     /**
-     * @param User $user
+     * @param string $emailAddress
      * @param string $subject
      * @param string $textTemplate
      * @param string $htmlTemplate
      * @param array $context Variables for Twig templates
      * @throws TransportExceptionInterface
      */
-    public function sendMessageToUser(User $user, string $subject, string $textTemplate, string $htmlTemplate, array $context = []): void
+    public function sendMessageToUser(string $emailAddress, string $subject, string $textTemplate, string $htmlTemplate, array $context = []): void
     {
         $email = (new TemplatedEmail())
             ->from($_ENV['MAILER_ACCOUNT'])
-            ->to($user->getEmail())
+            ->to($emailAddress)
             ->subject($subject)
             ->htmlTemplate($htmlTemplate)
             ->textTemplate($textTemplate)
