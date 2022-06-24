@@ -27,7 +27,7 @@
                              class="mt-2 text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
                     {% if inactive_account_error %}
-                        <div id="inactive_error" class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger" role="alert">
                             <div>
                                 <p class="lead text-white"><i class="fa-solid fa-circle-exclamation"></i> Błędy:</p>
                                 <p class="text-white">{{ inactive_account_error }}</p>
