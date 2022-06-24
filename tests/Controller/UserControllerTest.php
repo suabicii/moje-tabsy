@@ -122,7 +122,19 @@ class UserControllerTest extends WebTestCase
             'email' => 'dummy@email.com'
         ]);
 
-        $this->assertResponseRedirects();
+        $this->assertResponseRedirects('/account-created/123xyz456abc');
+    }
+
+    public function testSubmitResendActivationEmailFormWithActivatedUserEmailAndRenderAlertDivWithError(): void
+    {
+        $crawler = $this->client->request('GET', '/resend-activation-email');
+
+        $crawler = $this->client->submitForm('submit', [
+            'email' => 'dummy@email2.com'
+        ]);
+        $crawler = $this->client->followRedirect();
+
+        $this->assertCount(1, $crawler->filter('.alert'));
     }
 
     protected function tearDown(): void
