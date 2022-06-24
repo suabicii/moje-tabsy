@@ -145,15 +145,15 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param string $emailAddress
+     * @param string $userEmail
      * @param string $token
      * @return void
      * @throws TransportExceptionInterface
      */
-    public function sendActivationEmail(string $emailAddress, string $token): void
+    public function sendActivationEmail(string $userEmail, string $token): void
     {
         $this->emailService->sendMessageToUser(
-            $emailAddress,
+            $userEmail,
             'Moje-Tabsy.pl – aktywacja konta',
             'emails/signup_confirmation.txt.twig',
             'emails/signup_confirmation.html.twig',
