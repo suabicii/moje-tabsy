@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,15 +32,25 @@ class UserController extends AbstractController
     }
 
     #[Route('/login', name: 'login_page')]
-    public function login_page(AuthenticationUtils $authenticationUtils): Response
+    public function login_page(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
+        $inactiveAccountError = null;
+        $cookie = $request->cookies->get('inactive_user');
         // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $lastUsername = $authenticationUtils->getLastUsername() ? $authenticationUtils->getLastUsername() : $cookie;
+
+        if ($cookie && $cookie === $lastUsername) {
+            $inactiveAccountError = 'Aby móc się zalogować, musisz aktywować swoje konto.';
+            $res = new Response();
+            $res->headers->clearCookie('inactive_user');
+            $res->send();
+        }
 
         return $this->render('user/login.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error
+            'error' => $error,
+            'inactive_account_error' => $inactiveAccountError
         ]);
     }
 
