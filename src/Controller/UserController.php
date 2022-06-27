@@ -36,7 +36,8 @@ class UserController extends AbstractController
         $inactiveAccountError = null;
         $cookie = $request->cookies->get('inactive_user');
         // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername() ? $authenticationUtils->getLastUsername() : $cookie;
+        $lastUsernameFromAuthenticationUtils = $authenticationUtils->getLastUsername();
+        $lastUsername = $lastUsernameFromAuthenticationUtils ?: $cookie;
 
         if ($cookie && $cookie === $lastUsername) {
             $inactiveAccountError = 'Aby móc się zalogować, musisz aktywować swoje konto.';
