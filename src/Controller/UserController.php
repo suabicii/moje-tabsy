@@ -32,6 +32,10 @@ class UserController extends AbstractController
     #[Route('/login', name: 'login_page')]
     public function login_page(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
+        if ($this->getUser()) { // if user is logged
+            return $this->redirectToRoute('app_dashboard');
+        }
+
         $authenticationError = $authenticationUtils->getLastAuthenticationError();
         $inactiveAccountError = null;
         $cookie = $request->cookies->get('inactive_user');
@@ -56,6 +60,10 @@ class UserController extends AbstractController
     #[Route('/register', name: 'register_page')]
     public function register_page(Request $request): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_dashboard');
+        }
+
         $user = new User();
         $form = $this->createForm(RegisterFormType::class, $user);
         $form->handleRequest($request);
@@ -106,6 +114,10 @@ class UserController extends AbstractController
     #[Route('/resend-activation-email/submit', name: 'resend_activation_email_submit', methods: ['POST'])]
     public function resend_activation_email_page(Request $request): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_dashboard');
+        }
+
         $route = $request->get('_route');
         $error = $request->get('error');
 

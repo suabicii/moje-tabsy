@@ -137,6 +137,31 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('.alert'));
     }
 
+    /**
+     * @dataProvider provideUrls
+     */
+    public function testRedirectFromAnyUserControllerRouteToDashboardIfUserIsLoggedIn(string $url): void
+    {
+        self::ensureKernelShutdown();
+        $client = static::createClient();
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email2.com']);
+
+        $client->loginUser($user);
+        $crawler = $client->request('GET', $url);
+
+        $this->assertResponseRedirects('/dashboard');
+    }
+
+    public function provideUrls(): array
+    {
+        return [
+            ['/'],
+            ['/login'],
+            ['/register'],
+            ['/resend-activation-email']
+        ];
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
