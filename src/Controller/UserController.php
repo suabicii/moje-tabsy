@@ -32,7 +32,7 @@ class UserController extends AbstractController
     #[Route('/login', name: 'login_page')]
     public function login_page(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
-        $error = $authenticationUtils->getLastAuthenticationError();
+        $authenticationError = $authenticationUtils->getLastAuthenticationError();
         $inactiveAccountError = null;
         $cookie = $request->cookies->get('inactive_user');
         // last username entered by the user
@@ -48,7 +48,7 @@ class UserController extends AbstractController
 
         return $this->render('user/login.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error,
+            'authentication_error' => $authenticationError,
             'inactive_account_error' => $inactiveAccountError
         ]);
     }
