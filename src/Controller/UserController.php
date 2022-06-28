@@ -8,6 +8,7 @@ use App\Service\EmailService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -126,18 +127,27 @@ class UserController extends AbstractController
                 'error' => $error
             ]);
         } else {
-            $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $request->get('email')]);
-            $token = $user->getToken();
-            if ($token && !$user->isActivated()) {
-                try {
-                    $this->sendActivationEmail($user->getEmail(), $token);
-                } catch (TransportExceptionInterface $e) {
-                    return $this->redirectToRoute('resend_activation_email_page', ['error' => $e->getCode()]);
-                }
-                return $this->redirectToRoute('account_created', ['token' => $token]);
-            } else {
-                return $this->redirectToRoute('resend_activation_email_page', ['error' => 'Konto o podanym adresie email nie istnieje lub zostało aktywowane.']);
+            return $this->redirectAfterSubmitResendActivationEmailForm($request);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    private function redirectAfterSubmitResendActivationEmailForm(Request $request): RedirectResponse
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $request->get('email')]);
+        $token = $user->getToken();
+        if ($token && !$user->isActivated()) {
+            try {
+                $this->sendActivationEmail($user->getEmail(), $token);
+            } catch (TransportExceptionInterface $e) {
+                return $this->redirectToRoute('resend_activation_email_page', ['error' => $e->getCode()]);
             }
+            return $this->redirectToRoute('account_created', ['token' => $token]);
+        } else {
+            return $this->redirectToRoute('resend_activation_email_page', ['error' => 'Konto o podanym adresie email nie istnieje lub zostało aktywowane.']);
         }
     }
 
