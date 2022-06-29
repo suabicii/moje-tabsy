@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,7 +52,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $token;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $token_expiration_date;
+    private ?DateTimeInterface $token_expiration_date;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $reset_pass_mode_enabled;
 
     public function getId(): ?int
     {
@@ -183,14 +187,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTokenExpirationDate(): ?\DateTimeInterface
+    public function getTokenExpirationDate(): ?DateTimeInterface
     {
         return $this->token_expiration_date;
     }
 
-    public function setTokenExpirationDate(?\DateTimeInterface $token_expiration_date): self
+    public function setTokenExpirationDate(?DateTimeInterface $token_expiration_date): self
     {
         $this->token_expiration_date = $token_expiration_date;
+
+        return $this;
+    }
+
+    public function isResetPassModeEnabled(): ?bool
+    {
+        return $this->reset_pass_mode_enabled;
+    }
+
+    public function setResetPassModeEnabled(bool $reset_pass_mode_enabled): self
+    {
+        $this->reset_pass_mode_enabled = $reset_pass_mode_enabled;
 
         return $this;
     }
