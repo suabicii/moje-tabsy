@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\PasswordHasher\Hasher\PlaintextPasswordHasher;
 
 /**
  * @property EntityManager $entityManager
@@ -106,6 +107,79 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseRedirects('/logout');
     }
 
+    public function testRenderResetPasswordForm(): void
+    {
+        $crawler = $this->client->request('GET', '/password-reset');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(1, $crawler->filter('form[name="reset_password_form"]'));
+    }
+
+    public function testGenerateUserTokenWithExpirationDateOfTwoHoursAfterResetPasswordFormSubmitWasSuccessful(): void
+    {
+        $crawler = $this->client->request('GET', '/password-reset');
+        $userData = ['email' => 'dummy@email3.com'];
+
+        $this->client->submitForm('submit', $userData);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy($userData);
+
+        $this->assertNotNull($user->getToken());
+        $this->assertGreaterThanOrEqual($user->getTokenExpirationDate(), (new \DateTime())->modify('+2 hours'));
+    }
+
+    public function testSubmitResetPasswordFormWithIncorrectUserEmailAndRenderAlertDivWithError(): void
+    {
+        $crawler = $this->client->request('GET', '/password-reset');
+
+        $crawler = $this->client->submitForm('submit', [
+            'email' => 'dummy@emailwichdoesnotexistindb.com'
+        ]);
+        $crawler = $this->client->followRedirect();
+
+        $this->assertCount(1, $crawler->filter('.alert'));
+    }
+
+    public function testRedirectToResetPasswordRequestedPageIfResetPasswordSubmitWasSuccessful(): void
+    {
+        $crawler = $this->client->request('GET', '/password-reset');
+        $userData = ['email' => 'dummy@email3.com'];
+
+        $this->client->submitForm('submit', $userData);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy($userData);
+
+        $this->assertResponseRedirects('/password-reset-requested/' . $user->getToken());
+    }
+    public function testRedirectFromResetPasswordRequestedPageToPasswordResetIfTokenIsIncorrectOrExpirationDateDoesNotExistAndRenderAlertDivWithError(): void
+    {
+        $crawler = $this->client->request('GET', '/password-reset-requested/this-should-fail');
+
+        $crawler = $this->client->followRedirect();
+
+        $this->assertCount(1, $crawler->filter('.alert'));
+    }
+
+    public function testRenderPasswordChangeForm(): void
+    {
+        $crawler = $this->client->request('GET', '/password-change/abc654xyz321');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertCount(1, $crawler->filter('form[name="change_password_form"]'));
+    }
+
+    public function testPasswordChangeAfterPasswordChangeFormSubmission(): void
+    {
+        $crawler = $this->client->request('GET', '/password-change/abc654xyz321');
+
+        $newPassword = 'Password456!';
+        $crawler = $this->client->submitForm('submit', [
+            'password' => $newPassword,
+            'password_repeat' => $newPassword
+        ]);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email4.com']);
+
+        $this->assertEquals($newPassword, $user->getPassword());
+    }
+
     public function testRenderResendActivationEmailPage(): void
     {
         $crawler = $this->client->request('GET', '/resend-activation-email');
@@ -130,7 +204,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/resend-activation-email');
 
         $crawler = $this->client->submitForm('submit', [
-            'email' => 'dummy@email2.com'
+            'email' => 'dummy@email2.com',
         ]);
         $crawler = $this->client->followRedirect();
 
@@ -158,7 +232,8 @@ class UserControllerTest extends WebTestCase
             ['/'],
             ['/login'],
             ['/register'],
-            ['/resend-activation-email']
+            ['/resend-activation-email'],
+            ['/password-reset']
         ];
     }
 

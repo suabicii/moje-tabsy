@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterFormType;
 use App\Service\EmailService;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -127,7 +128,62 @@ class UserController extends AbstractController
                 'error' => $error
             ]);
         } else {
-            return $this->redirectAfterSubmitResendActivationEmailForm($request);
+            return $this->redirectAfterResendActivationEmailFormSubmission($request);
+        }
+    }
+
+    #[Route('/password-reset', name: 'reset_password_page')]
+    #[Route('/password-reset/submit', name: 'reset_password_submit', methods: ['POST'])]
+    public function reset_password_page(Request $request): RedirectResponse|Response
+    {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_dashboard');
+        }
+
+        $route = $request->get('_route');
+        $error = $request->get('error');
+
+        if ($route === 'reset_password_page') {
+            return $this->render('user/reset_password.html.twig', [
+                'error' => $error
+            ]);
+        } else {
+            return $this->redirectAfterPasswordResetFormSubmission($request);
+        }
+    }
+
+    #[Route('/password-reset-requested/{token}', name: 'reset_password_requested_page')]
+    public function reset_password_requested_page(string $token): Response
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['token' => $token]);
+        if (!$user || $user->getTokenExpirationDate() === null) {
+            return $this->redirectToRoute('reset_password_page', ['error' => 'Nieprawidłowe dane użytkownika']);
+        }
+
+        return $this->render('user/reset_password_requested.html.twig');
+    }
+
+    #[Route('/password-change/{token}', name: 'change_password_page')]
+    #[Route('/password-change/{token}/submit', name: 'change_password_submit', methods: ['POST'])]
+    public function change_password_page(string $token, Request $request): RedirectResponse|Response
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['token' => $token]);
+        $tokenExpirationDate = $user->getTokenExpirationDate();
+        if ($tokenExpirationDate === null) {
+            return $this->redirectToRoute('reset_password_page', ['error' => 'Nieprawidłowe dane użytkownika']);
+        } elseif (new DateTime() > $tokenExpirationDate) {
+            return $this->redirectToRoute('reset_password_page', ['error' => 'Token resetowania hasła wygasł. Podaj adres e-mail jeszcze raz.']);
+        }
+
+        $route = $request->get('_route');
+        $error = $request->get('error');
+
+        if ($route === 'change_password_page') {
+            return $this->render('user/change_password.html.twig', [
+                'error' => $error
+            ]);
+        } else {
+            return $this->redirectAfterPasswordChangeFormSubmission($request, $token, $user);
         }
     }
 
@@ -135,7 +191,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @return RedirectResponse
      */
-    private function redirectAfterSubmitResendActivationEmailForm(Request $request): RedirectResponse
+    private function redirectAfterResendActivationEmailFormSubmission(Request $request): RedirectResponse
     {
         $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $request->get('email')]);
         $token = $user->getToken();
@@ -148,6 +204,77 @@ class UserController extends AbstractController
             return $this->redirectToRoute('account_created', ['token' => $token]);
         } else {
             return $this->redirectToRoute('resend_activation_email_page', ['error' => 'Konto o podanym adresie email nie istnieje lub zostało aktywowane.']);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    private function redirectAfterPasswordResetFormSubmission(Request $request): RedirectResponse
+    {
+        $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $request->get('email')]);
+        if (!$user) {
+            return $this->redirectToRoute('reset_password_page', ['error' => 'Nie znaleziono konta o podanym adresie e-mail']);
+        }
+        $entityManager = $this->doctrine->getManager();
+        $user->setToken($this->generateToken());
+        $user->setTokenExpirationDate((new DateTime())->modify('+2 hours'));
+        $entityManager->flush();
+        try {
+            $this->sendPasswordResetEmail($user->getEmail(), $user->getToken());
+        } catch (TransportExceptionInterface $e) {
+            $this->redirectToRoute('reset_password_page', ['error' => $e->getCode()]);
+        }
+        return $this->redirectToRoute('reset_password_requested_page', ['token' => $user->getToken()]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $token
+     * @param User $user
+     * @return RedirectResponse
+     */
+    public function redirectAfterPasswordChangeFormSubmission(Request $request, string $token, User $user): RedirectResponse
+    {
+        $password = $request->get('password');
+        $passwordRepeated = $request->get('password_repeat');
+        $error = $this->validatePasswordChange($password, $passwordRepeated);
+        if ($error) {
+            return $this->redirectToRoute('change_password_page', [
+                'token' => $token,
+                'error' => $error
+            ]);
+        }
+        $entityManager = $this->doctrine->getManager();
+        if ($_ENV['APP_ENV'] === 'test') {
+            $user->setPassword($password);
+        } else {
+            $hashed_password = $this->passwordHasher->hashPassword($user, $password);
+            $user->setPassword($hashed_password);
+        }
+        $user->setToken(null);
+        $user->setTokenExpirationDate(null);
+        $entityManager->flush();
+        $this->addFlash('info', 'Hasło zostało zmienione');
+        return $this->redirectToRoute('login_page');
+    }
+
+    /**
+     * @param string $password
+     * @param string $passwordRepeated
+     * @return string|null error message
+     */
+    private function validatePasswordChange(string $password, string $passwordRepeated): ?string
+    {
+        if (strlen($password) < 8) {
+            return 'Hasło musi zawierać co najmniej 8 znaków.';
+        } elseif ($password !== $passwordRepeated) {
+            return 'Hasła w obu polach muszą być takie same.';
+        } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).*$/', $password)) {
+            return 'Hasło musi zawierać co najmniej jedną małą literę, co najmniej jedną wielką literę, co najmniej jedną cyfrę i co najmniej jeden znak specjalny.';
+        } else {
+            return null;
         }
     }
 
@@ -173,7 +300,7 @@ class UserController extends AbstractController
      * @return void
      * @throws TransportExceptionInterface
      */
-    public function sendActivationEmail(string $userEmail, string $token): void
+    private function sendActivationEmail(string $userEmail, string $token): void
     {
         $this->emailService->sendMessageToUser(
             $userEmail,
@@ -181,6 +308,23 @@ class UserController extends AbstractController
             'emails/signup_confirmation.txt.twig',
             'emails/signup_confirmation.html.twig',
             ['activation_url' => $_ENV['HOST_URL'] . '/activated/' . $token]
+        );
+    }
+
+    /**
+     * @param string $userEmail
+     * @param string $token
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    private function sendPasswordResetEmail(string $userEmail, string $token): void
+    {
+        $this->emailService->sendMessageToUser(
+            $userEmail,
+            'Moje-Tabsy.pl – zmiana hasła',
+            'emails/password_reset.txt.twig',
+            'emails/password_reset.html.twig',
+            ['reset_url' => $_ENV['HOST_URL'] . '/password-change/' . $token]
         );
     }
 
