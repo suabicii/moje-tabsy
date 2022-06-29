@@ -5,7 +5,6 @@ namespace App\Tests\Controller;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\PasswordHasher\Hasher\PlaintextPasswordHasher;
 
 /**
  * @property EntityManager $entityManager
@@ -139,7 +138,7 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('.alert'));
     }
 
-    public function testRedirectToResetPasswordRequestedPageIfResetPasswordSubmitWasSuccessful(): void
+    public function testRedirectToResetPasswordRequestedPageIfResetPasswordSubmissionWasSuccessful(): void
     {
         $crawler = $this->client->request('GET', '/password-reset');
         $userData = ['email' => 'dummy@email3.com'];
@@ -178,6 +177,32 @@ class UserControllerTest extends WebTestCase
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email4.com']);
 
         $this->assertEquals($newPassword, $user->getPassword());
+    }
+
+    public function testLogoutUserWhenPasswordResetModeIsEnabled(): void
+    {
+        self::ensureKernelShutdown();
+        $client = static::createClient();
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email4.com']);
+
+        $client->loginUser($user);
+        $crawler = $client->request('GET', '/dashboard');
+
+        $this->assertResponseRedirects('/logout');
+    }
+
+    public function testDisableResetPasswordModeAfterPasswordChange(): void
+    {
+        $this->client->request('GET', '/password-change/abc654xyz321');
+
+        $newPassword = 'Password456!';
+        $crawler = $this->client->submitForm('submit', [
+            'password' => $newPassword,
+            'password_repeat' => $newPassword
+        ]);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email4.com']);
+
+        $this->assertFalse($user->isResetPassModeEnabled());
     }
 
     public function testRenderResendActivationEmailPage(): void

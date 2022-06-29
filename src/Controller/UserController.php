@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterFormType;
+use App\Service\CookieCleanerService;
 use App\Service\EmailService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,14 +22,16 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  * @property ManagerRegistry $doctrine
  * @property UserPasswordHasherInterface $passwordHasher
  * @property EmailService $emailService
+ * @property CookieCleanerService $cookieCleaner
  */
 class UserController extends AbstractController
 {
-    public function __construct(ManagerRegistry $doctrine, EmailService $emailService, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(ManagerRegistry $doctrine, EmailService $emailService, UserPasswordHasherInterface $passwordHasher, CookieCleanerService $cookieCleaner)
     {
         $this->doctrine = $doctrine;
         $this->passwordHasher = $passwordHasher;
         $this->emailService = $emailService;
+        $this->cookieCleaner = $cookieCleaner;
     }
 
     #[Route('/login', name: 'login_page')]
@@ -38,24 +41,13 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_dashboard');
         }
 
-        $authenticationError = $authenticationUtils->getLastAuthenticationError();
-        $inactiveAccountError = null;
-        $cookie = $request->cookies->get('inactive_user');
-        // last username entered by the user
-        $lastUsernameFromAuthenticationUtils = $authenticationUtils->getLastUsername();
-        $lastUsername = $lastUsernameFromAuthenticationUtils ?: $cookie;
-
-        if ($cookie && $cookie === $lastUsername) {
-            $inactiveAccountError = 'Aby móc się zalogować, musisz aktywować swoje konto.';
-            $res = new Response();
-            $res->headers->clearCookie('inactive_user');
-            $res->send();
-        }
+        list($authenticationError, $inactiveAccountError, $passwordResetError, $lastUsername) = $this->getLoginErrors($authenticationUtils, $request);
 
         return $this->render('user/login.html.twig', [
             'last_username' => $lastUsername,
             'authentication_error' => $authenticationError,
-            'inactive_account_error' => $inactiveAccountError
+            'inactive_account_error' => $inactiveAccountError,
+            'password_reset_error' => $passwordResetError
         ]);
     }
 
@@ -188,6 +180,37 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param AuthenticationUtils $authenticationUtils
+     * @param Request $request
+     * @return array
+     */
+    private function getLoginErrors(AuthenticationUtils $authenticationUtils, Request $request): array
+    {
+        $authenticationError = $authenticationUtils->getLastAuthenticationError();
+        $inactiveAccountError = null;
+        $passwordResetError = null;
+        $inactiveAccountCookieName = 'inactive_user';
+        $passwordResetErrorCookieName = 'password_reset_error';
+        $lastUsernameFromCookie = $request->cookies->get($inactiveAccountCookieName);
+        $passwordResetErrorMessageFromCookie = $request->cookies->get($passwordResetErrorCookieName);
+        // last username entered by the user
+        $lastUsernameFromAuthenticationUtils = $authenticationUtils->getLastUsername();
+        $lastUsername = $lastUsernameFromAuthenticationUtils ?: $lastUsernameFromCookie;
+
+        if ($passwordResetErrorMessageFromCookie) {
+            $passwordResetError = $passwordResetErrorMessageFromCookie;
+            $this->cookieCleaner->cleanCookie($passwordResetErrorCookieName);
+        }
+
+        if ($lastUsernameFromCookie && $lastUsernameFromCookie === $lastUsername) {
+            $inactiveAccountError = 'Aby móc się zalogować, musisz aktywować swoje konto.';
+            $this->cookieCleaner->cleanCookie($inactiveAccountCookieName);
+        }
+
+        return array($authenticationError, $inactiveAccountError, $passwordResetError, $lastUsername);
+    }
+
+    /**
      * @param Request $request
      * @return RedirectResponse
      */
@@ -220,6 +243,7 @@ class UserController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $user->setToken($this->generateToken());
         $user->setTokenExpirationDate((new DateTime())->modify('+2 hours'));
+        $user->setResetPassModeEnabled(true);
         $entityManager->flush();
         try {
             $this->sendPasswordResetEmail($user->getEmail(), $user->getToken());
@@ -255,6 +279,7 @@ class UserController extends AbstractController
         }
         $user->setToken(null);
         $user->setTokenExpirationDate(null);
+        $user->setResetPassModeEnabled(false);
         $entityManager->flush();
         $this->addFlash('info', 'Hasło zostało zmienione');
         return $this->redirectToRoute('login_page');
@@ -346,6 +371,7 @@ class UserController extends AbstractController
         $hashed_password = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed_password);
         $user->setToken($token);
+        $user->setResetPassModeEnabled(false);
     }
 
     /**
