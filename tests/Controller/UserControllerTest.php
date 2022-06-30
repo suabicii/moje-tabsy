@@ -254,7 +254,6 @@ class UserControllerTest extends WebTestCase
     public function provideUrls(): array
     {
         return [
-            ['/'],
             ['/login'],
             ['/register'],
             ['/resend-activation-email'],
