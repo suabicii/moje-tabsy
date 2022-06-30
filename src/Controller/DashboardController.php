@@ -29,9 +29,7 @@ class DashboardController extends AbstractController
             return $this->setCookieAndLogout($cookie);
         }
 
-        return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
-        ]);
+        return $this->render('dashboard/index.html.twig');
     }
 
     /**
