@@ -16,7 +16,7 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    .addEntry('react-app', './assets/react-app.js')
+    .addEntry('react-app', './assets/ReactApp/react-app.js')
     .addEntry('app', './assets/app.js')
     .addEntry('bootstrap', './assets/bootstrap.min.js')
 
