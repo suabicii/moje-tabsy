@@ -1,8 +1,9 @@
 import React from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import MainPage from "../components/MainPage";
+import Header from "../components/Header";
 
-const mainRoute = "/dashboard";
+export const mainRoute = "/dashboard";
 
 function AppRouter() {
     return (
@@ -10,6 +11,7 @@ function AppRouter() {
             <Routes>
                 <Route path={mainRoute} element={<MainPage />} />
             </Routes>
+            <Header/>
         </BrowserRouter>
     );
 }

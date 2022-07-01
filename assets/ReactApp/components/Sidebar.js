@@ -1,4 +1,6 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
+import {mainRoute} from "../routers/AppRouter";
 
 function Sidebar() {
     return (
@@ -6,13 +8,9 @@ function Sidebar() {
         <nav id="sidebarMenu" className="collapse d-lg-block sidebar collapse bg-white">
             <div className="position-sticky">
                 <div className="list-group list-group-flush mx-3 mt-4">
-                    <a
-                        href="#"
-                        className="list-group-item list-group-item-action py-2 ripple active"
-                        aria-current="true"
-                    >
+                    <NavLink to={mainRoute} className="list-group-item list-group-item-action py-2 ripple">
                         <i className="fas fa-tachometer-alt fa-fw me-3"></i><span>Strona główna</span>
-                    </a>
+                    </NavLink>
                     <a href="#" className="list-group-item list-group-item-action py-2 ripple">
                         <i className="fa-solid fa-jar fa-fw me-3"></i><span>Moje leki i suplementy</span>
                     </a>
@@ -22,7 +20,7 @@ function Sidebar() {
                     <a href="#" className="list-group-item list-group-item-action py-2 ripple"
                     ><i className="fa-solid fa-gear fa-fw me-3"></i><span>Ustawienia</span></a
                     >
-                    <a href="/" className="list-group-item list-group-item-action py-2 ripple"
+                    <a href="/logout" className="list-group-item list-group-item-action py-2 ripple"
                     ><i className="fa-solid fa-power-off fa-fw me-3"></i><span>Wyloguj się</span></a
                     >
                 </div>

@@ -5,8 +5,7 @@ import Header from "./components/Header";
 
 const root = createRoot(document.getElementById('react'));
 root.render(
-    <div>
+    <AppRouter>
         <Header/>
-        <AppRouter/>
-    </div>
+    </AppRouter>
 );
