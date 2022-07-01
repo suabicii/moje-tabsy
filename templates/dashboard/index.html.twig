@@ -216,10 +216,12 @@
                 <!--Schedule and storage -->
             </div>
         </div>
+        <div id="react"></div>
     </main>
     <!--Main layout-->
 
     {% block javascripts %}
+        {{ encore_entry_script_tags('react-app') }}
         {{ parent() }}
     {% endblock %}
     </body>
