@@ -1,6 +1,6 @@
 import React from "react";
 import {createRoot} from "react-dom/client";
-import AppRouter from "./routers/AppRouter";
+import MainPage from "./components/MainPage";
 
 const root = createRoot(document.getElementById('react'));
-root.render(<AppRouter/>);
+root.render(<MainPage/>);

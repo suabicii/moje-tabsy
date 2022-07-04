@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
-    #[Route('/dashboard', name: 'app_dashboard')]
+    #[Route('/dashboard/{reactRouting}', name: 'app_dashboard', defaults: ['reactRouting' => null])]
     public function index(): Response
     {
         /** @var User $user */

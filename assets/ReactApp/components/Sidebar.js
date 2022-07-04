@@ -11,9 +11,9 @@ function Sidebar() {
                     <NavLink to={mainRoute} className="list-group-item list-group-item-action py-2 ripple">
                         <i className="fas fa-tachometer-alt fa-fw me-3"></i><span>Strona główna</span>
                     </NavLink>
-                    <a href="#" className="list-group-item list-group-item-action py-2 ripple">
+                    <NavLink to={`${mainRoute}/drug-list`} className="list-group-item list-group-item-action py-2 ripple">
                         <i className="fa-solid fa-jar fa-fw me-3"></i><span>Moje leki i suplementy</span>
-                    </a>
+                    </NavLink>
                     <a href="#" className="list-group-item list-group-item-action py-2 ripple"
                     ><i className="fa-solid fa-user fa-fw me-3"></i><span>Mój profil</span></a
                     >
