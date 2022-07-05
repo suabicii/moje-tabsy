@@ -5,6 +5,7 @@ import Summary from "../components/Summary";
 import DrugList from "../components/DrugList";
 import Profile from "../components/Profile";
 import Settings from "../components/Settings";
+import NotFound from "../components/NotFound";
 
 export const mainRoute = "/dashboard";
 
@@ -16,6 +17,7 @@ function AppRouter() {
                 <Route path={`${mainRoute}/drug-list`} element={<DrugList/>} />
                 <Route path={`${mainRoute}/profile`} element={<Profile/>} />
                 <Route path={`${mainRoute}/settings`} element={<Settings/>} />
+                <Route path={`${mainRoute}/*`} element={<NotFound/>} />
             </Routes>
             <Header/>
         </BrowserRouter>
