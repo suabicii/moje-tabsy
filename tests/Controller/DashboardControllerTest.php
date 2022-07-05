@@ -30,11 +30,23 @@ class DashboardControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testRenderDashboardSubpageCreatedInReact(): void
+    /**
+     * @dataProvider provideReactRoutes
+     */
+    public function testRenderDashboardSubpageCreatedInReact(string $reactRoute): void
     {
-        $this->client->request('GET', '/dashboard/drug-list');
+        $this->client->request('GET', '/dashboard' . $reactRoute);
 
         $this->assertResponseIsSuccessful();
+    }
+
+    private function provideReactRoutes(): array
+    {
+        return [
+            ['/drug-list'],
+            ['/profile'],
+            ['/settings']
+        ];
     }
 
     protected function tearDown(): void

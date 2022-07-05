@@ -5,10 +5,10 @@ import NavbarMain from "./NavbarMain";
 function Header() {
     return (
         //Main Navigation-->
-        <header className="mb-5">
+        <div className="mb-5">
             <Sidebar/>
             <NavbarMain/>
-        </header>
+        </div>
         //Main Navigation-->
     );
 }
