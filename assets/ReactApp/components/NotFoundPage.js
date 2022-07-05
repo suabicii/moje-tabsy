@@ -1,6 +1,6 @@
 import React from "react";
 
-function NotFound() {
+function NotFoundPage() {
     return (
         <div id="notFound" className="alert alert-danger">
             <h1 className="text-center text-white">Nie znaleziono strony 😥</h1>
@@ -8,4 +8,4 @@ function NotFound() {
     );
 }
 
-export default NotFound;
+export default NotFoundPage;

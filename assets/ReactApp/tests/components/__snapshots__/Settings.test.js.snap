@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render Settings Page 1`] = `
+<React.Fragment>
+  <h1
+    className="text-center"
+  >
+    Ustawienia
+  </h1>
+</React.Fragment>
+`;

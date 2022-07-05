@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render Profile page 1`] = `
+<React.Fragment>
+  <h1
+    className="text-center"
+  >
+    Mój profil
+  </h1>
+</React.Fragment>
+`;

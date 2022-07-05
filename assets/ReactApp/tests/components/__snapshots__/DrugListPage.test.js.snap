@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render DrugListPage 1`] = `
+<React.Fragment>
+  <h1
+    className="text-center"
+  >
+    Moje leki i suplementy
+  </h1>
+  <DrugList
+    isEditMode={true}
+  />
+</React.Fragment>
+`;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render MainPage 1`] = `
+<main
+  className="dashboard__main"
+>
+  <div
+    className="container py-4"
+  >
+    <AppRouter />
+  </div>
+</main>
+`;

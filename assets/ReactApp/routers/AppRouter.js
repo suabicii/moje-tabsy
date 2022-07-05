@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Summary from "../components/Summary";
 import Profile from "../components/Profile";
 import Settings from "../components/Settings";
-import NotFound from "../components/NotFound";
+import NotFoundPage from "../components/NotFoundPage";
 import DrugListPage from "../components/DrugListPage";
 
 export const mainRoute = "/dashboard";
@@ -17,7 +17,7 @@ function AppRouter() {
                 <Route path={`${mainRoute}/drug-list`} element={<DrugListPage/>} />
                 <Route path={`${mainRoute}/profile`} element={<Profile/>} />
                 <Route path={`${mainRoute}/settings`} element={<Settings/>} />
-                <Route path={`${mainRoute}/*`} element={<NotFound/>} />
+                <Route path={`${mainRoute}/*`} element={<NotFoundPage/>} />
             </Routes>
             <Header/>
         </BrowserRouter>

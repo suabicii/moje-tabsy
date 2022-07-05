@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render Header 1`] = `
+<div
+  className="mb-5"
+>
+  <Sidebar />
+  <NavbarMain />
+</div>
+`;
