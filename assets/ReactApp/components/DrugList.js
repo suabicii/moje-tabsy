@@ -1,9 +1,11 @@
 import React from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
+import {DrugListContainer} from "../container/DrugListContainer";
 
 function DrugList(props) {
     const navigate = useNavigate();
+    const drugListContainer = DrugListContainer.useContainer();
 
     return (
         <div className="card text-center mt-3">
@@ -13,12 +15,15 @@ function DrugList(props) {
             <div className="card-body">
                 <h5 className="card-title">Lista leków i suplementów:</h5>
                 <ul className="card-text list-group">
-                    <li className="list-group-item"><span className="fw-bold">Xanax</span>: 60/120 szt. <button className="btn btn-danger rounded-circle">
-                        <i className="fa-solid fa-trash-can"></i></button></li>
-                    <li className="list-group-item"><span className="fw-bold">Witamina C</span>: 20/80 szt. <button className="btn btn-danger rounded-circle">
-                        <i className="fa-solid fa-trash-can"></i></button></li>
-                    <li className="list-group-item"><span className="fw-bold">Metanabol</span>: 4/10 amp. 10 ml <button className="btn btn-danger rounded-circle">
-                        <i className="fa-solid fa-trash-can"></i></button></li>
+                    {drugListContainer.drugList.map(drug => <li className="list-group-item">
+                            <strong>{drug.name}</strong>: {drug.quantity}/{drug.quantityMax} {`${drug.unit} `}
+                            {
+                                props.isEditMode && <button className="btn btn-danger rounded-circle">
+                                    <i className="fa-solid fa-trash-can"></i>
+                                </button>
+                            }
+                        </li>
+                    )}
                 </ul>
                 <div className="d-grid">
                     <button className="btn btn-primary mt-2" onClick={() => {
@@ -29,7 +34,8 @@ function DrugList(props) {
                         }
                     }}>
                         {props.isEditMode ? 'Dodaj ' : 'Edytuj '}
-                        {props.isEditMode ? <i className="fa-solid fa-plus"></i> : <i className="fa-solid fa-pencil"></i>}
+                        {props.isEditMode ? <i className="fa-solid fa-plus"></i> :
+                            <i className="fa-solid fa-pencil"></i>}
                     </button>
                 </div>
             </div>
