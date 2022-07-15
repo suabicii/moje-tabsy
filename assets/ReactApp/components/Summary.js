@@ -4,7 +4,7 @@ import DrugList from "./DrugList";
 function Summary() {
     return (
         <>
-            <h1 className="text-center">Podsumowanie</h1>
+            <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
             <DrugList isEditMode={false}/>
             {/* SCHEDULE AND STOCK STATUS */}
             <div className="row mt-3">

@@ -4,7 +4,7 @@ import DrugList from "./DrugList";
 function DrugListPage() {
     return (
         <>
-            <h1 className="text-center">Moje leki i suplementy</h1>
+            <h1 className="text-center mt-5 mt-md-0">Moje leki i suplementy</h1>
             <DrugList isEditMode={true}/>
         </>
     );
