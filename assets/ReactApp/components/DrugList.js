@@ -15,17 +15,22 @@ function DrugList(props) {
             <div className="card-body">
                 <h5 className="card-title">Lista leków i suplementów:</h5>
                 <ul className="card-text list-group">
-                    {drugListContainer.drugList.map(drug => <li className="list-group-item">
+                    {drugListContainer.drugList.map(drug => <li key={drug.id} className="list-group-item">
                             <strong>{drug.name}</strong>: {drug.quantity}/{drug.quantityMax} {`${drug.unit}, `}
                             <strong>Dzienna
                                 dawka: </strong> {drug.dosing} {drug.unit} {`${Object.keys(drug.dosingMoments).length} raz(-y) dziennie `}
                             {
-                                props.isEditMode && <button className="btn btn-danger rounded-circle float-md-end">
+                                // Delete button
+                                props.isEditMode && <button className="btn btn-danger rounded-circle float-md-end" onClick={() => {
+                                    drugListContainer.removeDrug(drug.id);
+                                }}>
                                     <i className="fa-solid fa-trash-can"></i>
                                 </button>
                             }
                             {
-                                props.isEditMode && <button className="btn btn-info rounded-circle float-md-end">
+                                // Edit button
+                                props.isEditMode &&
+                                <button className="btn btn-info rounded-circle float-md-end">
                                     <i className="fa-solid fa-pencil"></i>
                                 </button>
                             }
