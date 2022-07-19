@@ -1,11 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
 import {DrugListContainer} from "../container/DrugListContainer";
+import Modal from "./Modal";
+import EditDrugModalContent from "./EditDrugModalContent";
 
 function DrugList(props) {
     const navigate = useNavigate();
     const drugListContainer = DrugListContainer.useContainer();
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const editModalContent = <EditDrugModalContent setIsEditModalOpen={setIsEditModalOpen}/>;
 
     return (
         <div className="card text-center mt-3">
@@ -21,7 +25,8 @@ function DrugList(props) {
                                 dawka: </strong> {drug.dosing} {drug.unit} {`${Object.keys(drug.dosingMoments).length} raz(-y) dziennie `}
                             {
                                 // Delete button
-                                props.isEditMode && <button className="btn btn-danger rounded-circle float-md-end" onClick={() => {
+                                props.isEditMode &&
+                                <button className="btn btn-danger rounded-circle float-md-end" onClick={() => {
                                     drugListContainer.removeDrug(drug.id);
                                 }}>
                                     <i className="fa-solid fa-trash-can"></i>
@@ -30,7 +35,9 @@ function DrugList(props) {
                             {
                                 // Edit button
                                 props.isEditMode &&
-                                <button className="btn btn-info rounded-circle float-md-end">
+                                <button className="btn btn-info rounded-circle float-md-end" onClick={() => {
+                                    setIsEditModalOpen(true);
+                                }}>
                                     <i className="fa-solid fa-pencil"></i>
                                 </button>
                             }
@@ -51,6 +58,7 @@ function DrugList(props) {
                     </button>
                 </div>
             </div>
+            <Modal modalIsOpen={isEditModalOpen} content={editModalContent}/>
         </div>
     );
 }
