@@ -23,7 +23,7 @@ function Modal(props) {
     return (
         <ReactModal
             isOpen={showModal}
-            appElement={document.getElementById('react')}
+            appElement={!props.customRoot && document.getElementById('react')} // customRoot is for test purposes
             shouldCloseOnOverlayClick={true}
             shouldCloseOnEsc={true}
             style={customStyles}

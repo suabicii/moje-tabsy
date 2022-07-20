@@ -2,14 +2,14 @@ import React, {useState} from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
 import {DrugListContainer} from "../container/DrugListContainer";
-import Modal from "./Modal";
-import EditDrugModalContent from "./EditDrugModalContent";
+import Modal from "./modal/Modal";
+import DrugModalContent from "./modal/DrugModalContent";
 
 function DrugList(props) {
     const navigate = useNavigate();
     const drugListContainer = DrugListContainer.useContainer();
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const editModalContent = <EditDrugModalContent setIsEditModalOpen={setIsEditModalOpen}/>;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const modalContent = <DrugModalContent setIsModalOpen={setIsModalOpen}/>;
 
     return (
         <div className="card text-center mt-3">
@@ -36,7 +36,7 @@ function DrugList(props) {
                                 // Edit button
                                 props.isEditMode &&
                                 <button className="btn btn-info rounded-circle float-md-end" onClick={() => {
-                                    setIsEditModalOpen(true);
+                                    setIsModalOpen(true);
                                 }}>
                                     <i className="fa-solid fa-pencil"></i>
                                 </button>
@@ -58,7 +58,7 @@ function DrugList(props) {
                     </button>
                 </div>
             </div>
-            {props.isEditMode && <Modal modalIsOpen={isEditModalOpen} content={editModalContent}/>}
+            {props.isEditMode && <Modal modalIsOpen={isModalOpen} content={modalContent}/>}
         </div>
     );
 }

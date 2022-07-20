@@ -1,10 +1,10 @@
 import React from "react";
 
-function EditDrugModalContent(props) {
+function DrugModalContent(props) {
     return (
         <>
             <button className="btn btn-close" onClick={() => {
-                props.setIsEditModalOpen(false);
+                props.setIsModalOpen(false);
             }}>
             </button>
             <h3 className="mt-2 text-center">Edytuj</h3>
@@ -50,7 +50,7 @@ function EditDrugModalContent(props) {
                 <div className="d-flex justify-content-between mt-3">
                     <button type="submit" className="btn btn-info px-5">Zapisz</button>
                     <button type="button" className="btn btn-outline-dark px-5" onClick={() => {
-                        props.setIsEditModalOpen(false);
+                        props.setIsModalOpen(false);
                     }}>
                         Anuluj
                     </button>
@@ -60,4 +60,4 @@ function EditDrugModalContent(props) {
     );
 }
 
-export default EditDrugModalContent;
+export default DrugModalContent;
