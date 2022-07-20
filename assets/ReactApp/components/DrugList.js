@@ -8,7 +8,7 @@ import EditDrugModalContent from "./EditDrugModalContent";
 function DrugList(props) {
     const navigate = useNavigate();
     const drugListContainer = DrugListContainer.useContainer();
-    const [isEditModalOpen, setIsEditModalOpen] = useState(true);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const editModalContent = <EditDrugModalContent setIsEditModalOpen={setIsEditModalOpen}/>;
 
     return (
@@ -58,7 +58,7 @@ function DrugList(props) {
                     </button>
                 </div>
             </div>
-            <Modal modalIsOpen={isEditModalOpen} content={editModalContent}/>
+            {props.isEditMode && <Modal modalIsOpen={isEditModalOpen} content={editModalContent}/>}
         </div>
     );
 }
