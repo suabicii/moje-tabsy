@@ -10,8 +10,7 @@ function Modal(props) {
             right: 'auto',
             bottom: 'auto',
             marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            maxWidth: '550px'
+            transform: 'translate(-50%, -50%)'
         },
     };
 

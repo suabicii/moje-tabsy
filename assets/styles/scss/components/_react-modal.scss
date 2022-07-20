@@ -1,0 +1,11 @@
+.ReactModal__Content {
+  height: 400px;
+  margin-top: 20px;
+}
+
+@media (min-width: 360px) {
+  .ReactModal__Content {
+    height: unset;
+    margin-top: unset;
+  }
+}
