@@ -8,7 +8,7 @@ import EditDrugModalContent from "./EditDrugModalContent";
 function DrugList(props) {
     const navigate = useNavigate();
     const drugListContainer = DrugListContainer.useContainer();
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(true);
     const editModalContent = <EditDrugModalContent setIsEditModalOpen={setIsEditModalOpen}/>;
 
     return (

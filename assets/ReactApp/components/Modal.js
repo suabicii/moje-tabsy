@@ -11,12 +11,15 @@ function Modal(props) {
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
+            maxWidth: '550px'
         },
     };
 
     useEffect(() => {
         setShowModal(props.modalIsOpen);
     });
+
+    ReactModal.defaultStyles.overlay.backgroundColor = 'rgba(0, 0, 0, 0.4)';
 
     return (
         <ReactModal
