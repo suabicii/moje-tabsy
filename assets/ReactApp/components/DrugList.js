@@ -9,7 +9,9 @@ function DrugList(props) {
     const navigate = useNavigate();
     const drugListContainer = DrugListContainer.useContainer();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const modalContent = <DrugModalContent setIsModalOpen={setIsModalOpen}/>;
+    const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
+    const modalContent = <DrugModalContent setIsModalOpen={setIsModalOpen} drug={drugDataForEdit}/>;
+    const customRoot = props.customRoot || null;
 
     return (
         <div className="card text-center mt-3">
@@ -35,8 +37,10 @@ function DrugList(props) {
                             {
                                 // Edit button
                                 props.isEditMode &&
-                                <button className="btn btn-info rounded-circle float-md-end" onClick={() => {
+                                <button className="btn btn-info rounded-circle float-md-end"
+                                        data-testid={`edit-drug-${drug.id}`} onClick={() => {
                                     setIsModalOpen(true);
+                                    setDrugDataForEdit(drug);
                                 }}>
                                     <i className="fa-solid fa-pencil"></i>
                                 </button>
@@ -58,7 +62,7 @@ function DrugList(props) {
                     </button>
                 </div>
             </div>
-            {props.isEditMode && <Modal modalIsOpen={isModalOpen} content={modalContent}/>}
+            {props.isEditMode && <Modal modalIsOpen={isModalOpen} content={modalContent} customRoot={customRoot}/>}
         </div>
     );
 }

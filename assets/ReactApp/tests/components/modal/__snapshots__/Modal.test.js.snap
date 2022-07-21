@@ -2,7 +2,11 @@
 
 exports[`should correctly render opened modal with some content 1`] = `
 <Modal
-  appElement={false}
+  appElement={
+    <div
+      className="custom-root"
+    />
+  }
   ariaHideApp={true}
   bodyOpenClassName="ReactModal__Body--open"
   closeTimeoutMS={0}

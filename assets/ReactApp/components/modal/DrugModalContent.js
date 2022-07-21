@@ -8,35 +8,40 @@ function DrugModalContent(props) {
             }}>
             </button>
             <h3 className="mt-2 text-center">Edytuj</h3>
-            <form onSubmit={e => {
+            <form role="form" name="drug_form" onSubmit={e => {
                 e.preventDefault();
             }}>
                 <div className="row">
                     <div className="col-md-6">
                         <div className="form-floating mt-3">
-                            <input type="text" className="form-control" id="name" placeholder="Nazwa"/>
+                            <input type="text" className="form-control" id="name" name="name"
+                                   defaultValue={props.drug ? props.drug.name : ""} placeholder="Nazwa"/>
                             <label htmlFor="name">Nazwa</label>
                         </div>
                         <div className="form-floating mt-3">
-                            <input type="text" className="form-control" id="unit" placeholder="Jednostka"/>
+                            <input type="text" className="form-control" id="unit" name="unit"
+                                   defaultValue={props.drug ? props.drug.unit : ""} placeholder="Jednostka"/>
                             <label htmlFor="unit">Jednostka (szt., ml. itp.)</label>
                         </div>
                     </div>
                     <div className="col-md-6">
                         <div className="form-floating mt-3">
-                            <input type="number" step="1" className="form-control" id="quantity" placeholder="Bieżąca ilość"/>
+                            <input type="number" step="1" className="form-control" id="quantity" name="quantity"
+                                   defaultValue={props.drug ? props.drug.quantity : ""} placeholder="Bieżąca ilość"/>
                             <label htmlFor="quantity">Bieżąca ilość</label>
                         </div>
                         <div className="form-floating mt-3">
                             <input type="number" step="1" className="form-control" id="quantityMax"
+                                   defaultValue={props.drug ? props.drug.quantityMax : ""} name="quantityMax"
                                    placeholder="Ilość całkowita"/>
                             <label htmlFor="quantityMax">Ilość całkowita</label>
                         </div>
                     </div>
                 </div>
                 <div className="form-floating mt-3">
-                    <input type="number" step="1" className="form-control" id="dosing"
-                           placeholder="Dawkowanie (ile razy dziennie)" value="1" aria-valuemin="1"/>
+                    <input type="number" step="1" className="form-control" id="dosing" name="dosing"
+                           placeholder="Dawkowanie (ile razy dziennie)"
+                           defaultValue={props.drug ? props.drug.dosing : "1"} aria-valuemin="1"/>
                     <label htmlFor="dosing">Dawkowanie (ile razy dziennie)</label>
                 </div>
                 <div className="dosing-hours mt-3">

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import ReactModal from "react-modal";
 
 function Modal(props) {
+    const root = props.customRoot || document.getElementById('react'); // customRoot is for test purposes
     const [showModal, setShowModal] = useState(false);
     const customStyles = {
         content: {
@@ -23,7 +24,7 @@ function Modal(props) {
     return (
         <ReactModal
             isOpen={showModal}
-            appElement={!props.customRoot && document.getElementById('react')} // customRoot is for test purposes
+            appElement={root}
             shouldCloseOnOverlayClick={true}
             shouldCloseOnEsc={true}
             style={customStyles}
