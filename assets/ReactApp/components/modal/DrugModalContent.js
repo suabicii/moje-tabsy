@@ -1,6 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
+import DosingMomentsInputs from "../DosingMomentsInputs";
 
 function DrugModalContent(props) {
+    const [dosingMoments, setDosingMoments] = useState(Object.entries(props.drug.dosingMoments));
+
     return (
         <>
             <button className="btn btn-close" onClick={() => {
@@ -41,16 +44,13 @@ function DrugModalContent(props) {
                 <div className="form-floating mt-3">
                     <input type="number" step="1" className="form-control" id="dosing" name="dosing"
                            placeholder="Dawkowanie (ile razy dziennie)"
-                           defaultValue={props.drug ? props.drug.dosing : "1"} aria-valuemin="1"/>
+                           defaultValue={props.drug ? props.drug.dosing : "1"} aria-valuemin="1"
+                    />
                     <label htmlFor="dosing">Dawkowanie (ile razy dziennie)</label>
                 </div>
                 <div className="dosing-hours mt-3">
                     <h4 className="text-center">Godziny przyjęcia dawki</h4>
-                    <div className="input-group mt-3">
-                        <span className="input-group-text"><i
-                            className="fa-solid fa-clock"></i></span>
-                        <input type="time" name="hour1" className="form-control" aria-label="Godzina przyjęcia dawki"/>
-                    </div>
+                    <DosingMomentsInputs dosingMoments={dosingMoments}/>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
                     <button type="submit" className="btn btn-info px-5">Zapisz</button>

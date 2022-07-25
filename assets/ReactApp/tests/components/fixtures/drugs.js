@@ -7,7 +7,7 @@ export default [
         unit: 'szt.',
         dosing: 1,
         dosingMoments: {
-            1: '7:00',
+            1: '07:00',
             2: '18:00'
         }
     },

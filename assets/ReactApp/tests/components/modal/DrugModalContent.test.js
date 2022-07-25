@@ -14,7 +14,7 @@ import "@testing-library/jest-dom/extend-expect";
 it('should correctly render modal content with form', () => {
     const renderer = new ReactShallowRenderer();
     const setIsModalOpen = jest.fn();
-    renderer.render(<DrugModalContent setIsModalOpen={setIsModalOpen}/>);
+    renderer.render(<DrugModalContent drug={drugs[0]} setIsModalOpen={setIsModalOpen}/>);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
@@ -37,6 +37,8 @@ it('should render modal content with drug data after clicking edit button', () =
         unit: drugs[0].unit,
         quantity: drugs[0].quantity,
         quantityMax: drugs[0].quantityMax,
-        dosing: drugs[0].dosing
+        dosing: drugs[0].dosing,
+        hour1: drugs[0].dosingMoments["1"],
+        hour2: drugs[0].dosingMoments["2"]
     });
 });

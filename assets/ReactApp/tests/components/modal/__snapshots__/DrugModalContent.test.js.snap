@@ -27,7 +27,7 @@ exports[`should correctly render modal content with form 1`] = `
         >
           <input
             className="form-control"
-            defaultValue=""
+            defaultValue="Xanax"
             id="name"
             name="name"
             placeholder="Nazwa"
@@ -44,7 +44,7 @@ exports[`should correctly render modal content with form 1`] = `
         >
           <input
             className="form-control"
-            defaultValue=""
+            defaultValue="szt."
             id="unit"
             name="unit"
             placeholder="Jednostka"
@@ -65,7 +65,7 @@ exports[`should correctly render modal content with form 1`] = `
         >
           <input
             className="form-control"
-            defaultValue=""
+            defaultValue={60}
             id="quantity"
             name="quantity"
             placeholder="Bieżąca ilość"
@@ -83,7 +83,7 @@ exports[`should correctly render modal content with form 1`] = `
         >
           <input
             className="form-control"
-            defaultValue=""
+            defaultValue={120}
             id="quantityMax"
             name="quantityMax"
             placeholder="Ilość całkowita"
@@ -104,7 +104,7 @@ exports[`should correctly render modal content with form 1`] = `
       <input
         aria-valuemin="1"
         className="form-control"
-        defaultValue="1"
+        defaultValue={1}
         id="dosing"
         name="dosing"
         placeholder="Dawkowanie (ile razy dziennie)"
@@ -125,23 +125,20 @@ exports[`should correctly render modal content with form 1`] = `
       >
         Godziny przyjęcia dawki
       </h4>
-      <div
-        className="input-group mt-3"
-      >
-        <span
-          className="input-group-text"
-        >
-          <i
-            className="fa-solid fa-clock"
-          />
-        </span>
-        <input
-          aria-label="Godzina przyjęcia dawki"
-          className="form-control"
-          name="hour1"
-          type="time"
-        />
-      </div>
+      <DosingMomentsInputs
+        dosingMoments={
+          Array [
+            Array [
+              "1",
+              "07:00",
+            ],
+            Array [
+              "2",
+              "18:00",
+            ],
+          ]
+        }
+      />
     </div>
     <div
       className="d-flex justify-content-between mt-3"
