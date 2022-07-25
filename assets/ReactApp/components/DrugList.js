@@ -8,9 +8,11 @@ import DrugModalContent from "./modal/DrugModalContent";
 function DrugList(props) {
     const navigate = useNavigate();
     const drugListContainer = DrugListContainer.useContainer();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
-    const modalContent = <DrugModalContent setIsModalOpen={setIsModalOpen} drug={drugDataForEdit}/>;
+    const editModalContent = <DrugModalContent setIsModalOpen={setIsEditModalOpen} drug={drugDataForEdit}/>;
+    const addModalContent = <DrugModalContent setIsModalOpen={setIsAddModalOpen}/>;
     const customRoot = props.customRoot || null;
 
     return (
@@ -39,7 +41,7 @@ function DrugList(props) {
                                 props.isEditMode &&
                                 <button className="btn btn-info rounded-circle float-md-end"
                                         data-testid={`edit-drug-${drug.id}`} onClick={() => {
-                                    setIsModalOpen(true);
+                                    setIsEditModalOpen(true);
                                     setDrugDataForEdit(drug);
                                 }}>
                                     <i className="fa-solid fa-pencil"></i>
@@ -49,9 +51,9 @@ function DrugList(props) {
                     )}
                 </ul>
                 <div className="d-grid">
-                    <button className="btn btn-primary mt-2" onClick={() => {
+                    <button className="btn btn-primary mt-2" data-testid="add-drug" onClick={() => {
                         if (props.isEditMode) {
-                            console.log('edit mode enabled');
+                            setIsAddModalOpen(true);
                         } else {
                             navigate(`${mainRoute}/drug-list`);
                         }
@@ -62,7 +64,12 @@ function DrugList(props) {
                     </button>
                 </div>
             </div>
-            {props.isEditMode && <Modal modalIsOpen={isModalOpen} content={modalContent} customRoot={customRoot}/>}
+            {props.isEditMode &&
+                <>
+                    <Modal modalIsOpen={isEditModalOpen} content={editModalContent} customRoot={customRoot}/>
+                    <Modal modalIsOpen={isAddModalOpen} content={addModalContent} customRoot={customRoot}/>
+                </>
+            }
         </div>
     );
 }

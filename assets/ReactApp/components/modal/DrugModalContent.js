@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import DosingMomentsInputs from "../DosingMomentsInputs";
 
 function DrugModalContent(props) {
-    const [dosingMoments, setDosingMoments] = useState(Object.entries(props.drug.dosingMoments));
+    const dosingMomentsDefaultValue = props.drug ? Object.entries(props.drug.dosingMoments) : [["1", null]];
+    const [dosingMoments, setDosingMoments] = useState(dosingMomentsDefaultValue);
 
     return (
         <>
@@ -10,7 +11,7 @@ function DrugModalContent(props) {
                 props.setIsModalOpen(false);
             }}>
             </button>
-            <h3 className="mt-2 text-center">Edytuj</h3>
+            <h3 className="mt-2 text-center">{props.drug ? 'Edytuj' : 'Dodaj'} lek/suplement</h3>
             <form role="form" name="drug_form" onSubmit={e => {
                 e.preventDefault();
             }}>

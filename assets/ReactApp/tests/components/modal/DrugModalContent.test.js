@@ -11,14 +11,7 @@ import {DrugListContainer} from "../../../container/DrugListContainer";
 import {fireEvent, render, screen} from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
-it('should correctly render modal content with form', () => {
-    const renderer = new ReactShallowRenderer();
-    const setIsModalOpen = jest.fn();
-    renderer.render(<DrugModalContent drug={drugs[0]} setIsModalOpen={setIsModalOpen}/>);
-    expect(renderer.getRenderOutput()).toMatchSnapshot();
-});
-
-it('should render modal content with drug data after clicking edit button', () => {
+const renderDrugList = () => {
     const root = document.createElement('div');
     document.body.appendChild(root);
     render(
@@ -28,6 +21,17 @@ it('should render modal content with drug data after clicking edit button', () =
             </BrowserRouter>
         </DrugListContainer.Provider>
     );
+};
+
+it('should correctly render modal content with form', () => {
+    const renderer = new ReactShallowRenderer();
+    const setIsModalOpen = jest.fn();
+    renderer.render(<DrugModalContent drug={drugs[0]} setIsModalOpen={setIsModalOpen}/>);
+    expect(renderer.getRenderOutput()).toMatchSnapshot();
+});
+
+it('should render modal content with drug data after clicking edit button', () => {
+    renderDrugList();
 
     // click edit button near first list item
     fireEvent.click(screen.getByTestId('edit-drug-1')); // from data-testid, 1 is id of first item
@@ -42,3 +46,11 @@ it('should render modal content with drug data after clicking edit button', () =
         hour2: drugs[0].dosingMoments["2"]
     });
 });
+
+it('should render modal with empty input fields in most and one default value after clicking add button', function () {
+    renderDrugList();
+
+    fireEvent.click(screen.getByTestId('add-drug'));
+
+    expect(screen.getByRole('form')).toHaveFormValues({dosing: 1});
+}); 

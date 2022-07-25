@@ -10,6 +10,7 @@ exports[`should correctly render modal content with form 1`] = `
     className="mt-2 text-center"
   >
     Edytuj
+     lek/suplement
   </h3>
   <form
     name="drug_form"
