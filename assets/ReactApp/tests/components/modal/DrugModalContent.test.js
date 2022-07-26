@@ -47,10 +47,17 @@ it('should render modal content with drug data after clicking edit button', () =
     });
 });
 
-it('should render modal with empty input fields in most and one default value after clicking add button', function () {
+it('should render modal with empty input fields in most and one default value after clicking add button', () => {
     renderDrugList();
+    fireEvent.click(screen.getByTestId('add-drug'));
+    expect(screen.getByRole('form')).toHaveFormValues({dosing: 1});
+});
 
+it('should add dosing moment input after increasing dosing input value in add drug form', () => {
+    renderDrugList();
     fireEvent.click(screen.getByTestId('add-drug'));
 
-    expect(screen.getByRole('form')).toHaveFormValues({dosing: 1});
+    fireEvent.change(screen.getByTestId('dosing'), {target: {value: 2}});
+
+    expect(screen.getAllByRole('timer').length).toBeGreaterThan(1);
 }); 

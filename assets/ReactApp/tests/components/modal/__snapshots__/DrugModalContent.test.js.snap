@@ -109,9 +109,11 @@ exports[`should correctly render modal content with form 1`] = `
       <input
         aria-valuemin="1"
         className="form-control"
+        data-testid="dosing"
         defaultValue={1}
         id="dosing"
         name="dosing"
+        onChange={[Function]}
         placeholder="Dawkowanie (ile razy dziennie)"
         required={true}
         step="1"
