@@ -32,6 +32,7 @@ exports[`should correctly render modal content with form 1`] = `
             id="name"
             name="name"
             placeholder="Nazwa"
+            required={true}
             type="text"
           />
           <label
@@ -49,6 +50,7 @@ exports[`should correctly render modal content with form 1`] = `
             id="unit"
             name="unit"
             placeholder="Jednostka"
+            required={true}
             type="text"
           />
           <label
@@ -70,6 +72,7 @@ exports[`should correctly render modal content with form 1`] = `
             id="quantity"
             name="quantity"
             placeholder="Bieżąca ilość"
+            required={true}
             step="1"
             type="number"
           />
@@ -88,6 +91,7 @@ exports[`should correctly render modal content with form 1`] = `
             id="quantityMax"
             name="quantityMax"
             placeholder="Ilość całkowita"
+            required={true}
             step="1"
             type="number"
           />
@@ -109,6 +113,7 @@ exports[`should correctly render modal content with form 1`] = `
         id="dosing"
         name="dosing"
         placeholder="Dawkowanie (ile razy dziennie)"
+        required={true}
         step="1"
         type="number"
       />

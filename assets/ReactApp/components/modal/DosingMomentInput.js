@@ -12,6 +12,7 @@ function DosingMomentInput(props) {
                 defaultValue={props.value}
                 className="form-control"
                 aria-label="Godzina przyjęcia dawki"
+                required
             />
         </div>
     );
