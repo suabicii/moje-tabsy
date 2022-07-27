@@ -41,6 +41,14 @@ function DrugModalContent(props) {
                             />
                             <label htmlFor="unit">Jednostka (szt., ml. itp.)</label>
                         </div>
+                        <div className="form-floating mt-3">
+                            <input type="number" step="0.01" name="dosing" id="dosing" className="form-control"
+                                   aria-valuemin="0.01"
+                                   defaultValue={props.drug ? props.drug.dosing : ""}
+                                   placeholder="Dawkowanie (ile na raz?)" required
+                            />
+                            <label htmlFor="dosing">Dawkowanie (ile na raz?)</label>
+                        </div>
                     </div>
                     <div className="col-md-6">
                         <div className="form-floating mt-3">
@@ -57,18 +65,19 @@ function DrugModalContent(props) {
                             />
                             <label htmlFor="quantityMax">Ilość całkowita</label>
                         </div>
+                        <div className="form-floating mt-3">
+                            <input type="number" step="1" className="form-control" id="dailyDosing" name="daily_dosing"
+                                   placeholder="Ile razy dziennie?"
+                                   defaultValue={props.drug ? Object.keys(props.drug.dosingMoments).length : "1"}
+                                   aria-valuemin="1"
+                                   required data-testid="dailyDosing"
+                                   onChange={e => {
+                                       handleChangeDosingInput(e.target.value);
+                                   }}
+                            />
+                            <label htmlFor="dailyDosing">Ile razy dziennie?</label>
+                        </div>
                     </div>
-                </div>
-                <div className="form-floating mt-3">
-                    <input type="number" step="1" className="form-control" id="dosing" name="dosing"
-                           placeholder="Dawkowanie (ile razy dziennie)"
-                           defaultValue={props.drug ? props.drug.dosing : "1"} aria-valuemin="1"
-                           required data-testid="dosing"
-                           onChange={e => {
-                               handleChangeDosingInput(e.target.value);
-                           }}
-                    />
-                    <label htmlFor="dosing">Dawkowanie (ile razy dziennie)</label>
                 </div>
                 <div className="dosing-hours mt-3">
                     <h4 className="text-center">Godziny przyjęcia dawki</h4>
