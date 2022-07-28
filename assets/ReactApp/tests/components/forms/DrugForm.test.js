@@ -51,11 +51,46 @@ it('should add dosing moment input after increasing daily dosing input value in 
     expect(screen.getAllByRole('timer').length).toBeGreaterThan(1);
 });
 
-it('should add dosing moment input after increasing more than once daily dosing input value in edit drug form', () => {
+it('should remove dosing moment input added before after decreasing daily dosing input value in add drug form', () => {
     renderForm();
+
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 1}});
+
+    expect(screen.getAllByRole('timer').length).toBe(1);
+});
+
+it('should add dosing moment input after increasing more than once daily dosing input value in edit drug form', () => {
+    renderForm(drugs[0]);
 
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 3}});
 
     expect(screen.getAllByRole('timer').length).toBeGreaterThan(2);
+});
+
+it('should remove dosing moment input after decreasing daily dosing input value in edit drug form', () => {
+    renderForm(drugs[0]);
+
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 3}});
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
+
+    expect(screen.getAllByRole('timer').length).toBe(2);
+});
+
+it('should change dosing moment input amount to correct value after manually writing any daily dosing input value any times in edit drug form', () => {
+    renderForm(drugs[0]);
+
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 8}});
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 4}});
+
+    expect(screen.getAllByRole('timer').length).toBe(4);
+});
+
+it('should remove dosing moment inputs with values from database after decreasing daily dosing input value in edit drug form', () => {
+    renderForm(drugs[0]);
+
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 1}}); // decreased value from value equaled 2
+
+    expect(screen.getAllByRole('timer').length).toBe(1);
 });

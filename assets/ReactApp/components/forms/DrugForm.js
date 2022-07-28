@@ -6,12 +6,7 @@ function DrugForm(props) {
     const dosingMoments = props.drug ? Object.entries(props.drug.dosingMoments) : null;
     const [dosingMomentInputAmount, setDosingMomentInputAmount] = useState(dosingMomentInputDefaultAmount);
     const handleChangeDosingInput = value => {
-        const dosingMomentInputs = [...document.querySelectorAll('.dosing-moment-input')];
-        if (value > dosingMomentInputs.length) {
-            setDosingMomentInputAmount(dosingMomentInputAmount + 1);
-        } else {
-            setDosingMomentInputAmount(dosingMomentInputAmount - 1);
-        }
+        setDosingMomentInputAmount(value);
     };
 
     return (

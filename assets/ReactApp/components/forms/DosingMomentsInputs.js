@@ -10,6 +10,9 @@ function DosingMomentsInputs(props) {
 
     if (props.dosingMoments) {
         for (const [key, value] of props.dosingMoments) {
+            if (parseInt(key) > props.inputAmount) {
+                break;
+            }
             addInputToArray(`hour${key}`, value);
         }
         if (props.inputAmount > props.dosingMoments.length) {
