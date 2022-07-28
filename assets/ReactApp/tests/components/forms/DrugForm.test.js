@@ -3,13 +3,12 @@
  * */
 import React from "react";
 import ReactShallowRenderer from "react-test-renderer/shallow";
-import DrugModalContent from "../../../components/modal/DrugModalContent";
-import DrugList from "../../../components/DrugList";
-import {BrowserRouter} from "react-router-dom";
+import DrugForm from "../../../components/forms/DrugForm";
+import {fireEvent, render, screen} from "@testing-library/react";
 import drugs from "../fixtures/drugs";
 import {DrugListContainer} from "../../../container/DrugListContainer";
-import {fireEvent, render, screen} from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import {BrowserRouter} from "react-router-dom";
+import DrugList from "../../../components/DrugList";
 
 const renderDrugList = () => {
     const root = document.createElement('div');
@@ -23,11 +22,11 @@ const renderDrugList = () => {
     );
 };
 
-it('should correctly render modal content with form', () => {
+it('should correctly render DrugForm', () => {
     const renderer = new ReactShallowRenderer();
-    const setIsModalOpen = jest.fn();
-    renderer.render(<DrugModalContent drug={drugs[0]} setIsModalOpen={setIsModalOpen}/>);
-    expect(renderer.getRenderOutput()).toMatchSnapshot();
+    const setIsFormVisible = jest.fn();
+    renderer.render(<DrugForm setIsFormVisible={setIsFormVisible}/>);
+    expect(renderer.getRenderOutput).toMatchSnapshot();
 });
 
 it('should render modal content with drug data after clicking edit button', () => {
@@ -61,4 +60,14 @@ it('should add dosing moment input after increasing daily dosing input value in 
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
 
     expect(screen.getAllByRole('timer').length).toBeGreaterThan(1);
-}); 
+});
+
+it('should add dosing moment input after increasing more than once daily dosing input value in edit drug form', () => {
+    renderDrugList();
+    fireEvent.click(screen.getByTestId('edit-drug-2'));
+
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 3}});
+
+    expect(screen.getAllByRole('timer').length).toBeGreaterThan(2);
+});

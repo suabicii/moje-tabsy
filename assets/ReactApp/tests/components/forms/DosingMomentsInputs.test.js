@@ -3,7 +3,7 @@
  * */
 import React from "react";
 import {render, screen} from "@testing-library/react";
-import DosingMomentsInputs from "../../../components/modal/DosingMomentsInputs";
+import DosingMomentsInputs from "../../../components/forms/DosingMomentsInputs";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 
 const dosingMoments = [
