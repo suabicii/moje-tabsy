@@ -6,20 +6,14 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import DrugForm from "../../../components/forms/DrugForm";
 import {fireEvent, render, screen} from "@testing-library/react";
 import drugs from "../fixtures/drugs";
-import {DrugListContainer} from "../../../container/DrugListContainer";
-import {BrowserRouter} from "react-router-dom";
-import DrugList from "../../../components/DrugList";
 
-const renderDrugList = () => {
-    const root = document.createElement('div');
-    document.body.appendChild(root);
-    render(
-        <DrugListContainer.Provider initialState={drugs}>
-            <BrowserRouter>
-                <DrugList isEditMode={true} customRoot={root}/>
-            </BrowserRouter>
-        </DrugListContainer.Provider>
-    );
+const renderForm = (drug = null) => {
+    const setIsFormVisible = jest.fn();
+    if (drug) {
+        render(<DrugForm drug={drug} setIsFormVisible={setIsFormVisible}/>);
+    } else {
+        render(<DrugForm setIsFormVisible={setIsFormVisible}/>);
+    }
 };
 
 it('should correctly render DrugForm', () => {
@@ -30,10 +24,7 @@ it('should correctly render DrugForm', () => {
 });
 
 it('should render modal content with drug data after clicking edit button', () => {
-    renderDrugList();
-
-    // click edit button near first list item
-    fireEvent.click(screen.getByTestId('edit-drug-1')); // from data-testid, 1 is id of first item
+    renderForm(drugs[0]);
 
     expect(screen.getByRole('form')).toHaveFormValues({
         name: drugs[0].name,
@@ -48,14 +39,12 @@ it('should render modal content with drug data after clicking edit button', () =
 });
 
 it('should render modal with empty input fields in most and one default value after clicking add button', () => {
-    renderDrugList();
-    fireEvent.click(screen.getByTestId('add-drug'));
+    renderForm();
     expect(screen.getByRole('form')).toHaveFormValues({daily_dosing: 1});
 });
 
 it('should add dosing moment input after increasing daily dosing input value in add drug form', () => {
-    renderDrugList();
-    fireEvent.click(screen.getByTestId('add-drug'));
+    renderForm();
 
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
 
@@ -63,8 +52,7 @@ it('should add dosing moment input after increasing daily dosing input value in 
 });
 
 it('should add dosing moment input after increasing more than once daily dosing input value in edit drug form', () => {
-    renderDrugList();
-    fireEvent.click(screen.getByTestId('edit-drug-2'));
+    renderForm();
 
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 2}});
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 3}});
