@@ -7,8 +7,8 @@ export default [
         unit: 'szt.',
         dosing: 1,
         dosingMoments: {
-            1: '07:00',
-            2: '18:00'
+            hour1: '07:00',
+            hour2: '18:00'
         }
     },
     {
@@ -19,7 +19,7 @@ export default [
         unit: 'szt.',
         dosing: 1,
         dosingMoments: {
-            1: '12:00'
+            hour1: '12:00'
         }
     },
     {
@@ -30,7 +30,7 @@ export default [
         unit: 'amp. 10 ml',
         dosing: 1,
         dosingMoments: {
-            1: '17:00'
+            hour2: '17:00'
         }
     },
 ];

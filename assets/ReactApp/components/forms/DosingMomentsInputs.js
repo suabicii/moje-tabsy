@@ -5,15 +5,21 @@ function DosingMomentsInputs(props) {
     const inputArray = [];
 
     const addInputToArray = (name, value = "") => {
-        inputArray.push(<DosingMomentInput name={name} value={value}/>);
+        inputArray.push(
+            <DosingMomentInput
+                handleTimeInputChange={props.handleTimeInputChange}
+                name={name}
+                value={value}
+            />
+        );
     };
 
     if (props.dosingMoments) {
         for (const [key, value] of props.dosingMoments) {
-            if (parseInt(key) > props.inputAmount) {
+            if (parseInt(key.substring(key.length - 1)) > props.inputAmount) {
                 break;
             }
-            addInputToArray(`hour${key}`, value);
+            addInputToArray(key, value);
         }
         if (props.inputAmount > props.dosingMoments.length) {
             for (let i = props.dosingMoments.length; i < props.inputAmount; i++) {

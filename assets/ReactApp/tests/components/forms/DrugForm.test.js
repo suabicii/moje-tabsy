@@ -6,24 +6,37 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import DrugForm from "../../../components/forms/DrugForm";
 import {fireEvent, render, screen} from "@testing-library/react";
 import drugs from "../fixtures/drugs";
+import {DrugListContainer} from "../../../container/DrugListContainer";
 
 const renderForm = (drug = null) => {
     const setIsFormVisible = jest.fn();
     if (drug) {
-        render(<DrugForm drug={drug} setIsFormVisible={setIsFormVisible}/>);
+        render(
+            <DrugListContainer.Provider initialState={drugs}>
+                <DrugForm drug={drug} setIsFormVisible={setIsFormVisible}/>
+            </DrugListContainer.Provider>
+        );
     } else {
-        render(<DrugForm setIsFormVisible={setIsFormVisible}/>);
+        render(
+            <DrugListContainer.Provider initialState={drugs}>
+                <DrugForm setIsFormVisible={setIsFormVisible}/>
+            </DrugListContainer.Provider>
+        );
     }
 };
 
 it('should correctly render DrugForm', () => {
     const renderer = new ReactShallowRenderer();
     const setIsFormVisible = jest.fn();
-    renderer.render(<DrugForm setIsFormVisible={setIsFormVisible}/>);
+    renderer.render(
+        <DrugListContainer.Provider>
+            <DrugForm setIsFormVisible={setIsFormVisible}/>
+        </DrugListContainer.Provider>
+    );
     expect(renderer.getRenderOutput).toMatchSnapshot();
 });
 
-it('should render modal content with drug data after clicking edit button', () => {
+it('should render drug edit form with drug data', () => {
     renderForm(drugs[0]);
 
     expect(screen.getByRole('form')).toHaveFormValues({
@@ -33,8 +46,8 @@ it('should render modal content with drug data after clicking edit button', () =
         quantityMax: drugs[0].quantityMax,
         dosing: drugs[0].dosing,
         daily_dosing: Object.keys(drugs[0].dosingMoments).length,
-        hour1: drugs[0].dosingMoments["1"],
-        hour2: drugs[0].dosingMoments["2"]
+        hour1: drugs[0].dosingMoments["hour1"],
+        hour2: drugs[0].dosingMoments["hour2"]
     });
 });
 
@@ -93,4 +106,20 @@ it('should remove dosing moment inputs with values from database after decreasin
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: 1}}); // decreased value from value equaled 2
 
     expect(screen.getAllByRole('timer').length).toBe(1);
+});
+
+it('should add drug to list', () => {
+    renderForm();
+    const drugListLengthBeforeUpdate = drugs.length;
+
+    fireEvent.change(screen.getByTestId('drugName'), {target: {value: 'Prozac'}});
+    fireEvent.change(screen.getByTestId('unit'), {target: {value: 'pcs'}});
+    fireEvent.change(screen.getByTestId('dosing'), {target: {value: '1'}});
+    fireEvent.change(screen.getByTestId('quantity'), {target: {value: '120'}});
+    fireEvent.change(screen.getByTestId('quantityMax'), {target: {value: '120'}});
+    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: '1'}});
+    fireEvent.change(screen.getByTestId('hour1-test'), {target: {value: '07:00'}});
+    fireEvent.submit(screen.getByRole('form'));
+
+    expect(drugs.length).toBeGreaterThan(drugListLengthBeforeUpdate);
 });

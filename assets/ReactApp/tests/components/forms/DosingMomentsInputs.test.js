@@ -7,8 +7,8 @@ import DosingMomentsInputs from "../../../components/forms/DosingMomentsInputs";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 
 const dosingMoments = [
-    ['1', '00:00'],
-    ['2', '00:01']
+    ['hour1', '00:00'],
+    ['hour2', '00:01']
 ];
 
 it('should correctly render dosing moments inputs', () => {
