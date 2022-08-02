@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
 import {DrugListContainer} from "../container/DrugListContainer";
@@ -6,10 +6,14 @@ import DrugForm from "./forms/DrugForm";
 
 function DrugList(props) {
     const navigate = useNavigate();
-    const drugListContainer = DrugListContainer.useContainer();
+    const {drugList, removeDrug} = DrugListContainer.useContainer();
     const [isEditFormVisible, setIsEditFormVisible] = useState(false);
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
+
+    useEffect(() => {
+        localStorage.setItem('drugs', JSON.stringify(drugList));
+    });
 
     return (
         <>
@@ -20,15 +24,16 @@ function DrugList(props) {
                 <div className="card-body">
                     <h5 className="card-title">Lista leków i suplementów:</h5>
                     <ul className="card-text list-group">
-                        {drugListContainer.drugList.map(drug => <li key={drug.id} className="list-group-item" data-testid="drug">
+                        {drugList.map(drug => <li key={drug.id} className="list-group-item" data-testid="drug">
                                 <strong>{drug.name}</strong>: {drug.quantity}/{drug.quantityMax} {`${drug.unit}, `}
                                 <strong>Dzienna
                                     dawka: </strong> {drug.dosing} {drug.unit} {`${Object.keys(drug.dosingMoments).length} raz(-y) dziennie `}
                                 {
                                     // Delete button
                                     props.isEditMode &&
-                                    <button className="btn btn-danger rounded-circle float-md-end" onClick={() => {
-                                        drugListContainer.removeDrug(drug.id);
+                                    <button className="btn btn-danger rounded-circle float-md-end"
+                                            data-testid={`remove-drug-${drug.id}`} onClick={() => {
+                                        removeDrug(drug.id);
                                     }}>
                                         <i className="fa-solid fa-trash-can"></i>
                                     </button>

@@ -44,3 +44,13 @@ it('should render edit drug form after clicking edit button', () => {
     fireEvent.click(screen.getByTestId('edit-drug-1')); // from data-testid, 1 is id of first item
     expect(screen.getByRole('form')).toBeVisible();
 });
+
+it('should delete drug from list after clicking delete button', () => {
+    renderDrugList();
+    const drugListLengthBeforeDelete = screen.getAllByTestId('drug').length;
+
+    fireEvent.click(screen.getByTestId('remove-drug-1'));
+    const drugListLengthAfterDelete = screen.getAllByTestId('drug').length;
+
+    expect(drugListLengthAfterDelete).toBeLessThan(drugListLengthBeforeDelete);
+});
