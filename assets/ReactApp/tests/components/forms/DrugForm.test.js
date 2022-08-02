@@ -27,6 +27,18 @@ const renderForm = (drug = null) => {
     }
 };
 
+const renderFormWithDrugList = () => {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    render(
+        <DrugListContainer.Provider initialState={drugs}>
+            <BrowserRouter>
+                <DrugList isEditMode={true} customRoot={root}/>
+            </BrowserRouter>
+        </DrugListContainer.Provider>
+    );
+};
+
 it('should correctly render DrugForm', () => {
     const renderer = new ReactShallowRenderer();
     const setIsFormVisible = jest.fn();
@@ -111,15 +123,7 @@ it('should remove dosing moment inputs with values from database after decreasin
 });
 
 it('should add drug to list', () => {
-    const root = document.createElement('div');
-    document.body.appendChild(root);
-    render(
-        <DrugListContainer.Provider initialState={drugs}>
-            <BrowserRouter>
-                <DrugList isEditMode={true} customRoot={root}/>
-            </BrowserRouter>
-        </DrugListContainer.Provider>
-    );
+    renderFormWithDrugList();
     const drugListLengthBeforeUpdate = screen.getAllByTestId('drug').length;
 
     fireEvent.click(screen.getByTestId('add-drug')); // activate add drug form
@@ -136,4 +140,16 @@ it('should add drug to list', () => {
     const drugListLengthAfterUpdate = screen.getAllByTestId('drug').length;
 
     expect(drugListLengthAfterUpdate).toBeGreaterThan(drugListLengthBeforeUpdate);
+});
+
+it('should change drug data after changing value in edit form', () => {
+    renderFormWithDrugList();
+
+    fireEvent.click(screen.getByTestId('edit-drug-1'));
+    const newDrugName = 'Clonazepamum'
+
+    fireEvent.change(screen.getByTestId('drugName'), {target: {value: newDrugName}});
+    fireEvent.submit(screen.getByRole('form'));
+
+    expect(screen.getByText(newDrugName)).toBeVisible();
 });

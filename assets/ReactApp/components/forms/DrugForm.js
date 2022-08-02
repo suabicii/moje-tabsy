@@ -21,7 +21,7 @@ function DrugForm(props) {
 
     useEffect(() => {
         localStorage.setItem('drugs', JSON.stringify(drugList));
-    }, [drugList]);
+    });
 
     /** EVENT HANDLERS */
     const handleChangeDosingInput = value => {
