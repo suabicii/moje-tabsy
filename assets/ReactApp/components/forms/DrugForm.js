@@ -8,11 +8,7 @@ function DrugForm(props) {
     const [dosingMomentInputAmount, setDosingMomentInputAmount] = useState(dosingMomentInputDefaultAmount);
     const [allInputValues, setAllInputValues] = useState({});
     const [timeInputValues, setTimeInputValues] = useState({});
-    const drugListContainer = DrugListContainer.useContainer();
-
-    const updateDrugDatabase = () => {
-        localStorage.setItem('drugs', JSON.stringify(drugListContainer.drugList));
-    };
+    const {addDrug, drugList, editDrug} = DrugListContainer.useContainer();
 
     useEffect(() => {
         setAllInputValues( prevState => ({
@@ -22,6 +18,10 @@ function DrugForm(props) {
             }
         }));
     }, [timeInputValues]);
+
+    useEffect(() => {
+        localStorage.setItem('drugs', JSON.stringify(drugList));
+    }, [drugList]);
 
     /** EVENT HANDLERS */
     const handleChangeDosingInput = value => {
@@ -42,13 +42,12 @@ function DrugForm(props) {
 
     const handleSubmit = () => {
         if (props.drug) {
-            drugListContainer.editDrug(props.drug.id, allInputValues);
-            updateDrugDatabase();
+            editDrug(props.drug.id, allInputValues);
         } else {
-            drugListContainer.addDrug(allInputValues);
-            updateDrugDatabase();
+            const id = drugList ? drugList[drugList.length - 1].id + 1 : 1;
+            addDrug({id, ...allInputValues});
         }
-        // console.log(allInputValues);
+        props.setIsFormVisible(false);
     };
     /** EVENT HANDLERS */
 

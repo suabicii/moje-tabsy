@@ -20,7 +20,7 @@ function DrugList(props) {
                 <div className="card-body">
                     <h5 className="card-title">Lista leków i suplementów:</h5>
                     <ul className="card-text list-group">
-                        {drugListContainer.drugList.map(drug => <li key={drug.id} className="list-group-item">
+                        {drugListContainer.drugList.map(drug => <li key={drug.id} className="list-group-item" data-testid="drug">
                                 <strong>{drug.name}</strong>: {drug.quantity}/{drug.quantityMax} {`${drug.unit}, `}
                                 <strong>Dzienna
                                     dawka: </strong> {drug.dosing} {drug.unit} {`${Object.keys(drug.dosingMoments).length} raz(-y) dziennie `}

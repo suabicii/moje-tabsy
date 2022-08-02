@@ -7,6 +7,8 @@ import DrugForm from "../../../components/forms/DrugForm";
 import {fireEvent, render, screen} from "@testing-library/react";
 import drugs from "../fixtures/drugs";
 import {DrugListContainer} from "../../../container/DrugListContainer";
+import {BrowserRouter} from "react-router-dom";
+import DrugList from "../../../components/DrugList";
 
 const renderForm = (drug = null) => {
     const setIsFormVisible = jest.fn();
@@ -109,8 +111,18 @@ it('should remove dosing moment inputs with values from database after decreasin
 });
 
 it('should add drug to list', () => {
-    renderForm();
-    const drugListLengthBeforeUpdate = drugs.length;
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    render(
+        <DrugListContainer.Provider initialState={drugs}>
+            <BrowserRouter>
+                <DrugList isEditMode={true} customRoot={root}/>
+            </BrowserRouter>
+        </DrugListContainer.Provider>
+    );
+    const drugListLengthBeforeUpdate = screen.getAllByTestId('drug').length;
+
+    fireEvent.click(screen.getByTestId('add-drug')); // activate add drug form
 
     fireEvent.change(screen.getByTestId('drugName'), {target: {value: 'Prozac'}});
     fireEvent.change(screen.getByTestId('unit'), {target: {value: 'pcs'}});
@@ -121,5 +133,7 @@ it('should add drug to list', () => {
     fireEvent.change(screen.getByTestId('hour1-test'), {target: {value: '07:00'}});
     fireEvent.submit(screen.getByRole('form'));
 
-    expect(drugs.length).toBeGreaterThan(drugListLengthBeforeUpdate);
+    const drugListLengthAfterUpdate = screen.getAllByTestId('drug').length;
+
+    expect(drugListLengthAfterUpdate).toBeGreaterThan(drugListLengthBeforeUpdate);
 });
