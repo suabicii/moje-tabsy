@@ -7,8 +7,18 @@ function DrugForm(props) {
     const dosingMoments = props.drug ? Object.entries(props.drug.dosingMoments) : null;
     const [dosingMomentInputAmount, setDosingMomentInputAmount] = useState(dosingMomentInputDefaultAmount);
     const [allInputValues, setAllInputValues] = useState({});
-    const [timeInputValues, setTimeInputValues] = useState({});
     const {addDrug, drugList, editDrug} = DrugListContainer.useContainer();
+
+    // Because without it if you change any input value in edit form except time input,
+    // submit event sends dosingMoments with empty object
+    let timeInputValuesDefaults = {};
+    if (dosingMoments) {
+        for (const [name, value] of dosingMoments) {
+            timeInputValuesDefaults = {...timeInputValuesDefaults, [name]: value};
+        }
+    }
+    const [timeInputValues, setTimeInputValues] = useState(timeInputValuesDefaults);
+
 
     useEffect(() => {
         setAllInputValues( prevState => ({
