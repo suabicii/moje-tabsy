@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.5",
+        "dayjs": "^1.11.4",
         "jest": "^28.1.2",
         "jest-environment-jsdom": "^28.1.2",
         "prop-types": "^15.8.1",

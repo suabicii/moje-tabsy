@@ -30,7 +30,7 @@ export default [
         unit: 'amp. 10 ml',
         dosing: 1,
         dosingMoments: {
-            hour2: '17:00'
+            hour2: '12:00'
         }
     },
 ];

@@ -1,7 +1,12 @@
 import React from "react";
 import DrugList from "./DrugList";
+import {DrugListContainer} from "../container/DrugListContainer";
+import dayjs from "dayjs";
 
-function Summary() {
+function Summary({customDate}) {
+    const {drugList} = DrugListContainer.useContainer();
+    const currentDate = customDate ? customDate : dayjs(); // custom date is for testing purposes only
+
     return (
         <>
             <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
@@ -15,8 +20,25 @@ function Summary() {
                         </div>
                         <div className="card-body">
                             <ul className="list-unstyled">
-                                <li><span className="fw-bold">18:00</span> — Xanax: 1 szt.</li>
-                                <li><span className="fw-bold">20:00</span> — Witamina C: 1 szt.</li>
+                                {drugList.map(drug => {
+                                    const dosingMomentsToDisplay = [];
+                                    for (const key in drug.dosingMoments) {
+                                        if (drug.dosingMoments.hasOwnProperty(key)) {
+                                            const [hour, minute] = drug.dosingMoments[key].split(':');
+                                            if (currentDate.isBefore(currentDate.hour(parseInt(hour)).minute(parseInt(minute)), 'hour')) {
+                                                dosingMomentsToDisplay.push(
+                                                    <li key={drug.id}>
+                                                        <strong data-testid="schedule-drugName">{drug.name} </strong> – {drug.dosing} {drug.unit}:
+                                                        <ul>
+                                                            <li data-testid="schedule-dosingHour">{hour}:{minute}</li>
+                                                        </ul>
+                                                    </li>
+                                                );
+                                            }
+                                        }
+                                    }
+                                    return dosingMomentsToDisplay;
+                                })}
                             </ul>
                         </div>
                     </div>
