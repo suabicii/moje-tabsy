@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render StockStatusChecker component 1`] = `
+<Context.Provider
+  value={
+    Object {
+      "addDrug": [Function],
+      "drugList": Array [],
+      "editDrug": [Function],
+      "removeDrug": [Function],
+    }
+  }
+>
+  <StockStatusChecker />
+</Context.Provider>
+`;

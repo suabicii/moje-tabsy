@@ -106,7 +106,7 @@ function DrugForm(props) {
                             <div className="form-floating mt-3">
                                 <input type="number" step="1" className="form-control" id="quantity" name="quantity"
                                        defaultValue={props.drug ? props.drug.quantity : ""} placeholder="Bieżąca ilość"
-                                       min="1" aria-valuemin="1" data-testid="quantity" onChange={handleInputChange} required
+                                       min="0" aria-valuemin="0" data-testid="quantity" onChange={handleInputChange} required
                                 />
                                 <label htmlFor="quantity">Bieżąca ilość</label>
                             </div>
