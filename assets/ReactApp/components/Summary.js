@@ -8,6 +8,10 @@ function Summary({customDate}) {
     const {drugList} = DrugListContainer.useContainer();
     const currentDate = customDate ? customDate : dayjs(); // custom date is for testing purposes only
 
+    const checkIfCurrentTimeIsBeforeDosingMoment = (hour, minute) => {
+        return currentDate.isBefore(currentDate.hour(parseInt(hour)).minute(parseInt(minute)), 'minute');
+    };
+
     return (
         <>
             <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
@@ -26,7 +30,7 @@ function Summary({customDate}) {
                                     for (const key in drug.dosingMoments) {
                                         if (drug.dosingMoments.hasOwnProperty(key)) {
                                             const [hour, minute] = drug.dosingMoments[key].split(':');
-                                            if (currentDate.isBefore(currentDate.hour(parseInt(hour)).minute(parseInt(minute)), 'minute')) {
+                                            if (checkIfCurrentTimeIsBeforeDosingMoment(hour, minute)) {
                                                 dosingMomentsToDisplay.push(
                                                     <li key={drug.id + key}>
                                                         <strong
