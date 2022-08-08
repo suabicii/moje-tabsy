@@ -7,5 +7,6 @@ exports[`should correctly render Profile page 1`] = `
   >
     Mój profil
   </h1>
+  <ProfileForm />
 </React.Fragment>
 `;
