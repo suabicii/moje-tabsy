@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  * */
 import React from "react";
-import DosingMomentInput from "../../../components/forms/DosingMomentInput";
+import DosingMomentInput from "../../../../components/forms/special-inputs/DosingMomentInput";
 import {render, screen} from "@testing-library/react";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 

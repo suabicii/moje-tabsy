@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import DosingMomentsInputs from "./DosingMomentsInputs";
+import DosingMomentsInputs from "./special-inputs/DosingMomentsInputs";
 import {DrugListContainer} from "../../container/DrugListContainer";
 
 function DrugForm(props) {
