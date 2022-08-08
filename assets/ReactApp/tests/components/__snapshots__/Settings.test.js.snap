@@ -7,5 +7,6 @@ exports[`should correctly render Settings Page 1`] = `
   >
     Ustawienia
   </h1>
+  <SettingsForm />
 </React.Fragment>
 `;
