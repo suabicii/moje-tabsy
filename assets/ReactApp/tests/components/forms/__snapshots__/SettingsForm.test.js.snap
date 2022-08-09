@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render SettingsForm 1`] = `
+<div
+  className="card mt-3"
+>
+  <div
+    className="card-header text-center"
+  >
+    Ustawienia ogólne
+  </div>
+  <div
+    className="card-body"
+  >
+    <form
+      name="settings_form"
+      onSubmit={[Function]}
+      role="form"
+    >
+      <label
+        className="form-label"
+        htmlFor="reminderAmount"
+      >
+        Przypomnij o dawce
+      </label>
+      <div
+        className="input-group text-center"
+      >
+        <input
+          className="form-control"
+          data-testid="reminderAmount"
+          defaultValue="1"
+          id="reminderAmount"
+          min="1"
+          name="reminderAmount"
+          onChange={[Function]}
+          required={true}
+          type="number"
+        />
+        <span
+          className="input-group-text"
+        >
+          raz(-y)
+        </span>
+      </div>
+      <RemindTimeInputs
+        amount={1}
+        handleUnitInputChange={[Function]}
+      />
+      <div
+        className="notifier-choice mt-3"
+      >
+        <label
+          className="form-label"
+        >
+          Otrzymuj powiadomienia poprzez:
+        </label>
+        <div
+          className="form-check form-switch"
+        >
+          <input
+            className="form-check-input"
+            id="messengerCheck"
+            name="messengerCheck"
+            role="switch"
+            type="checkbox"
+          />
+          <label
+            className="form-check-label"
+            htmlFor="messengerCheck"
+          >
+            Messenger
+          </label>
+        </div>
+        <div
+          className="form-check form-switch"
+        >
+          <input
+            className="form-check-input"
+            id="smsCheck"
+            name="smsCheck"
+            role="switch"
+            type="checkbox"
+          />
+          <label
+            className="form-check-label"
+            htmlFor="smsCheck"
+          >
+            SMS
+          </label>
+        </div>
+      </div>
+      <div
+        className="d-grid mt-3"
+      >
+        <button
+          className="btn btn-primary"
+        >
+          Zapisz 
+          <i
+            className="fa-solid fa-floppy-disk"
+          />
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+`;

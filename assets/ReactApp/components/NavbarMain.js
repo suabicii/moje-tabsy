@@ -1,4 +1,6 @@
 import React from "react";
+import {Link} from "react-router-dom";
+import {mainRoute} from "../routers/AppRouter";
 
 function NavbarMain() {
     return (
@@ -111,10 +113,10 @@ function NavbarMain() {
                             aria-labelledby="navbarDropdownMenuLink"
                         >
                             <li>
-                                <a className="dropdown-item" href="#">Mój profil</a>
+                                <Link to={`${mainRoute}/profile`} className="dropdown-item">Mój profil</Link>
                             </li>
                             <li>
-                                <a className="dropdown-item" href="#">Ustawienia</a>
+                                <Link to={`${mainRoute}/settings`} className="dropdown-item">Ustawienia</Link>
                             </li>
                             <li>
                                 <a className="dropdown-item" href="/logout">Wyloguj się</a>

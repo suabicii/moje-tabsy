@@ -1,11 +1,13 @@
 import React from "react";
 import {createRoot} from "react-dom/client";
-import AppRouter from "./routers/AppRouter";
-import Header from "./components/Header";
+import MainPage from "./components/MainPage";
+import {DrugListContainer} from "./container/DrugListContainer";
+
+const drugList = JSON.parse(localStorage.getItem('drugs')) || [];
 
 const root = createRoot(document.getElementById('react'));
 root.render(
-    <AppRouter>
-        <Header/>
-    </AppRouter>
+    <DrugListContainer.Provider initialState={drugList}>
+        <MainPage/>
+    </DrugListContainer.Provider>
 );

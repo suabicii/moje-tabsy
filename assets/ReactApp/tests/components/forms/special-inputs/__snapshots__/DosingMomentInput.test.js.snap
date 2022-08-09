@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render dosing moment input 1`] = `
+<div
+  className="input-group mt-3"
+>
+  <span
+    className="input-group-text"
+  >
+    <i
+      className="fa-solid fa-clock"
+    />
+  </span>
+  <input
+    aria-label="Godzina przyjęcia dawki"
+    className="form-control dosing-moment-input"
+    data-testid="some_name-test"
+    defaultValue="00:00"
+    name="some_name"
+    required={true}
+    role="timer"
+    type="time"
+  />
+</div>
+`;

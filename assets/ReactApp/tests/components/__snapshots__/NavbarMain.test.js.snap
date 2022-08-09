@@ -1,0 +1,211 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render main navbar 1`] = `
+<nav
+  className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top"
+  id="main-navbar"
+>
+  <div
+    className="container-fluid"
+  >
+    <button
+      aria-controls="sidebarMenu"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-bs-target="#sidebarMenu"
+      data-bs-toggle="collapse"
+      type="button"
+    >
+      <i
+        className="fas fa-bars"
+      />
+    </button>
+    <a
+      className="navbar-brand fst-italic d-none d-lg-block"
+      href="#"
+    >
+      Moje-Tabsy.pl 
+      <i
+        className="fa-solid fa-pills"
+      />
+    </a>
+    <form
+      className="d-none d-md-flex input-group w-auto my-auto"
+    >
+      <input
+        autoComplete="off"
+        className="form-control rounded-start dashboard__search"
+        id="searchInput"
+        placeholder="Wyszukaj"
+        type="search"
+      />
+      <label
+        className="visually-hidden"
+        htmlFor="searchInput"
+      >
+        Wyszukaj
+      </label>
+      <span
+        className="input-group-text border-0"
+      >
+        <i
+          className="fas fa-search"
+        />
+      </span>
+    </form>
+    <ul
+      className="navbar-nav ms-auto d-flex flex-row"
+    >
+      <li
+        className="nav-item dropdown"
+      >
+        <a
+          aria-expanded="false"
+          className="nav-link me-3 me-lg-0 notifications-dropdown dropdown-toggle hidden-arrow"
+          data-bs-toggle="dropdown"
+          href="#"
+          id="notificationDropdown"
+          role="button"
+        >
+          <i
+            className="fas fa-bell"
+          />
+          <span
+            className="badge rounded-pill badge-notification bg-danger"
+          >
+            1
+          </span>
+        </a>
+        <ul
+          aria-labelledby="notificationDropdown"
+          className="dropdown-menu dropdown-menu-end"
+        >
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+            >
+              Some news
+            </a>
+          </li>
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+            >
+              Another news
+            </a>
+          </li>
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+            >
+              Something else here
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li
+        className="nav-item dropdown"
+      >
+        <a
+          aria-expanded="false"
+          className="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow"
+          data-bs-toggle="dropdown"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+        >
+          <i
+            className="m-0"
+          >
+            🇵🇱
+          </i>
+        </a>
+        <ul
+          aria-labelledby="navbarDropdown"
+          className="dropdown-menu dropdown-menu-end"
+        >
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+            >
+              <i>
+                🇵🇱
+              </i>
+               Polski
+              <i
+                className="fa fa-check text-success ms-2"
+              />
+            </a>
+          </li>
+          <li>
+            <hr
+              className="dropdown-divider"
+            />
+          </li>
+          <li>
+            <a
+              className="dropdown-item"
+              href="#"
+            >
+              <i>
+                🇬🇧
+              </i>
+               English
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li
+        className="nav-item dropdown"
+      >
+        <a
+          aria-expanded="false"
+          className="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
+          data-bs-toggle="dropdown"
+          href="#"
+          id="navbarDropdownMenuLink"
+          role="button"
+        >
+          <i
+            className="fa-solid fa-circle-user fs-4"
+          />
+        </a>
+        <ul
+          aria-labelledby="navbarDropdownMenuLink"
+          className="dropdown-menu dropdown-menu-end"
+        >
+          <li>
+            <Link
+              className="dropdown-item"
+              to="/dashboard/profile"
+            >
+              Mój profil
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="dropdown-item"
+              to="/dashboard/settings"
+            >
+              Ustawienia
+            </Link>
+          </li>
+          <li>
+            <a
+              className="dropdown-item"
+              href="/logout"
+            >
+              Wyloguj się
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+`;

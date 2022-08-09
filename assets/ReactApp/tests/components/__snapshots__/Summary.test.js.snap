@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render summary 1`] = `
+<Context.Provider
+  value={
+    Object {
+      "addDrug": [Function],
+      "drugList": Array [
+        Object {
+          "dosing": 1,
+          "dosingMoments": Object {
+            "hour1": "07:00",
+            "hour2": "18:00",
+          },
+          "id": 1,
+          "name": "Xanax",
+          "quantity": 60,
+          "quantityMax": 120,
+          "unit": "szt.",
+        },
+        Object {
+          "dosing": 1,
+          "dosingMoments": Object {
+            "hour1": "12:00",
+          },
+          "id": 2,
+          "name": "Witamina C",
+          "quantity": 20,
+          "quantityMax": 80,
+          "unit": "szt.",
+        },
+        Object {
+          "dosing": 1,
+          "dosingMoments": Object {
+            "hour2": "12:00",
+          },
+          "id": 3,
+          "name": "Metanabol",
+          "quantity": 4,
+          "quantityMax": 10,
+          "unit": "amp. 10 ml",
+        },
+      ],
+      "editDrug": [Function],
+      "removeDrug": [Function],
+    }
+  }
+>
+  <Summary />
+</Context.Provider>
+`;

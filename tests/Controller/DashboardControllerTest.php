@@ -30,6 +30,13 @@ class DashboardControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testRenderDashboardSubpageCreatedInReact(): void
+    {
+        $this->client->request('GET', '/dashboard/react-route');
+
+        $this->assertResponseIsSuccessful();
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();

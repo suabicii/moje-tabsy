@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render NotFoundPage 1`] = `
+<div
+  className="alert alert-danger"
+  id="notFound"
+>
+  <h1
+    className="text-center text-white"
+  >
+    Nie znaleziono strony 😥
+  </h1>
+</div>
+`;
