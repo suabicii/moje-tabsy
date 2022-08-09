@@ -33,6 +33,7 @@ exports[`should correctly render SettingsForm 1`] = `
           id="reminderAmount"
           min="1"
           name="reminderAmount"
+          onChange={[Function]}
           required={true}
           type="number"
         />
@@ -42,48 +43,10 @@ exports[`should correctly render SettingsForm 1`] = `
           raz(-y)
         </span>
       </div>
-      <div
-        className="input-group mt-3"
-      >
-        <input
-          className="form-control"
-          data-testid="remindTime"
-          id="remindTime"
-          min="1"
-          name="remindTime"
-          required={true}
-          type="number"
-        />
-        <select
-          className="form-select text-center"
-          defaultValue="min"
-          id="unit"
-          name="unit"
-          onChange={[Function]}
-        >
-          <option
-            value="min"
-          >
-            min.
-          </option>
-          <option
-            value="h"
-          >
-            h
-          </option>
-          <option
-            value="atDosingHour"
-          >
-            W godzinie zażycia
-          </option>
-        </select>
-        <span
-          className="input-group-text ps-3"
-          id="remindTimeSuffix"
-        >
-          przed
-        </span>
-      </div>
+      <RemindTimeInputs
+        amount={1}
+        handleUnitInputChange={[Function]}
+      />
       <div
         className="notifier-choice mt-3"
       >

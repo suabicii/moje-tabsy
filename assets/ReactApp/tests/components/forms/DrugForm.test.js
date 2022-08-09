@@ -65,7 +65,7 @@ it('should render drug edit form with drug data', () => {
     });
 });
 
-it('should render modal with empty input fields in most and one default value after clicking add button', () => {
+it('should render form with empty input fields in most and one default value after clicking add button', () => {
     renderForm();
     expect(screen.getByRole('form')).toHaveFormValues({daily_dosing: 1});
 });
