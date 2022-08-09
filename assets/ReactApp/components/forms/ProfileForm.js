@@ -20,6 +20,18 @@ function ProfileForm() {
                         />
                         <label htmlFor="name">Email</label>
                     </div>
+                    <div className="input-group mt-3">
+                        <div className="input-group input-group--prefix-number">
+                            <span className="input-group-text">+</span>
+                            <select id="tel_prefix" name="tel_prefix"
+                                    className="form-select" aria-label="Prefix">
+                                <option value="48">48 🇵🇱</option>
+                                <option value="47">47 🇳🇴</option>
+                            </select>
+                        </div>
+                        <input type="text" id="tel" name="tel"
+                               className="form-control rounded-start" placeholder="Nr tel"/>
+                    </div>
                     <div className="form-floating mt-3">
                         <input type="password" className="form-control" id="oldPassword" name="oldPassword"
                                placeholder="Stare hasło" data-testid="oldPassword"
@@ -33,7 +45,8 @@ function ProfileForm() {
                         <label htmlFor="name">Nowe hasło</label>
                     </div>
                     <div className="form-floating mt-3">
-                        <input type="password" className="form-control" id="newPasswordRepeated" name="newPasswordRepeated"
+                        <input type="password" className="form-control" id="newPasswordRepeated"
+                               name="newPasswordRepeated"
                                placeholder="Nowe hasło" data-testid="newPasswordRepeated"
                         />
                         <label htmlFor="name">Powtórz nowe hasło</label>

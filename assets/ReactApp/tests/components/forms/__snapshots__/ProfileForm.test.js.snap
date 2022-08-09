@@ -54,6 +54,43 @@ exports[`should correctly display ProfileForm 1`] = `
         </label>
       </div>
       <div
+        className="input-group mt-3"
+      >
+        <div
+          className="input-group input-group--prefix-number"
+        >
+          <span
+            className="input-group-text"
+          >
+            +
+          </span>
+          <select
+            aria-label="Prefix"
+            className="form-select"
+            id="tel_prefix"
+            name="tel_prefix"
+          >
+            <option
+              value="48"
+            >
+              48 🇵🇱
+            </option>
+            <option
+              value="47"
+            >
+              47 🇳🇴
+            </option>
+          </select>
+        </div>
+        <input
+          className="form-control rounded-start"
+          id="tel"
+          name="tel"
+          placeholder="Nr tel"
+          type="text"
+        />
+      </div>
+      <div
         className="form-floating mt-3"
       >
         <input
