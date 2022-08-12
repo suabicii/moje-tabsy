@@ -1,6 +1,16 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
-function ProfileForm() {
+function ProfileForm({fetchData}) {
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        fetchData.then(data => {
+            setUserData(data);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
+
     return (
         <div className="card mt-3">
             <div className="card-header text-center">Ustawienia profilu</div>
@@ -10,13 +20,13 @@ function ProfileForm() {
                 }}>
                     <div className="form-floating mt-3">
                         <input type="text" className="form-control" id="name" name="name"
-                               placeholder="Imię" data-testid="firstName" required
+                               placeholder="Imię" data-testid="firstName" defaultValue={userData.name} required
                         />
                         <label htmlFor="name">Imię</label>
                     </div>
                     <div className="form-floating mt-3">
                         <input type="email" className="form-control" id="email" name="email"
-                               placeholder="Email" data-testid="email" required
+                               placeholder="Email" data-testid="email" defaultValue={userData.email} required
                         />
                         <label htmlFor="name">Email</label>
                     </div>
@@ -24,13 +34,16 @@ function ProfileForm() {
                         <div className="input-group input-group--prefix-number">
                             <span className="input-group-text">+</span>
                             <select id="tel_prefix" name="tel_prefix"
-                                    className="form-select" aria-label="Prefix">
+                                    className="form-select" aria-label="Prefix" defaultValue={userData.tel_prefix}
+                            >
                                 <option value="48">48 🇵🇱</option>
                                 <option value="47">47 🇳🇴</option>
                             </select>
                         </div>
                         <input type="text" id="tel" name="tel"
-                               className="form-control rounded-start" placeholder="Nr tel"/>
+                               className="form-control rounded-start" placeholder="Nr tel"
+                               defaultValue={userData.tel}
+                        />
                     </div>
                     <div className="form-floating mt-3">
                         <input type="password" className="form-control" id="oldPassword" name="oldPassword"
