@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Drug;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -12,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @property KernelBrowser $client
  * @property ContainerInterface $container
  * @property EntityManager $entityManager
+ * @property User $user
  */
 class ApiControllerTest extends WebTestCase
 {
@@ -20,7 +22,7 @@ class ApiControllerTest extends WebTestCase
         $this->client = static::createClient();
         $this->container = $this->client->getContainer();
         $this->entityManager = $this->container->get('doctrine.orm.entity_manager');
-        $this->createAuthorizedClient();
+        $this->user = $this->createAuthorizedClient();
     }
 
     public function testGetLoggedUserDataFromApi(): void
@@ -51,6 +53,30 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'No user was found'], $responseData);
     }
 
+    public function testGetDrugListRelatedToLoggedUser(): void
+    {
+        $this->client->request('GET', '/api/drug-list');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+        $drugList = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals($drugList, $responseData);
+    }
+
+    public function testGetErrorIfNonLoggedUserTriesToGetDrugList(): void
+    {
+        $this->client->request('GET', '/logout');
+
+        $this->client->request('GET', '/api/drug-list');
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['error' => 'Permission denied'], $responseData);
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -64,5 +90,6 @@ class ApiControllerTest extends WebTestCase
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email3.com']);
         $this->client->loginUser($user);
+        return $user;
     }
 }

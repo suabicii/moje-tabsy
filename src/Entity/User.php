@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -56,6 +58,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private bool $reset_pass_mode_enabled;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Drug::class, orphanRemoval: true)]
+    private Collection $drugs;
+
+    public function __construct()
+    {
+        $this->drugs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -207,6 +217,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetPassModeEnabled(bool $reset_pass_mode_enabled): self
     {
         $this->reset_pass_mode_enabled = $reset_pass_mode_enabled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Drug>
+     */
+    public function getDrugs(): Collection
+    {
+        return $this->drugs;
+    }
+
+    public function addDrug(Drug $drug): self
+    {
+        if (!$this->drugs->contains($drug)) {
+            $this->drugs[] = $drug;
+            $drug->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDrug(Drug $drug): self
+    {
+        if ($this->drugs->removeElement($drug)) {
+            // set the owning side to null (unless already changed)
+            if ($drug->getUser() === $this) {
+                $drug->setUser(null);
+            }
+        }
 
         return $this;
     }
