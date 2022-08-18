@@ -9,9 +9,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -31,14 +29,12 @@ class ApiController extends AbstractFOSRestController
     {
         $user = $this->getUser();
         if ($user) {
-            $userRepository = $this->doctrine->getRepository(User::class)->findOneBy([
-                'email' => $user->getUserIdentifier()
-            ]);
+            $userFromDb = $this->getUserFromDb($user);
             return $this->json([
-                'name' => $userRepository->getName(),
-                'email' => $userRepository->getEmail(),
-                'tel_prefix' => $userRepository->getTelPrefix(),
-                'tel' => $userRepository->getTel()
+                'name' => $userFromDb->getName(),
+                'email' => $userFromDb->getEmail(),
+                'tel_prefix' => $userFromDb->getTelPrefix(),
+                'tel' => $userFromDb->getTel()
             ]);
         } else {
             return $this->json(['error' => 'No user was found']);
@@ -50,13 +46,22 @@ class ApiController extends AbstractFOSRestController
     {
         $user = $this->getUser();
         if ($user) {
-            $userRepository = $this->doctrine->getRepository(User::class)->findOneBy([
-                'email' => $user->getUserIdentifier()
-            ]);
-            $drugList = $this->doctrine->getRepository(Drug::class)->findDrugsRelatedToUser($userRepository);
+            $userFromDb = $this->getUserFromDb($user);
+            $drugList = $this->doctrine->getRepository(Drug::class)->findDrugsRelatedToUser($userFromDb);
             return $this->json($drugList);
         } else {
             return $this->json(['error' => 'Permission denied']);
         }
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return mixed
+     */
+    private function getUserFromDb(UserInterface $user): mixed
+    {
+        return $this->doctrine->getRepository(User::class)->findOneBy([
+            'email' => $user->getUserIdentifier()
+        ]);
     }
 }
