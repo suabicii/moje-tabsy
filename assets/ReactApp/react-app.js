@@ -2,12 +2,16 @@ import React from "react";
 import {createRoot} from "react-dom/client";
 import MainPage from "./components/MainPage";
 import {DrugListContainer} from "./container/DrugListContainer";
-
-const drugList = JSON.parse(localStorage.getItem('drugs')) || [];
+import {fetchData} from "./utils/fetchData";
 
 const root = createRoot(document.getElementById('react'));
-root.render(
-    <DrugListContainer.Provider initialState={drugList}>
-        <MainPage/>
-    </DrugListContainer.Provider>
-);
+
+fetchData('/api/drug-list').then(data => {
+    root.render(
+        <DrugListContainer.Provider initialState={data}>
+            <MainPage/>
+        </DrugListContainer.Provider>
+    );
+}).catch(error => {
+    console.log(error);
+});

@@ -19,6 +19,6 @@ it('should correctly render dosing moments inputs', () => {
 
 it('should render DosingMomentsInputs component with collection of DosingMomentInput and correct values', () => {
     render(<DosingMomentsInputs dosingMoments={dosingMoments}/>);
-    expect(screen.getByTestId('hour1-test')).toHaveValue('00:00');
-    expect(screen.getByTestId('hour2-test')).toHaveValue('00:01');
+    expect(screen.getByTestId('hour1')).toHaveValue('00:00');
+    expect(screen.getByTestId('hour2')).toHaveValue('00:01');
 });

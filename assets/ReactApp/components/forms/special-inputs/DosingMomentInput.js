@@ -13,7 +13,7 @@ function DosingMomentInput(props) {
                 defaultValue={props.value}
                 className="form-control dosing-moment-input"
                 aria-label="Godzina przyjęcia dawki"
-                data-testid={`${props.name}-test`}
+                data-testid={props.name}
                 onChange={props.handleTimeInputChange}
                 required
             />

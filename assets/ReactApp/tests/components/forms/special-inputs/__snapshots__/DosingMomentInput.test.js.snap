@@ -14,7 +14,7 @@ exports[`should correctly render dosing moment input 1`] = `
   <input
     aria-label="Godzina przyjęcia dawki"
     className="form-control dosing-moment-input"
-    data-testid="some_name-test"
+    data-testid="some_name"
     defaultValue="00:00"
     name="some_name"
     required={true}

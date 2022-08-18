@@ -43,7 +43,7 @@ class DrugRepository extends ServiceEntityRepository
     public function findDrugsRelatedToUser(User $user): mixed
     {
         return $this->createQueryBuilder('d')
-            ->select('d.name', 'd.quantity', 'd.quantityMax', 'd.unit', 'd.dosing', 'd.dosingMoments')
+            ->select('d.id', 'd.name', 'd.quantity', 'd.quantityMax', 'd.unit', 'd.dosing', 'd.dosingMoments')
             ->andWhere('d.user = :user')
             ->setParameter('user', $user)
             ->getQuery()

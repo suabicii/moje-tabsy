@@ -134,7 +134,7 @@ it('should add drug to list', () => {
     fireEvent.change(screen.getByTestId('quantity'), {target: {value: '120'}});
     fireEvent.change(screen.getByTestId('quantityMax'), {target: {value: '120'}});
     fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: '1'}});
-    fireEvent.change(screen.getByTestId('hour1-test'), {target: {value: '07:00'}});
+    fireEvent.change(screen.getByTestId('hour1'), {target: {value: '07:00'}});
     fireEvent.submit(screen.getByRole('form'));
 
     const drugListLengthAfterUpdate = screen.getAllByTestId('drug').length;
