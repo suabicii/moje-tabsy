@@ -55,7 +55,7 @@ class ApiController extends AbstractFOSRestController
     }
 
     /**
-     * @param UserInterface $user
+     * @param UserInterface $user Logged user
      * @return mixed
      */
     private function getUserFromDb(UserInterface $user): mixed
