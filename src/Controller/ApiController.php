@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -42,7 +42,7 @@ class ApiController extends AbstractFOSRestController
     }
 
     #[Rest('/drug-list', name: 'drug_list', methods: ['GET'])]
-    public function drugList(): Response
+    public function drugList(): JsonResponse
     {
         $user = $this->getUser();
         if ($user) {
@@ -51,6 +51,36 @@ class ApiController extends AbstractFOSRestController
             return $this->json($drugList);
         } else {
             return $this->json(['error' => 'Permission denied']);
+        }
+    }
+
+    #[Rest('/add-drug', name: 'add_drug', methods: ['POST'])]
+    public function addDrug(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $content = json_decode($request->getContent(), true);
+
+            $drug = new Drug();
+            $userFromDb = $this->getUserFromDb($user);
+            $drug->setUser($userFromDb);
+            $drug->setName($content['name']);
+            $drug->setQuantity($content['quantity']);
+            $drug->setQuantityMax($content['quantityMax']);
+            $drug->setUnit($content['unit']);
+            $drug->setDosing($content['dosing']);
+            $drug->setDosingMoments($content['dosingMoments']);
+
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->persist($drug);
+            $entityManager->flush();
+
+            return $this->json([
+                'status' => 'OK',
+                'addedDrug' => $content
+            ]);
+        } else {
+            return $this->json(['error' => 'Adding drug failed']);
         }
     }
 

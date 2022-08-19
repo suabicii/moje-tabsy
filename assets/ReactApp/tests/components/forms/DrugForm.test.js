@@ -9,6 +9,19 @@ import drugs from "../fixtures/drugs";
 import {DrugListContainer} from "../../../container/DrugListContainer";
 import {BrowserRouter} from "react-router-dom";
 import DrugList from "../../../components/DrugList";
+import {act} from "react-dom/test-utils";
+
+const unmockedFetch = global.fetch;
+
+beforeAll(() => {
+    global.fetch = () => Promise.resolve({
+        json: () => Promise.resolve({status: 'OK'})
+    });
+});
+
+afterAll(() => {
+    global.fetch = unmockedFetch;
+});
 
 const renderForm = (drug = null) => {
     const setIsFormVisible = jest.fn();
@@ -122,20 +135,24 @@ it('should remove dosing moment inputs with values from database after decreasin
     expect(screen.getAllByRole('timer').length).toBe(1);
 });
 
-it('should add drug to list', () => {
-    renderFormWithDrugList();
+it('should add drug to list', async () => {
+    await act(() => {
+        renderFormWithDrugList();
+    });
     const drugListLengthBeforeUpdate = screen.getAllByTestId('drug').length;
 
     fireEvent.click(screen.getByTestId('add-drug')); // activate add drug form
 
-    fireEvent.change(screen.getByTestId('drugName'), {target: {value: 'Prozac'}});
-    fireEvent.change(screen.getByTestId('unit'), {target: {value: 'pcs'}});
-    fireEvent.change(screen.getByTestId('dosing'), {target: {value: '1'}});
-    fireEvent.change(screen.getByTestId('quantity'), {target: {value: '120'}});
-    fireEvent.change(screen.getByTestId('quantityMax'), {target: {value: '120'}});
-    fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: '1'}});
-    fireEvent.change(screen.getByTestId('hour1'), {target: {value: '07:00'}});
-    fireEvent.submit(screen.getByRole('form'));
+    await act(async () => {
+        fireEvent.change(screen.getByTestId('drugName'), {target: {value: 'Prozac'}});
+        fireEvent.change(screen.getByTestId('unit'), {target: {value: 'pcs'}});
+        fireEvent.change(screen.getByTestId('dosing'), {target: {value: '1'}});
+        fireEvent.change(screen.getByTestId('quantity'), {target: {value: '120'}});
+        fireEvent.change(screen.getByTestId('quantityMax'), {target: {value: '120'}});
+        fireEvent.change(screen.getByTestId('dailyDosing'), {target: {value: '1'}});
+        fireEvent.change(screen.getByTestId('hour1'), {target: {value: '07:00'}});
+        fireEvent.submit(screen.getByRole('form'));
+    });
 
     const drugListLengthAfterUpdate = screen.getAllByTestId('drug').length;
 

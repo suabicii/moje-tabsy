@@ -77,6 +77,50 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Permission denied'], $responseData);
     }
 
+    public function testAddNewDrug()
+    {
+        $drugs = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
+        $drugsAmountBeforeAdding = sizeof($drugs);
+
+        $newDrug = [
+            'name' => 'CBD Oil',
+            'quantity' => 25,
+            'quantityMax' => 30,
+            'unit' => 'ml.',
+            'dosing' => 3,
+            'dosingMoments' => [
+                'hour1' => '08:00',
+                'hour2' => '18:00',
+                'hour3' => '22:00'
+            ]
+        ];
+        $this->client->request(
+            'POST',
+            '/api/add-drug',
+            [],
+            [],
+            [],
+            json_encode($newDrug)
+        );
+        $drugs = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
+        $drugsAmountAfterAdding = sizeof($drugs);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertGreaterThan($drugsAmountBeforeAdding, $drugsAmountAfterAdding);
+    }
+
+    public function testGetErrorIfNonLoggedUserTriesToAddNewDrug()
+    {
+        $this->client->request('GET', '/logout');
+
+        $this->client->request('POST', '/api/add-drug');
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['error' => 'Adding drug failed'], $responseData);
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
