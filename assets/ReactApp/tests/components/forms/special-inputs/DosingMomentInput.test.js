@@ -14,6 +14,6 @@ it('should correctly render dosing moment input', () => {
 
 it('should render single dosing moment input with correct name and value', () => {
     render(<DosingMomentInput name="some_name" value="00:00"/>);
-    expect(screen.getByTestId('some_name-test').getAttribute('name')).toBe('some_name');
-    expect(screen.getByTestId('some_name-test')).toHaveValue('00:00');
+    expect(screen.getByTestId('some_name').getAttribute('name')).toBe('some_name');
+    expect(screen.getByTestId('some_name')).toHaveValue('00:00');
 });
