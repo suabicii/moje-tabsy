@@ -69,11 +69,9 @@ function DrugForm({drug, setIsFormVisible}) {
                 {drug ? 'Edytuj' : 'Dodaj'} lek/suplement
             </div>
             <div className="card-body">
-                <form role="form" name="drug_form" onSubmit={e => {
+                <form role="form" name="drug_form" onSubmit={async e => {
                     e.preventDefault();
-                    handleSubmit().then(r => {
-                        console.log(r);
-                    });
+                    await handleSubmit();
                 }}>
                     <div className="row">
                         <div className="col-md-6">
