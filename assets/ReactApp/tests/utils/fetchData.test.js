@@ -1,6 +1,7 @@
+/**
+ * @jest-environment jsdom
+ * */
 import {fetchData} from "../../utils/fetchData";
-
-const unmockedFetch = global.fetch;
 
 let fetchedData;
 const mockData = {data: 'some data'};
@@ -9,7 +10,7 @@ const setData = data => {
 };
 
 beforeAll(() => {
-    global.fetch = jest.fn(() => Promise.resolve({
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
         json: () => Promise.resolve(mockData)
     }));
 });
@@ -19,7 +20,8 @@ afterEach(() => {
 });
 
 afterAll(() => {
-    global.fetch = unmockedFetch;
+    global.fetch.mockClear();
+    delete global.fetch;
 });
 
 it('should fetch some JSON data from API if connection succeeded',async () => {

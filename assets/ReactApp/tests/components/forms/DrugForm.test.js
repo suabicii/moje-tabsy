@@ -11,16 +11,15 @@ import {BrowserRouter} from "react-router-dom";
 import DrugList from "../../../components/DrugList";
 import {act} from "react-dom/test-utils";
 
-const unmockedFetch = global.fetch;
-
 beforeAll(() => {
-    global.fetch = () => Promise.resolve({
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
         json: () => Promise.resolve({status: 'OK'})
-    });
+    }));
 });
 
 afterAll(() => {
-    global.fetch = unmockedFetch;
+    global.fetch.mockClear();
+    delete global.fetch;
 });
 
 const renderForm = (drug = null) => {
