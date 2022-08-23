@@ -82,18 +82,7 @@ class ApiControllerTest extends WebTestCase
         $drugs = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
         $drugsAmountBeforeAdding = sizeof($drugs);
 
-        $newDrug = [
-            'name' => 'CBD Oil',
-            'quantity' => 25,
-            'quantityMax' => 30,
-            'unit' => 'ml.',
-            'dosing' => 3,
-            'dosingMoments' => [
-                'hour1' => '08:00',
-                'hour2' => '18:00',
-                'hour3' => '22:00'
-            ]
-        ];
+        $newDrug = $this->getNewDrugData();
         $this->client->request(
             'POST',
             '/api/add-drug',
@@ -128,6 +117,25 @@ class ApiControllerTest extends WebTestCase
         // avoid memory leaks
         $this->entityManager->close();
         $this->entityManager = null;
+    }
+
+    /**
+     * @return array
+     */
+    private function getNewDrugData(): array
+    {
+        return [
+            'name' => 'CBD Oil',
+            'quantity' => 25,
+            'quantityMax' => 30,
+            'unit' => 'ml.',
+            'dosing' => 3,
+            'dosingMoments' => [
+                'hour1' => '08:00',
+                'hour2' => '18:00',
+                'hour3' => '22:00'
+            ]
+        ];
     }
 
     private function createAuthorizedClient()
