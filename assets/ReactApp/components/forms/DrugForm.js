@@ -32,7 +32,7 @@ function DrugForm({drug, setIsFormVisible}) {
     }, [timeInputValues]);
 
     /** EVENT HANDLERS */
-    const handleChangeDosingInput = value => {
+    const handleDosingInputChange = value => {
         setDosingMomentInputAmount(value);
     };
 
@@ -127,7 +127,7 @@ function DrugForm({drug, setIsFormVisible}) {
                                        aria-valuemin="1" min="1"
                                        required data-testid="dailyDosing"
                                        onChange={e => {
-                                           handleChangeDosingInput(e.target.value);
+                                           handleDosingInputChange(e.target.value);
                                        }}
                                 />
                                 <label htmlFor="dailyDosing">Ile razy dziennie?</label>
