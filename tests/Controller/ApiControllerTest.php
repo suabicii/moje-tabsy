@@ -65,7 +65,7 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals($drugList, $responseData);
     }
 
-    public function testGetErrorIfNonLoggedUserTriesToGetDrugList(): void
+    public function testGetErrorIfNotLoggedUserTriesToGetDrugList(): void
     {
         $this->client->request('GET', '/logout');
 
@@ -98,7 +98,7 @@ class ApiControllerTest extends WebTestCase
         $this->assertGreaterThan($drugsAmountBeforeAdding, $drugsAmountAfterAdding);
     }
 
-    public function testGetErrorIfNonLoggedUserTriesToAddNewDrug(): void
+    public function testGetErrorIfNotLoggedUserTriesToAddNewDrug(): void
     {
         $this->client->request('GET', '/logout');
 
@@ -110,7 +110,7 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Adding drug failed'], $responseData);
     }
 
-    public function testEditDrug()
+    public function testEditDrug(): void
     {
         $updates = [
             'name' => 'Potassium',
@@ -133,6 +133,26 @@ class ApiControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertEquals($updates, $updatedData);
+    }
+
+    public function testGetErrorIfNotLoggedUserTriesToEditDrug(): void
+    {
+        $this->client->request('GET', '/logout');
+        $update = ['name' => "It won't work"];
+
+        $this->client->request(
+            'PUT',
+            '/api/edit-drug/1',
+            [],
+            [],
+            [],
+            json_encode($update)
+        );
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['error' => 'Only logged users can edit drugs'], $responseData);
     }
 
     protected function tearDown(): void
