@@ -77,7 +77,7 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Permission denied'], $responseData);
     }
 
-    public function testAddNewDrug()
+    public function testAddNewDrug(): void
     {
         $drugs = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
         $drugsAmountBeforeAdding = sizeof($drugs);
@@ -98,7 +98,7 @@ class ApiControllerTest extends WebTestCase
         $this->assertGreaterThan($drugsAmountBeforeAdding, $drugsAmountAfterAdding);
     }
 
-    public function testGetErrorIfNonLoggedUserTriesToAddNewDrug()
+    public function testGetErrorIfNonLoggedUserTriesToAddNewDrug(): void
     {
         $this->client->request('GET', '/logout');
 
@@ -108,6 +108,31 @@ class ApiControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertEquals(['error' => 'Adding drug failed'], $responseData);
+    }
+
+    public function testEditDrug()
+    {
+        $updates = [
+            'name' => 'Potassium',
+            'quantity' => 50
+        ];
+
+        $this->client->request(
+            'PUT',
+            '/api/edit-drug/1',
+            [],
+            [],
+            [],
+            json_encode($updates)
+        );
+        $drug = $this->entityManager->getRepository(Drug::class)->find(1);
+        $updatedData = [
+            'name' => $drug->getName(),
+            'quantity' => $drug->getQuantity()
+        ];
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals($updates, $updatedData);
     }
 
     protected function tearDown(): void

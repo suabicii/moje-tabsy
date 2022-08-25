@@ -10,11 +10,9 @@ use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * @property ManagerRegistry $doctrine
- * @property Serializer $serializer
  */
 #[Rest('/api')]
 class ApiController extends AbstractFOSRestController
@@ -84,6 +82,28 @@ class ApiController extends AbstractFOSRestController
         }
     }
 
+    #[Rest('/edit-drug/{drugId}', name: 'edit_drug', methods: ['PUT'])]
+    public function editDrug(Request $request, int $drugId): JsonResponse
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $drug = $this->doctrine->getRepository(Drug::class)->find($drugId);
+            if ($drug) {
+                $entityManager = $this->doctrine->getManager();
+                $content = json_decode($request->getContent(), true);
+                foreach ($content as $updateKey => $updateValue) {
+                    $this->changeDrugData($drug, $updateKey, $updateValue);
+                }
+                $entityManager->flush();
+                return $this->json(['status' => 'OK']);
+            } else {
+                return $this->json(['error' => 'Drug with id: ' . $drugId . ' not found']);
+            }
+        } else {
+            return $this->json(['error' => 'Only logged users can edit drugs']);
+        }
+    }
+
     /**
      * @param UserInterface $user Logged user
      * @return mixed
@@ -93,5 +113,37 @@ class ApiController extends AbstractFOSRestController
         return $this->doctrine->getRepository(User::class)->findOneBy([
             'email' => $user->getUserIdentifier()
         ]);
+    }
+
+    /**
+     * @param Drug $drug
+     * @param string $updateKey Column name in table
+     * @param mixed $updateValue Column value
+     * @return void
+     */
+    private function changeDrugData(Drug $drug, string $updateKey, mixed $updateValue): void
+    {
+        switch ($updateKey) {
+            case 'name':
+                $drug->setName($updateValue);
+                break;
+            case 'quantity':
+                $drug->setQuantity($updateValue);
+                break;
+            case 'quantityMax':
+                $drug->setQuantityMax($updateValue);
+                break;
+            case 'unit':
+                $drug->setUnit($updateValue);
+                break;
+            case 'dosing':
+                $drug->setDosing($updateValue);
+                break;
+            case 'dosingMoments':
+                $drug->setDosingMoments($updateValue);
+                break;
+            default:
+                throw new \Error('Column ' . $updateKey . ' does not exist in table');
+        }
     }
 }
