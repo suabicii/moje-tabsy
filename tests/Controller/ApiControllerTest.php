@@ -155,6 +155,25 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Only logged users can edit drugs'], $responseData);
     }
 
+    public function testGetErrorIfDrugIdIsNotFound(): void
+    {
+        $update = ['name' => "It won't work"];
+        $incorrectDrugId = '2077';
+        $this->client->request(
+            'PUT',
+            '/api/edit-drug/' . $incorrectDrugId,
+            [],
+            [],
+            [],
+            json_encode($update)
+        );
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['error' => 'Drug with id: ' . $incorrectDrugId . ' not found'], $responseData);
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();
