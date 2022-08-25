@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import DosingMomentsInputs from "./special-inputs/DosingMomentsInputs";
 import {DrugListContainer} from "../../container/DrugListContainer";
 import {postData} from "../../utils/postData";
+import {updateData} from "../../utils/updateData";
 
 function DrugForm({drug, setIsFormVisible}) {
     const dosingMomentInputDefaultAmount = drug ? Object.keys(drug.dosingMoments).length : 1;
@@ -50,6 +51,7 @@ function DrugForm({drug, setIsFormVisible}) {
     const handleSubmit = async () => {
         if (drug) {
             editDrug(drug.id, allInputValues);
+            await updateData(drug.id, allInputValues, 'edit-drug');
         } else {
             const id = drugList ? drugList[drugList.length - 1].id + 1 : 1;
             addDrug({id, ...allInputValues});

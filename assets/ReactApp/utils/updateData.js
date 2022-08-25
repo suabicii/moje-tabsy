@@ -8,7 +8,7 @@ export const updateData = async (identifier, updates, urlEnd) => {
             },
             body: JSON.stringify(updates)
         });
-        return await response.json()
+        return await response.json();
     } catch (error) {
         console.log(error);
     }

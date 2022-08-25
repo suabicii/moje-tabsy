@@ -158,14 +158,18 @@ it('should add drug to list', async () => {
     expect(drugListLengthAfterUpdate).toBeGreaterThan(drugListLengthBeforeUpdate);
 });
 
-it('should change drug data after changing value in edit form', () => {
-    renderFormWithDrugList();
+it('should change drug data after changing value in edit form', async () => {
+    await act(() => {
+        renderFormWithDrugList();
+    });
 
     fireEvent.click(screen.getByTestId('edit-drug-1'));
     const newDrugName = 'Clonazepamum'
 
-    fireEvent.change(screen.getByTestId('drugName'), {target: {value: newDrugName}});
-    fireEvent.submit(screen.getByRole('form'));
+    await act(() => {
+        fireEvent.change(screen.getByTestId('drugName'), {target: {value: newDrugName}});
+        fireEvent.submit(screen.getByRole('form'));
+    });
 
     expect(screen.getByText(newDrugName)).toBeVisible();
 });
