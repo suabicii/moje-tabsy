@@ -57,21 +57,9 @@ class ApiController extends AbstractFOSRestController
     {
         $user = $this->getUser();
         if ($user) {
-            $content = json_decode($request->getContent(), true);
+            $content = json_decode($request->getContent(), true); // data retrieved from front-end
 
-            $drug = new Drug();
-            $userFromDb = $this->getUserFromDb($user);
-            $drug->setUser($userFromDb);
-            $drug->setName($content['name']);
-            $drug->setQuantity($content['quantity']);
-            $drug->setQuantityMax($content['quantityMax']);
-            $drug->setUnit($content['unit']);
-            $drug->setDosing($content['dosing']);
-            $drug->setDosingMoments($content['dosingMoments']);
-
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->persist($drug);
-            $entityManager->flush();
+            $this->saveNewDrugInDatabase($user, $content);
 
             return $this->json([
                 'status' => 'OK',
@@ -145,5 +133,27 @@ class ApiController extends AbstractFOSRestController
             default:
                 throw new \Error('Column ' . $updateKey . ' does not exist in table');
         }
+    }
+
+    /**
+     * @param UserInterface $user
+     * @param mixed $content
+     * @return void
+     */
+    public function saveNewDrugInDatabase(UserInterface $user, mixed $content): void
+    {
+        $drug = new Drug();
+        $userFromDb = $this->getUserFromDb($user);
+        $drug->setUser($userFromDb);
+        $drug->setName($content['name']);
+        $drug->setQuantity($content['quantity']);
+        $drug->setQuantityMax($content['quantityMax']);
+        $drug->setUnit($content['unit']);
+        $drug->setDosing($content['dosing']);
+        $drug->setDosingMoments($content['dosingMoments']);
+
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->persist($drug);
+        $entityManager->flush();
     }
 }
