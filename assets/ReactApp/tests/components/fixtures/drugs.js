@@ -30,7 +30,15 @@ export default [
         unit: 'amp. 10 ml',
         dosing: 1,
         dosingMoments: {
-            hour2: '12:00'
+            hour1: '12:00'
         }
     },
-];
+].sort((a, b) => {
+    if (a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+    } else if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+    } else {
+        return 0;
+    }
+});

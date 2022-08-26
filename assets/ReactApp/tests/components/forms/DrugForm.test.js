@@ -63,17 +63,17 @@ it('should correctly render DrugForm', () => {
 });
 
 it('should render drug edit form with drug data', () => {
-    renderForm(drugs[0]);
+    renderForm(drugs[2]); // Xanax
 
     expect(screen.getByRole('form')).toHaveFormValues({
-        name: drugs[0].name,
-        unit: drugs[0].unit,
-        quantity: drugs[0].quantity,
-        quantityMax: drugs[0].quantityMax,
-        dosing: drugs[0].dosing,
-        daily_dosing: Object.keys(drugs[0].dosingMoments).length,
-        hour1: drugs[0].dosingMoments["hour1"],
-        hour2: drugs[0].dosingMoments["hour2"]
+        name: drugs[2].name,
+        unit: drugs[2].unit,
+        quantity: drugs[2].quantity,
+        quantityMax: drugs[2].quantityMax,
+        dosing: drugs[2].dosing,
+        daily_dosing: Object.keys(drugs[2].dosingMoments).length,
+        hour1: drugs[2].dosingMoments["hour1"],
+        hour2: drugs[2].dosingMoments["hour2"]
     });
 });
 
