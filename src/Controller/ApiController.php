@@ -70,6 +70,30 @@ class ApiController extends AbstractFOSRestController
         }
     }
 
+    #[Rest('/delete-drug/{drugId}', name: 'delete_drug', methods: ['DELETE'])]
+    public function deleteDrug(int $drugId): JsonResponse
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $drug = $this->doctrine->getRepository(Drug::class)->find($drugId);
+
+            if ($drug) {
+                $entityManager = $this->doctrine->getManager();
+                $entityManager->remove($drug);
+                $entityManager->flush();
+
+                return $this->json([
+                    'status' => 'OK',
+                    'message' => 'Drug removed'
+                ]);
+            } else {
+                return $this->json(['error' => 'Drug with id: ' . $drugId . ' not found']);
+            }
+        } else {
+            return $this->json(['error' => 'Removing drug failed']);
+        }
+    }
+
     #[Rest('/edit-drug/{drugId}', name: 'edit_drug', methods: ['PUT'])]
     public function editDrug(Request $request, int $drugId): JsonResponse
     {

@@ -155,7 +155,7 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Only logged users can edit drugs'], $responseData);
     }
 
-    public function testGetErrorIfDrugIdIsNotFound(): void
+    public function testGetErrorIfDrugIdFromEditUrlIsNotFound(): void
     {
         $update = ['name' => "It won't work"];
         $incorrectDrugId = '2077';
@@ -167,6 +167,43 @@ class ApiControllerTest extends WebTestCase
             [],
             json_encode($update)
         );
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['error' => 'Drug with id: ' . $incorrectDrugId . ' not found'], $responseData);
+    }
+
+    public function testDeleteDrug(): void
+    {
+        $drugs = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
+        $drugsAmountBeforeDelete = sizeof($drugs);
+
+        $this->client->request('DELETE', '/api/delete-drug/1');
+        $drugs = $this->entityManager->getRepository(Drug::class)->findDrugsRelatedToUser($this->user);
+        $drugsAmountAfterDelete = sizeof($drugs);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertLessThan($drugsAmountBeforeDelete, $drugsAmountAfterDelete);
+    }
+
+    public function testGetErrorWhenNotLoggedUserTriesToDeleteDrug(): void
+    {
+        $this->client->request('GET', '/logout');
+
+        $this->client->request('DELETE', '/api/delete-drug/1');
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['error' => 'Removing drug failed'], $responseData);
+    }
+
+    public function testGetErrorIfDrugIdFromDeleteUrlIsNotFound(): void
+    {
+        $incorrectDrugId = '2077';
+
+        $this->client->request('DELETE', '/api/delete-drug/' . $incorrectDrugId);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 

@@ -8,6 +8,7 @@ import {BrowserRouter} from "react-router-dom";
 import {fireEvent, render, screen} from "@testing-library/react";
 import {DrugListContainer} from "../../container/DrugListContainer";
 import drugs from "./fixtures/drugs";
+import {act} from "react-dom/test-utils";
 
 const renderDrugList = () => {
     const root = document.createElement('div');
@@ -45,11 +46,15 @@ it('should render edit drug form after clicking edit button', () => {
     expect(screen.getByRole('form')).toBeVisible();
 });
 
-it('should delete drug from list after clicking delete button', () => {
-    renderDrugList();
+it('should delete drug from list after clicking delete button',  async () => {
+    await act(() => {
+        renderDrugList();
+    });
     const drugListLengthBeforeDelete = screen.getAllByTestId('drug').length;
 
-    fireEvent.click(screen.getByTestId('remove-drug-1'));
+    await act(async () => {
+        fireEvent.click(screen.getByTestId('remove-drug-1'));
+    });
     const drugListLengthAfterDelete = screen.getAllByTestId('drug').length;
 
     expect(drugListLengthAfterDelete).toBeLessThan(drugListLengthBeforeDelete);

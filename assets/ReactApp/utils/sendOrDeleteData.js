@@ -10,7 +10,8 @@ export const sendOrDeleteData = async (identifier = null, data = null, requestMe
         if (data) {
             options.body = JSON.stringify(data);
         }
-        const response = await fetch(`/api/${route}/${identifier || ''}`, options);
+        const fullRoute = identifier ? `${route}/${identifier}` : route;
+        const response = await fetch(`/api/${fullRoute}`, options);
         return await response.json();
     } catch (error) {
         console.log(error);

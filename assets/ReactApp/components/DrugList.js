@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
 import {DrugListContainer} from "../container/DrugListContainer";
 import DrugForm from "./forms/DrugForm";
+import {sendOrDeleteData} from "../utils/sendOrDeleteData";
 
 function DrugList(props) {
     const navigate = useNavigate();
@@ -10,10 +11,6 @@ function DrugList(props) {
     const [isEditFormVisible, setIsEditFormVisible] = useState(false);
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
-
-    useEffect(() => {
-        localStorage.setItem('drugs', JSON.stringify(drugList));
-    });
 
     return (
         <>
@@ -32,8 +29,9 @@ function DrugList(props) {
                                     // Delete button
                                     props.isEditMode &&
                                     <button className="btn btn-danger rounded-circle float-md-end"
-                                            data-testid={`remove-drug-${drug.id}`} onClick={() => {
+                                            data-testid={`remove-drug-${drug.id}`} onClick={async () => {
                                         removeDrug(drug.id);
+                                        await sendOrDeleteData(drug.id, null, 'DELETE', 'delete-drug');
                                     }}>
                                         <i className="fa-solid fa-trash-can"></i>
                                     </button>
