@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\API;
 
 use App\Entity\Drug;
 use App\Entity\User;
+use App\Tests\ApiControllerTrait;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -15,15 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @property EntityManager $entityManager
  * @property User $user
  */
-class ApiControllerTest extends WebTestCase
+class DrugApiControllerTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-        $this->container = $this->client->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.entity_manager');
-        $this->user = $this->createAuthorizedClient();
-    }
+    use ApiControllerTrait;
 
     public function testGetLoggedUserDataFromApi(): void
     {
@@ -49,8 +44,8 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
-        $this->assertEquals(['error' => 'No user was found'], $responseData);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertEquals(['error' => 'Permission denied'], $responseData);
     }
 
     public function testGetDrugListRelatedToLoggedUser(): void
@@ -180,8 +175,8 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
-        $this->assertEquals(['error' => 'Only logged users can edit drugs', 401], $responseData);
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertEquals(['error' => 'Only logged users can edit drugs'], $responseData);
     }
 
     public function testGetErrorIfDrugIdFromEditUrlIsNotFound(): void
@@ -250,15 +245,6 @@ class ApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Drug with id: ' . $incorrectDrugId . ' not found'], $responseData);
     }
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        // avoid memory leaks
-        $this->entityManager->close();
-        $this->entityManager = null;
-    }
-
     /**
      * @return array
      */
@@ -276,12 +262,5 @@ class ApiControllerTest extends WebTestCase
                 'hour3' => '22:00'
             ]
         ];
-    }
-
-    private function createAuthorizedClient()
-    {
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email3.com']);
-        $this->client->loginUser($user);
-        return $user;
     }
 }

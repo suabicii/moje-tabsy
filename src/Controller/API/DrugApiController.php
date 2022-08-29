@@ -1,44 +1,16 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\API;
 
 use App\Entity\Drug;
-use App\Entity\User;
-use Doctrine\Persistence\ManagerRegistry;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @property ManagerRegistry $doctrine
- */
 #[Rest('/api')]
-class ApiController extends AbstractFOSRestController
+class DrugApiController extends ApiController
 {
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        $this->doctrine = $doctrine;
-    }
-
-    #[Rest('/user-data', name: 'user_data', methods: ['GET'])]
-    public function userData(): JsonResponse
-    {
-        $user = $this->getUser();
-        if ($user) {
-            $userFromDb = $this->getUserFromDb($user);
-            return $this->json([
-                'name' => $userFromDb->getName(),
-                'email' => $userFromDb->getEmail(),
-                'tel_prefix' => $userFromDb->getTelPrefix(),
-                'tel' => $userFromDb->getTel()
-            ]);
-        } else {
-            return $this->json(['error' => 'Permission denied'], 401);
-        }
-    }
-
     #[Rest('/drug-list', name: 'drug_list', methods: ['GET'])]
     public function drugList(): JsonResponse
     {
@@ -120,18 +92,6 @@ class ApiController extends AbstractFOSRestController
             return $this->json(['error' => 'Only logged users can edit drugs'], 401);
         }
     }
-
-    /**
-     * @param UserInterface $user Logged user
-     * @return mixed
-     */
-    private function getUserFromDb(UserInterface $user): mixed
-    {
-        return $this->doctrine->getRepository(User::class)->findOneBy([
-            'email' => $user->getUserIdentifier()
-        ]);
-    }
-
     /**
      * @param Drug $drug
      * @param string $updateKey Column name in table
