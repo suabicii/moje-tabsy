@@ -73,7 +73,7 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(401);
         $this->assertEquals(['error' => 'Permission denied'], $responseData);
     }
 
@@ -106,8 +106,37 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(401);
         $this->assertEquals(['error' => 'Adding drug failed'], $responseData);
+    }
+
+    public function testGetErrorIfUserTriesToAddNewDrugWithEmptyObject(): void
+    {
+        $this->client->request('POST', '/api/add-drug');
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(405);
+        $this->assertEquals(['error' => 'Method not allowed'], $responseData);
+    }
+
+    public function testGetErrorIfUserTriesToAddNewDrugWithIncorrectData(): void
+    {
+        $incorrectData = [
+            'incorrectData1' => 'value1',
+            'incorrectData2' => 'value2'
+        ];
+
+        $this->client->request(
+            'POST',
+            '/api/add-drug',
+            [],
+            [],
+            [],
+            json_encode($incorrectData)
+        );
+
+        $this->assertResponseStatusCodeSame(500);
     }
 
     public function testEditDrug(): void
@@ -152,7 +181,7 @@ class ApiControllerTest extends WebTestCase
         $responseData = json_decode($response->getContent(), true);
 
         $this->assertResponseIsSuccessful();
-        $this->assertEquals(['error' => 'Only logged users can edit drugs'], $responseData);
+        $this->assertEquals(['error' => 'Only logged users can edit drugs', 401], $responseData);
     }
 
     public function testGetErrorIfDrugIdFromEditUrlIsNotFound(): void
@@ -170,8 +199,18 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(404);
         $this->assertEquals(['error' => 'Drug with id: ' . $incorrectDrugId . ' not found'], $responseData);
+    }
+
+    public function testGetErrorIfUserTriesToEditDrugDataBySendingEmptyObject()
+    {
+        $this->client->request('PUT', '/api/edit-drug/1');
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(405);
+        $this->assertEquals(['error' => 'Method not allowed'], $responseData);
     }
 
     public function testDeleteDrug(): void
@@ -195,7 +234,7 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(401);
         $this->assertEquals(['error' => 'Removing drug failed'], $responseData);
     }
 
@@ -207,7 +246,7 @@ class ApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(404);
         $this->assertEquals(['error' => 'Drug with id: ' . $incorrectDrugId . ' not found'], $responseData);
     }
 

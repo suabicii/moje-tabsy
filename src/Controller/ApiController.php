@@ -35,7 +35,7 @@ class ApiController extends AbstractFOSRestController
                 'tel' => $userFromDb->getTel()
             ]);
         } else {
-            return $this->json(['error' => 'No user was found']);
+            return $this->json(['error' => 'Permission denied'], 401);
         }
     }
 
@@ -48,7 +48,7 @@ class ApiController extends AbstractFOSRestController
             $drugList = $this->doctrine->getRepository(Drug::class)->findDrugsRelatedToUser($userFromDb);
             return $this->json($drugList);
         } else {
-            return $this->json(['error' => 'Permission denied']);
+            return $this->json(['error' => 'Permission denied'], 401);
         }
     }
 
@@ -58,7 +58,9 @@ class ApiController extends AbstractFOSRestController
         $user = $this->getUser();
         if ($user) {
             $content = json_decode($request->getContent(), true); // data retrieved from front-end
-
+            if (!$content) {
+                return $this->json(['error' => 'Method not allowed'], 405);
+            }
             $this->saveNewDrugInDatabase($user, $content);
 
             return $this->json([
@@ -66,7 +68,7 @@ class ApiController extends AbstractFOSRestController
                 'addedDrug' => $content
             ]);
         } else {
-            return $this->json(['error' => 'Adding drug failed']);
+            return $this->json(['error' => 'Adding drug failed'], 401);
         }
     }
 
@@ -87,10 +89,10 @@ class ApiController extends AbstractFOSRestController
                     'message' => 'Drug removed'
                 ]);
             } else {
-                return $this->json(['error' => 'Drug with id: ' . $drugId . ' not found']);
+                return $this->json(['error' => 'Drug with id: ' . $drugId . ' not found'], 404);
             }
         } else {
-            return $this->json(['error' => 'Removing drug failed']);
+            return $this->json(['error' => 'Removing drug failed'], 401);
         }
     }
 
@@ -103,16 +105,19 @@ class ApiController extends AbstractFOSRestController
             if ($drug) {
                 $entityManager = $this->doctrine->getManager();
                 $content = json_decode($request->getContent(), true);
+                if (!$content) {
+                    return $this->json(['error' => 'Method not allowed'], 405);
+                }
                 foreach ($content as $updateKey => $updateValue) {
                     $this->changeDrugData($drug, $updateKey, $updateValue);
                 }
                 $entityManager->flush();
-                return $this->json(['status' => 'OK']);
+                return $this->json(['status' => 'OK', 'updates' => $content]);
             } else {
-                return $this->json(['error' => 'Drug with id: ' . $drugId . ' not found']);
+                return $this->json(['error' => 'Drug with id: ' . $drugId . ' not found'], 404);
             }
         } else {
-            return $this->json(['error' => 'Only logged users can edit drugs']);
+            return $this->json(['error' => 'Only logged users can edit drugs'], 401);
         }
     }
 
@@ -155,7 +160,7 @@ class ApiController extends AbstractFOSRestController
                 $drug->setDosingMoments($updateValue);
                 break;
             default:
-                throw new \Error('Column ' . $updateKey . ' does not exist in table');
+                throw new \Error('Column ' . '"' . $updateKey . '"' . ' does not exist in table');
         }
     }
 

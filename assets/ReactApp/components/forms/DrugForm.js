@@ -66,7 +66,10 @@ function DrugForm({drug, setIsFormVisible}) {
         } else {
             const id = drugList ? drugList[drugList.length - 1].id + 1 : 1;
             addDrug({id, ...allInputValues});
-            await sendOrDeleteData(null,{id, ...allInputValues}, 'POST','add-drug');
+            await sendOrDeleteData(null, {id, ...allInputValues}, 'POST', 'add-drug')
+                .then(data => {
+                    console.log(data);
+                });
         }
         setIsFormVisible(false);
     };
