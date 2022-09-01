@@ -127,7 +127,7 @@ class LoginController extends UserController
             return $this->redirectToRoute('reset_password_page', ['error' => 'Nie znaleziono konta o podanym adresie e-mail']);
         }
         $entityManager = $this->doctrine->getManager();
-        $user->setToken($this->generateToken());
+        $user->setToken($this->tokenGenerator->generateToken());
         $user->setTokenExpirationDate((new DateTime())->modify('+2 hours'));
         $user->setResetPassModeEnabled(true);
         $entityManager->flush();

@@ -20,7 +20,8 @@ class UserDataUpdatesFixtures extends Fixture implements DependentFixtureInterfa
         $userDataUpdates->setPassword('Password321!');
         $userDataUpdates->setTelPrefix('123');
         $userDataUpdates->setTel('111222333');
-        $userDataUpdates->setExpiresAt((new \DateTimeImmutable())->modify('+2 hours'));
+        $userDataUpdates->setExpiresAt((new \DateTimeImmutable())->modify('+1 year'));
+        $userDataUpdates->setToken('abc123xyz');
 
         $manager->persist($userDataUpdates);
         $manager->flush();

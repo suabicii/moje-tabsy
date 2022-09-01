@@ -36,6 +36,9 @@ class UserDataUpdates
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $expires_at;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,18 @@ class UserDataUpdates
     public function setExpiresAt(\DateTimeImmutable $expires_at): self
     {
         $this->expires_at = $expires_at;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

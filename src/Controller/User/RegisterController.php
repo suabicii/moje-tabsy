@@ -115,7 +115,7 @@ class RegisterController extends UserController
     private function createUser(FormInterface $form, User $user): void
     {
         $entityManager = $this->doctrine->getManager();
-        $token = $this->generateToken();
+        $token = $this->tokenGenerator->generateToken();
         $this->setUserData($user, $form, $token);
         $this->sendActivationEmail($user->getEmail(), $token);
         $entityManager->persist($user);

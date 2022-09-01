@@ -1,0 +1,12 @@
+<h1>Zmiana danych użytkownika</h1>
+
+<p>Wykryto próbę zmiany Twoich danych. Dane, które ulegną zmianie to:</p>
+<ul>
+    {% for key, update in updates %}
+        <li><strong>{{ key }}:</strong> {{ update }}</li>
+    {% endfor %}
+</ul>
+<p>Aby potwierdzić, że to <strong>Ty</strong> chcesz zmienić swoje dane, kliknij poniższy link:</p>
+<a href="{{ user_data_change_url }}" style="text-align: center">Potwierdzam zmianę danych</a>
+<strong style="text-align: center; text-transform: uppercase">Uwaga!</strong>
+<p>Link wygaśnie w ciągu <strong>dwóch godzin</strong> od momentu otrzymania tego maila w skrzynce odbiorczej 😱</p>

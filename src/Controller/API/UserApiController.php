@@ -3,16 +3,32 @@
 namespace App\Controller\API;
 
 use App\Entity\UserDataUpdates;
+use App\Service\EmailService;
+use App\Service\TokenGeneratorService;
 use DateTimeImmutable;
+use Doctrine\Persistence\ManagerRegistry;
 use Error;
+use Exception;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @property EmailService $emailService
+ * @property TokenGeneratorService $tokenGenerator
+ */
 #[Rest('/api')]
 class UserApiController extends ApiController
 {
+    public function __construct(ManagerRegistry $doctrine, EmailService $emailService, TokenGeneratorService $tokenGenerator)
+    {
+        parent::__construct($doctrine);
+        $this->emailService = $emailService;
+        $this->tokenGenerator = $tokenGenerator;
+    }
+
     #[Rest('/user-data', name: 'user_data', methods: ['GET'])]
     public function userData(): JsonResponse
     {
@@ -49,6 +65,15 @@ class UserApiController extends ApiController
             }
 
             $this->saveUserDataUpdatesInDb($user, $content);
+            $savedUpdates = $this->doctrine->getRepository(UserDataUpdates::class)->findOneBy([
+                'user' => $user
+            ]);
+
+            try {
+                $this->sendUserDataChangeConfirmationEmail($user->getUserIdentifier(), $savedUpdates);
+            } catch (TransportExceptionInterface $e) {
+                exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+            }
 
             return $this->json(['status' => 'OK']);
         } else {
@@ -147,9 +172,62 @@ class UserApiController extends ApiController
             $updates->setPassword($content['newPassword']);
         }
         $updates->setExpiresAt((new DateTimeImmutable())->modify('+2 hours'));
+        $updates->setToken($this->tokenGenerator->generateToken());
 
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($updates);
         $entityManager->flush();
+    }
+
+    /**
+     * @param string $userEmail
+     * @param UserDataUpdates $updates
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    private function sendUserDataChangeConfirmationEmail(string $userEmail, UserDataUpdates $updates): void
+    {
+        $updatesToShow = [];
+        foreach ($updates as $updateKey => $updateValue) {
+            if ($updateKey === 'user') {
+                continue;
+            }
+            if ($updateKey === 'tel_prefix') {
+                $updatesToShow[] = ['Nr tel' => '+' . $updates->getTelPrefix() . ' ' . $updates->getTel()];
+            }
+
+            try {
+                $updatesToShow[] = $this->getUserUpdateToShowInEmailMessage($updateKey, $updateValue);
+            } catch (Exception $e) {
+                exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+            }
+        }
+
+        $this->emailService->sendMessageToUser(
+            $userEmail,
+            'Moje-Tabsy.pl – zmiana danych użytkownika',
+            'emails/user_data_change.txt.twig',
+            'emails/user_data_change.html.twig',
+            [
+                'user_data_change_url' => $_ENV['HOST_URL'] . '/user-data-change/' . $updates->getToken(),
+                'updates' => $updatesToShow
+            ]
+        );
+    }
+
+    /**
+     * @param string $updateKey
+     * @param string $updateValue
+     * @return array
+     * @throws Exception
+     */
+    private function getUserUpdateToShowInEmailMessage(string $updateKey, string $updateValue): array
+    {
+        return match ($updateKey) {
+            'name' => ['Imię' => $updateValue],
+            'email' => ['Adres email' => $updateValue],
+            'password' => ['Hasło' => '*********'],
+            default => throw new Exception('Unexpected value'),
+        };
     }
 }
