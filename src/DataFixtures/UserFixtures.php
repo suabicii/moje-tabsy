@@ -15,6 +15,7 @@ class UserFixtures extends Fixture
         $this->setUserData($manager, 'Eva', 'dummy@email2.com', '123xyz456abc', null, true, false);
         $this->setUserData($manager, 'Evan', 'dummy@email3.com', null, null, true, false);
         $this->setUserData($manager, 'Mary', 'dummy@email4.com', 'abc654xyz321', (new DateTime())->modify('+100 years'), true, true);
+        $this->setUserData($manager, 'John', 'john@doe.com', null, null, true, false);
 
         $manager->flush();
     }

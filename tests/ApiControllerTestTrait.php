@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @property EntityManager $entityManager
  * @property User $user
  */
-trait ApiControllerTrait
+trait ApiControllerTestTrait
 {
     protected function setUp(): void
     {
