@@ -99,11 +99,11 @@ class UserController extends AbstractController
 
     /**
      * @param string $updateKey
-     * @param string $updateValue
+     * @param string|null $updateValue
      * @param User $user
      * @return void
      */
-    private function moveUpdateToUserEntity(string $updateKey, string $updateValue, User $user): void
+    private function moveUpdateToUserEntity(string $updateKey, ?string $updateValue, User $user): void
     {
         switch ($updateKey) {
             case 'name':
@@ -113,7 +113,9 @@ class UserController extends AbstractController
                 $user->setEmail($updateValue);
                 break;
             case 'password':
-                $user->setPassword($updateValue);
+                if ($updateValue) {
+                    $user->setPassword($updateValue);
+                }
                 break;
             case 'tel_prefix':
                 $user->setTelPrefix($updateValue);

@@ -75,7 +75,7 @@ class UserApiController extends ApiController
                 exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
             }
 
-            return $this->json(['status' => 'OK']);
+            return $this->json(['status' => 200]);
         } else {
             return $this->json(['error' => 'Permission denied'], 401);
         }
@@ -125,10 +125,10 @@ class UserApiController extends ApiController
     /**
      * @param UserDataUpdates $updates
      * @param string $updateKey Column name in table
-     * @param string $updateValue Column value
+     * @param string|null $updateValue Column value
      * @return void
      */
-    private function setUserDataUpdate(UserDataUpdates $updates, string $updateKey, string $updateValue): void
+    private function setUserDataUpdate(UserDataUpdates $updates, string $updateKey, ?string $updateValue): void
     {
         switch ($updateKey) {
             case 'name':

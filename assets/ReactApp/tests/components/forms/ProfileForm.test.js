@@ -4,20 +4,24 @@
 import React from "react";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 import ProfileForm from "../../../components/forms/ProfileForm";
-import {render, screen, waitFor} from "@testing-library/react";
+import {act, fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {userData} from '../fixtures/apiData';
 import {fetchData} from "../../../utils/fetchData";
 
-const unmockedFetch = global.fetch;
+const setMockedFetch = mockedResponse => {
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve(mockedResponse)
+    }));
+};
 
-beforeAll(() => {
-    global.fetch = () => Promise.resolve({
-        json: () => Promise.resolve(userData)
-    });
-});
+const renderProfileForm = () => {
+    const fetchUserData = fetchData('/fake-api/user-data');
+    render(<ProfileForm fetchData={fetchUserData}/>);
+};
 
 afterAll(() => {
-    global.fetch = unmockedFetch;
+    global.fetch.mockClear();
+    delete global.fetch;
 });
 
 it('should correctly display ProfileForm', () => {
@@ -28,9 +32,9 @@ it('should correctly display ProfileForm', () => {
 });
 
 it('should display ProfileForm with user data fetched from API', async () => {
-    const fetchUserData = fetchData('/fake-api/user-data');
+    setMockedFetch(userData);
 
-    render(<ProfileForm fetchData={fetchUserData}/>);
+    renderProfileForm();
 
     await waitFor(() => expect(screen.getByRole('form')).toHaveFormValues({
         name: userData.name,
@@ -38,4 +42,29 @@ it('should display ProfileForm with user data fetched from API', async () => {
         tel_prefix: userData.tel_prefix,
         tel: userData.tel
     }));
+});
+
+it('should display modal with positive information after form submission if status is OK', async () => {
+    setMockedFetch(userData);
+    renderProfileForm();
+
+    setMockedFetch({status: 200});
+    await act(() => {
+        fireEvent.change(screen.getByTestId('email'), {target: {value: 'new@email.com'}});
+        fireEvent.submit(screen.getByRole('form'));
+    });
+
+    expect(screen.getByTestId('status-ok')).toBeVisible();
+});
+
+it('should display modal with negative information after form submission if status is FAIL', async () => {
+    setMockedFetch(userData);
+    renderProfileForm();
+
+    await act(() => {
+        fireEvent.change(screen.getByTestId('firstName'), {target: {value: 'John'}});
+        fireEvent.submit(screen.getByRole('form'));
+    });
+
+    expect(screen.getByTestId('status-failed')).toBeVisible();
 });
