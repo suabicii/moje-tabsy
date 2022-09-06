@@ -169,7 +169,12 @@ class UserApiController extends ApiController
         $updates->setTelPrefix($content['tel_prefix']);
         $updates->setTel($content['tel']);
         if (array_key_exists('newPassword', $content)) {
-            $updates->setPassword($content['newPassword']);
+            if ($_ENV['APP_ENV'] === 'test') {
+                $updates->setPassword($content['newPassword']);
+            } else {
+                $hashedPassword = password_hash($content['newPassword'], PASSWORD_DEFAULT);
+                $updates->setPassword($hashedPassword);
+            }
         }
         $updates->setExpiresAt((new DateTimeImmutable())->modify('+2 hours'));
         $updates->setToken($this->tokenGenerator->generateToken());
