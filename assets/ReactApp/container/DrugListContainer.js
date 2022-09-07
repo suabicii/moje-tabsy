@@ -2,7 +2,15 @@ import React, {useState} from "react";
 import {createContainer} from "unstated-next";
 
 const useDrugListing = (initialState = []) => {
-    const [drugList, setDrugList] = useState(initialState);
+    const [drugList, setDrugList] = useState(initialState.sort((a, b) => {
+        if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+        } else if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }));
     const addDrug = ({id, name, quantity, quantityMax, unit, dosing, dosingMoments}) => setDrugList([
         ...drugList,
         {

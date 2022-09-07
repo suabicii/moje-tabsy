@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import ReactModal from "react-modal";
 
-function Modal(props) {
-    const root = props.customRoot || document.getElementById('react'); // customRoot is for test purposes
+function Modal({content, customRoot, modalIsOpen}) {
+    const root = customRoot || document.getElementById('react'); // customRoot is for test purposes
     const [showModal, setShowModal] = useState(false);
     const customStyles = {
         content: {
@@ -16,7 +16,7 @@ function Modal(props) {
     };
 
     useEffect(() => {
-        setShowModal(props.modalIsOpen);
+        setShowModal(modalIsOpen);
     });
 
     ReactModal.defaultStyles.overlay.backgroundColor = 'rgba(0, 0, 0, 0.4)';
@@ -30,7 +30,7 @@ function Modal(props) {
             style={customStyles}
             contentLabel="Edycja"
         >
-            {props.content}
+            {content}
         </ReactModal>
     );
 }

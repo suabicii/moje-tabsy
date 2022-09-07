@@ -1,159 +1,177 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should correctly display ProfileForm 1`] = `
-<div
-  className="card mt-3"
->
+<React.Fragment>
   <div
-    className="card-header text-center"
+    className="card mt-3"
   >
-    Ustawienia profilu
-  </div>
-  <div
-    className="card-body"
-  >
-    <form
-      name="profile_form"
-      onSubmit={[Function]}
-      role="form"
+    <div
+      className="card-header text-center"
     >
-      <div
-        className="form-floating mt-3"
-      >
-        <input
-          className="form-control"
-          data-testid="firstName"
-          id="name"
-          name="name"
-          placeholder="Imię"
-          required={true}
-          type="text"
-        />
-        <label
-          htmlFor="name"
-        >
-          Imię
-        </label>
-      </div>
-      <div
-        className="form-floating mt-3"
-      >
-        <input
-          className="form-control"
-          data-testid="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          required={true}
-          type="email"
-        />
-        <label
-          htmlFor="name"
-        >
-          Email
-        </label>
-      </div>
-      <div
-        className="input-group mt-3"
+      Ustawienia profilu
+    </div>
+    <div
+      className="card-body"
+    >
+      <form
+        name="profile_form"
+        onSubmit={[Function]}
+        role="form"
       >
         <div
-          className="input-group input-group--prefix-number"
+          className="form-floating mt-3"
         >
-          <span
-            className="input-group-text"
-          >
-            +
-          </span>
-          <select
-            aria-label="Prefix"
-            className="form-select"
-            id="tel_prefix"
-            name="tel_prefix"
-          >
-            <option
-              value="48"
-            >
-              48 🇵🇱
-            </option>
-            <option
-              value="47"
-            >
-              47 🇳🇴
-            </option>
-          </select>
-        </div>
-        <input
-          className="form-control rounded-start"
-          id="tel"
-          name="tel"
-          placeholder="Nr tel"
-          type="text"
-        />
-      </div>
-      <div
-        className="form-floating mt-3"
-      >
-        <input
-          className="form-control"
-          data-testid="oldPassword"
-          id="oldPassword"
-          name="oldPassword"
-          placeholder="Stare hasło"
-          type="password"
-        />
-        <label
-          htmlFor="name"
-        >
-          Stare hasło
-        </label>
-      </div>
-      <div
-        className="form-floating mt-3"
-      >
-        <input
-          className="form-control"
-          data-testid="newPassword"
-          id="newPassword"
-          name="newPassword"
-          placeholder="Nowe hasło"
-          type="password"
-        />
-        <label
-          htmlFor="name"
-        >
-          Nowe hasło
-        </label>
-      </div>
-      <div
-        className="form-floating mt-3"
-      >
-        <input
-          className="form-control"
-          data-testid="newPasswordRepeated"
-          id="newPasswordRepeated"
-          name="newPasswordRepeated"
-          placeholder="Nowe hasło"
-          type="password"
-        />
-        <label
-          htmlFor="name"
-        >
-          Powtórz nowe hasło
-        </label>
-      </div>
-      <div
-        className="d-grid mt-3"
-      >
-        <button
-          className="btn btn-primary"
-        >
-          Zapisz 
-          <i
-            className="fa-solid fa-floppy-disk"
+          <input
+            className="form-control"
+            data-testid="firstName"
+            id="name"
+            name="name"
+            onChange={[Function]}
+            placeholder="Imię"
+            required={true}
+            type="text"
           />
-        </button>
-      </div>
-    </form>
+          <label
+            htmlFor="name"
+          >
+            Imię
+          </label>
+        </div>
+        <div
+          className="form-floating mt-3"
+        >
+          <input
+            className="form-control"
+            data-testid="email"
+            id="email"
+            name="email"
+            onChange={[Function]}
+            placeholder="Email"
+            required={true}
+            type="email"
+          />
+          <label
+            htmlFor="name"
+          >
+            Email
+          </label>
+        </div>
+        <div
+          className="input-group mt-3"
+        >
+          <div
+            className="input-group input-group--prefix-number"
+          >
+            <span
+              className="input-group-text"
+            >
+              +
+            </span>
+            <select
+              aria-label="Prefix"
+              className="form-select"
+              defaultValue="48"
+              id="tel_prefix"
+              name="tel_prefix"
+              onChange={[Function]}
+            >
+              <option
+                value="48"
+              >
+                48 🇵🇱
+              </option>
+              <option
+                value="47"
+              >
+                47 🇳🇴
+              </option>
+            </select>
+          </div>
+          <input
+            className="form-control rounded-start"
+            id="tel"
+            name="tel"
+            onChange={[Function]}
+            placeholder="Nr tel"
+            type="text"
+          />
+        </div>
+        <div
+          className="form-floating mt-3"
+        >
+          <input
+            className="form-control"
+            data-testid="oldPassword"
+            id="oldPassword"
+            name="oldPassword"
+            onChange={[Function]}
+            placeholder="Stare hasło"
+            type="password"
+          />
+          <label
+            htmlFor="name"
+          >
+            Stare hasło
+          </label>
+        </div>
+        <div
+          className="form-floating mt-3"
+        >
+          <input
+            className="form-control"
+            data-testid="newPassword"
+            id="newPassword"
+            name="newPassword"
+            onChange={[Function]}
+            placeholder="Nowe hasło"
+            type="password"
+          />
+          <label
+            htmlFor="name"
+          >
+            Nowe hasło
+          </label>
+        </div>
+        <div
+          className="form-floating mt-3"
+        >
+          <input
+            className="form-control"
+            data-testid="newPasswordRepeated"
+            id="newPasswordRepeated"
+            name="newPasswordRepeated"
+            onChange={[Function]}
+            placeholder="Nowe hasło"
+            type="password"
+          />
+          <label
+            htmlFor="name"
+          >
+            Powtórz nowe hasło
+          </label>
+        </div>
+        <div
+          className="d-grid mt-3"
+        >
+          <button
+            className="btn btn-primary"
+          >
+            Zapisz 
+            <i
+              className="fa-solid fa-floppy-disk"
+            />
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+  <Modal
+    content={
+      <StatusFailModalContent
+        setIsModalOpen={[Function]}
+      />
+    }
+    modalIsOpen={false}
+  />
+</React.Fragment>
 `;

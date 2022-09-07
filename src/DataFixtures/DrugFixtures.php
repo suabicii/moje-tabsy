@@ -23,7 +23,7 @@ class DrugFixtures extends Fixture implements DependentFixtureInterface
             'pcs.',
             1,
             [
-                'hour1' => '8:00',
+                'hour1' => '08:00',
                 'hour2' => '18:00'
             ]
         );

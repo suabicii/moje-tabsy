@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render StatusOkModalContent 1`] = `
+<div
+  className="container text-center"
+  data-testid="status-ok"
+  role="dialog"
+>
+  <h2
+    className="text-success"
+  >
+    Twoje nowe dane zostały tymczasowo zapisane 🙂
+  </h2>
+  <p
+    className="mt-2"
+  >
+    Aby w pełni zaktualizować swoje dane, sprawdź swoją skrzynkę pocztową 
+    <i
+      className="fa-regular fa-envelope"
+    />
+    ,
+    <br />
+     gdzie znajdziesz wiadomość email z linkiem do potwierdzenia zmiany 
+    <i
+      className="fa-solid fa-check"
+    />
+  </p>
+  <p
+    className="text-info"
+  >
+    Jeśli nie możesz znaleźć tego maila w skrzynce odbiorczej 
+    <i
+      className="fa-solid fa-inbox"
+    />
+    , sprawdź folder SPAM
+  </p>
+  <button
+    className="btn btn-primary mt-2"
+    onClick={[Function]}
+  >
+    OK 
+    <i
+      className="fa-solid fa-check"
+    />
+  </button>
+</div>
+`;

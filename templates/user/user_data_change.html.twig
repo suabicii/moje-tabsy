@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zmiana danych użytkownika zakończona sukcesem!{% endblock %}
+
+{% block body %}
+    <body>
+    <main>
+        <section class="user-info position-relative">
+            <div class="user-info__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
+                <h1 class="display-5">Twoje dane zostały zmienione 🤩</h1>
+                <div class="grid mt-2">
+                    <a href="{{ path('homepage') }}">Powrót do strony głównej</a>
+                    <a href="{{ path('login_page') }}" class="mt-1 mt-lg-0">Powrót do strony logowania</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% block javascripts %}
+        {{ parent() }}
+    {% endblock %}
+    </body>
+{% endblock %}

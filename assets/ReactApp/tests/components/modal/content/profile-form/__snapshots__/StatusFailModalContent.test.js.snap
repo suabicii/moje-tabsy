@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render StatusFailModalContent 1`] = `
+<div
+  className="container text-center"
+  data-testid="status-failed"
+  role="dialog"
+>
+  <h2
+    className="text-danger"
+  >
+    Błąd! 🙁
+  </h2>
+  <p>
+    Zmiana danych nie powiodła się 
+    <i
+      className="fa-regular fa-face-frown-slight"
+    />
+  </p>
+  <small
+    className="d-block text-danger"
+  >
+    Błędny format danych lub błąd serwera 😠
+  </small>
+  <button
+    className="btn btn-danger mt-2"
+    onClick={[Function]}
+  >
+    OK 
+    <i
+      className="fa-solid fa-check"
+    />
+  </button>
+</div>
+`;

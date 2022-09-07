@@ -1,0 +1,13 @@
+Zmiana danych użytkownika
+
+Wykryto próbę zmiany Twoich danych. Dane, które ulegną zmianie to:
+{% for update in updates %}
+    {% for key, value in update %}
+        {{ key }}: {{ value }},
+    {% endfor %}
+{% endfor %}.
+
+Aby potwierdzić, że to Ty chcesz zmienić swoje dane, skopiuj następujący link do przeglądarki:
+{{ user_data_change_url }}
+
+Uwaga! Link wygaśnie w ciągu dwóch godzin od momentu otrzymania tego maila w skrzynce odbiorczej.

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import DosingMomentsInputs from "./special-inputs/DosingMomentsInputs";
 import {DrugListContainer} from "../../container/DrugListContainer";
-import {postData} from "../../utils/postData";
+import {sendOrDeleteData} from "../../utils/sendOrDeleteData";
 
 function DrugForm({drug, setIsFormVisible}) {
     const dosingMomentInputDefaultAmount = drug ? Object.keys(drug.dosingMoments).length : 1;
@@ -30,8 +30,20 @@ function DrugForm({drug, setIsFormVisible}) {
         }));
     }, [timeInputValues]);
 
+    useEffect(() => {
+        drugList.sort((a, b) => {
+            if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                return 1;
+            } else if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+    }, [drugList]);
+
     /** EVENT HANDLERS */
-    const handleChangeDosingInput = value => {
+    const handleDosingInputChange = value => {
         setDosingMomentInputAmount(value);
     };
 
@@ -50,10 +62,14 @@ function DrugForm({drug, setIsFormVisible}) {
     const handleSubmit = async () => {
         if (drug) {
             editDrug(drug.id, allInputValues);
+            await sendOrDeleteData(drug.id, allInputValues, 'PUT','edit-drug');
         } else {
-            const id = drugList ? drugList[drugList.length - 1].id + 1 : 1;
+            const id = drugList.length > 0 ? drugList[drugList.length - 1].id + 1 : 1;
             addDrug({id, ...allInputValues});
-            await postData({id, ...allInputValues}, 'add-drug');
+            await sendOrDeleteData(null, {id, ...allInputValues}, 'POST', 'add-drug')
+                .then(data => {
+                    console.log(data);
+                });
         }
         setIsFormVisible(false);
     };
@@ -69,11 +85,9 @@ function DrugForm({drug, setIsFormVisible}) {
                 {drug ? 'Edytuj' : 'Dodaj'} lek/suplement
             </div>
             <div className="card-body">
-                <form role="form" name="drug_form" onSubmit={e => {
+                <form role="form" name="drug_form" onSubmit={async e => {
                     e.preventDefault();
-                    handleSubmit().then(r => {
-                        console.log(r);
-                    });
+                    await handleSubmit();
                 }}>
                     <div className="row">
                         <div className="col-md-6">
@@ -127,7 +141,7 @@ function DrugForm({drug, setIsFormVisible}) {
                                        aria-valuemin="1" min="1"
                                        required data-testid="dailyDosing"
                                        onChange={e => {
-                                           handleChangeDosingInput(e.target.value);
+                                           handleDosingInputChange(e.target.value);
                                        }}
                                 />
                                 <label htmlFor="dailyDosing">Ile razy dziennie?</label>

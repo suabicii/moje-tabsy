@@ -6,7 +6,7 @@ import StockStatusChecker from "./StockStatusChecker";
 
 function Summary({customDate}) {
     const {drugList} = DrugListContainer.useContainer();
-    const currentDate = customDate ? customDate : dayjs(); // custom date is for testing purposes only
+    const currentDate = customDate || dayjs(); // custom date is for testing purposes only
 
     const checkIfCurrentTimeIsBeforeDosingMoment = (hour, minute) => {
         return currentDate.isBefore(currentDate.hour(parseInt(hour)).minute(parseInt(minute)), 'minute');
