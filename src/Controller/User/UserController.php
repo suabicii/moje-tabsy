@@ -70,7 +70,7 @@ class UserController extends AbstractController
      * @param UserDataUpdates $updates
      * @return void
      */
-    public function updateUserData(UserDataUpdates $updates): void
+    private function updateUserData(UserDataUpdates $updates): void
     {
         $entityManager = $this->doctrine->getManager();
         $user = $updates->getUser();
@@ -92,7 +92,7 @@ class UserController extends AbstractController
      * @param string $updateKey
      * @return bool
      */
-    public function isUpdateKeyExcluded(string $updateKey): bool
+    private function isUpdateKeyExcluded(string $updateKey): bool
     {
         return $updateKey === 'user' || $updateKey === 'id' || $updateKey === 'token' || $updateKey === 'expiresAt';
     }
