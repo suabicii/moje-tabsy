@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Error;
 use Exception;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -18,15 +19,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @property EmailService $emailService
  * @property TokenGeneratorService $tokenGenerator
+ * @property SerializerInterface $serializer
  */
 #[Rest('/api')]
 class UserApiController extends ApiController
 {
-    public function __construct(ManagerRegistry $doctrine, EmailService $emailService, TokenGeneratorService $tokenGenerator)
+    public function __construct(
+        ManagerRegistry       $doctrine,
+        EmailService          $emailService,
+        TokenGeneratorService $tokenGenerator,
+        SerializerInterface   $serializer
+    )
     {
         parent::__construct($doctrine);
         $this->emailService = $emailService;
         $this->tokenGenerator = $tokenGenerator;
+        $this->serializer = $serializer;
     }
 
     #[Rest('/user-data', name: 'user_data', methods: ['GET'])]
@@ -193,18 +201,15 @@ class UserApiController extends ApiController
     private function sendUserDataChangeConfirmationEmail(string $userEmail, UserDataUpdates $updates): void
     {
         $updatesToShow = [];
-        foreach ($updates as $updateKey => $updateValue) {
-            if ($updateKey === 'user') {
+        $updatesArr = $this->serializer->normalize($updates);
+        foreach ($updatesArr as $updateKey => $updateValue) {
+            if ($this->isUpdateKeyExcluded($updateKey)) {
                 continue;
             }
-            if ($updateKey === 'tel_prefix') {
-                $updatesToShow[] = ['Nr tel' => '+' . $updates->getTelPrefix() . ' ' . $updates->getTel()];
-            }
-
             try {
-                $updatesToShow[] = $this->getUserUpdateToShowInEmailMessage($updateKey, $updateValue);
+                $this->setUserDataUpdatesToShowInEmailTemplate($updates, $updateKey, $updateValue, $updatesToShow);
             } catch (Exception $e) {
-                exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+                exit('Error: ' . $e->getMessage());
             }
         }
 
@@ -222,17 +227,42 @@ class UserApiController extends ApiController
 
     /**
      * @param string $updateKey
-     * @param string $updateValue
-     * @return array
+     * @return bool
+     */
+    private function isUpdateKeyExcluded(string $updateKey): bool
+    {
+        return $updateKey === 'user' || $updateKey === 'id' || $updateKey === 'token' || $updateKey === 'expiresAt' || $updateKey === 'tel';
+    }
+
+    /**
+     * @param UserDataUpdates $updates
+     * @param string $updateKey
+     * @param string|null $updateValue
+     * @param array $updatesToShow
+     * @return void
      * @throws Exception
      */
-    private function getUserUpdateToShowInEmailMessage(string $updateKey, string $updateValue): array
+    private function setUserDataUpdatesToShowInEmailTemplate(UserDataUpdates $updates, string $updateKey, ?string $updateValue, array &$updatesToShow): void
     {
-        return match ($updateKey) {
-            'name' => ['Imię' => $updateValue],
-            'email' => ['Adres email' => $updateValue],
-            'password' => ['Hasło' => '*********'],
-            default => throw new Exception('Unexpected value'),
-        };
+        switch ($updateKey) {
+            case 'name':
+                $updatesToShow[] = ['Imię' => $updateValue];
+                break;
+            case 'email':
+                $updatesToShow[] = ['Adres email' => $updateValue];
+                break;
+            case 'password':
+                if ($updateValue) {
+                    $updatesToShow[] = ['Hasło' => '*********'];
+                }
+                break;
+            case 'telPrefix':
+                if ($updateValue) {
+                    $updatesToShow[] = ['Nr tel' => '+' . $updates->getTelPrefix() . ' ' . $updates->getTel()];
+                }
+                break;
+            default:
+                throw new Exception('Unexpected key ' . '"' . $updateKey . '"' . ' in user data updates array');
+        }
     }
 }
