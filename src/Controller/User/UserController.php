@@ -32,7 +32,7 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         CookieCleanerService        $cookieCleaner,
         TokenGeneratorService       $tokenGenerator,
-        SerializerInterface                  $serializer
+        SerializerInterface         $serializer
     )
     {
         $this->doctrine = $doctrine;
