@@ -77,10 +77,12 @@ class UserApiController extends ApiController
                 'user' => $user
             ]);
 
-            try {
-                $this->sendUserDataChangeConfirmationEmail($user->getUserIdentifier(), $savedUpdates);
-            } catch (TransportExceptionInterface $e) {
-                exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+            if ($_ENV['APP_ENV'] !== 'test') {
+                try {
+                    $this->sendUserDataChangeConfirmationEmail($user->getUserIdentifier(), $savedUpdates);
+                } catch (TransportExceptionInterface $e) {
+                    exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+                }
             }
 
             return $this->json(['status' => 200]);
