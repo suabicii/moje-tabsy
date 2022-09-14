@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Error;
 use Exception;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +82,7 @@ class UserApiController extends ApiController
                 try {
                     $this->sendUserDataChangeConfirmationEmail($user->getUserIdentifier(), $savedUpdates);
                 } catch (TransportExceptionInterface $e) {
-                    exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
+                    exit('Error ' . $e->getCode() . ': ' . $e->getMessage() . ': ');
                 }
             }
 
@@ -203,11 +204,18 @@ class UserApiController extends ApiController
     private function sendUserDataChangeConfirmationEmail(string $userEmail, UserDataUpdates $updates): void
     {
         $updatesToShow = [];
-        $updatesArr = $this->serializer->normalize($updates);
+        $updatesArr = $this->serializer->normalize(
+            $updates,
+            null,
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                'id',
+                'user',
+                'tel',
+                'token',
+                'expiresAt'
+            ]]
+        );
         foreach ($updatesArr as $updateKey => $updateValue) {
-            if ($this->isUpdateKeyExcluded($updateKey)) {
-                continue;
-            }
             try {
                 $this->setUserDataUpdatesToShowInEmailTemplate($updates, $updateKey, $updateValue, $updatesToShow);
             } catch (Exception $e) {
@@ -225,15 +233,6 @@ class UserApiController extends ApiController
                 'updates' => $updatesToShow
             ]
         );
-    }
-
-    /**
-     * @param string $updateKey
-     * @return bool
-     */
-    private function isUpdateKeyExcluded(string $updateKey): bool
-    {
-        return $updateKey === 'user' || $updateKey === 'id' || $updateKey === 'token' || $updateKey === 'expiresAt' || $updateKey === 'tel';
     }
 
     /**
