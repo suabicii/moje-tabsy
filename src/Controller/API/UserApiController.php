@@ -2,6 +2,7 @@
 
 namespace App\Controller\API;
 
+use App\Entity\User;
 use App\Entity\UserDataUpdates;
 use App\Service\EmailService;
 use App\Service\TokenGeneratorService;
@@ -91,6 +92,37 @@ class UserApiController extends ApiController
             return $this->json(['error' => 'Permission denied'], 401);
         }
     }
+
+    #[Rest('/login', name: 'login_in_mobile_app', methods: ['POST'])]
+    public function loginInMobileApp(Request $request): JsonResponse // connection with notifier mobile app
+    {
+        $content = json_decode($request->getContent(), true);
+        if ($content) {
+            if ($_ENV['APP_ENV'] === 'test') {
+                $user = $this->doctrine->getRepository(User::class)->findByEmailAndPassword(
+                    $content['email'],
+                    $content['password']
+                );
+            } else {
+                $hashedPassword = password_hash($content['password'], PASSWORD_DEFAULT);
+                $user = $this->doctrine->getRepository(User::class)->findByEmailAndPassword(
+                    $content['email'],
+                    $hashedPassword
+                );
+            }
+
+            if (!$user) {
+                return $this->json(['error' => 'Nieprawidłowe dane'], 400);
+            } elseif (!$this->checkIfAccountIsActive($user)) {
+                return $this->json(['error' => 'Aby móc się zalogować, musisz aktywować swoje konto'], 400);
+            }
+
+            return $this->json(['status' => 200]);
+        } else {
+            return $this->json(['error' => 'Method not allowed'], 405);
+        }
+    }
+    /** CHANGE USER DATA AUXILIARY METHODS */
 
     /**
      * @param array $content
@@ -266,4 +298,17 @@ class UserApiController extends ApiController
                 throw new Exception('Unexpected key ' . '"' . $updateKey . '"' . ' in user data updates array');
         }
     }
+    /** CHANGE USER DATA AUXILIARY METHODS */
+
+    /** LOGIN BY MOBILE APP AUXILIARY METHODS */
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    private function checkIfAccountIsActive(User $user): bool
+    {
+        return $user->isActivated() && !$user->isResetPassModeEnabled();
+    }
+    /** LOGIN BY MOBILE APP AUXILIARY METHODS */
 }
