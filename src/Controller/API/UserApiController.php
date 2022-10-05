@@ -98,23 +98,18 @@ class UserApiController extends ApiController
     {
         $content = json_decode($request->getContent(), true);
         if ($content) {
-            if ($_ENV['APP_ENV'] === 'test') {
-                $user = $this->doctrine->getRepository(User::class)->findByEmailAndPassword(
-                    $content['email'],
-                    $content['password']
-                );
-            } else {
-                $hashedPassword = password_hash($content['password'], PASSWORD_DEFAULT);
-                $user = $this->doctrine->getRepository(User::class)->findByEmailAndPassword(
-                    $content['email'],
-                    $hashedPassword
-                );
-            }
+            $user = $this->doctrine->getRepository(User::class)->findOneBy([
+                'email' => $content['email']
+            ]);
 
             if (!$user) {
-                return $this->json(['error' => 'Nieprawidłowe dane'], 400);
-            } elseif (!$this->checkIfAccountIsActive($user)) {
-                return $this->json(['error' => 'Aby móc się zalogować, musisz aktywować swoje konto'], 400);
+                return $this->json(['error' => 'Nie znaleziono użytkownika'], 400);
+            } else {
+                if (!$this->verifyUserPasswordFromMobileApp($content['email'], $content['password'], $user)) {
+                    return $this->json(['error' => 'Nieprawidłowe hasło'], 400);
+                } elseif (!$this->checkIfAccountIsActive($user)) {
+                    return $this->json(['error' => 'Aby móc się zalogować, musisz aktywować swoje konto'], 400);
+                }
             }
 
             return $this->json(['status' => 200]);
@@ -309,6 +304,25 @@ class UserApiController extends ApiController
     private function checkIfAccountIsActive(User $user): bool
     {
         return $user->isActivated() && !$user->isResetPassModeEnabled();
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @param User $foundUser
+     * @return bool
+     */
+    private function verifyUserPasswordFromMobileApp(string $email, string $password, User $foundUser): bool
+    {
+        if ($_ENV['APP_ENV'] === 'test') {
+            $verifiedUser = $this->doctrine->getRepository(User::class)->findByEmailAndPassword(
+                $email,
+                $password
+            );
+            return (bool)$verifiedUser;
+        } else {
+            return password_verify($password, $foundUser->getPassword());
+        }
     }
     /** LOGIN BY MOBILE APP AUXILIARY METHODS */
 }

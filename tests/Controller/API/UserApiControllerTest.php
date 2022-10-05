@@ -115,7 +115,28 @@ class UserApiControllerTest extends WebTestCase
         $this->assertEquals(['status' => 200], $responseData);
     }
 
-    public function testGetErrorIfUserSubmittedWrongDataInMobileApp(): void
+    public function testGetErrorIfUserSubmitWrongEmailInMobileApp(): void
+    {
+        $this->client->request(
+            'POST',
+            '/api/login',
+            [],
+            [],
+            [],
+            json_encode([
+                'email' => 'this.mail.is@wrong.com',
+                'password' => 'SomePassword123!'
+            ])
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertEquals(['error' => 'Nie znaleziono użytkownika'], $responseData);
+    }
+
+    public function testGetErrorIfUserSubmitWrongPasswordInMobileApp(): void
     {
         $this->client->request(
             'POST',
@@ -133,7 +154,7 @@ class UserApiControllerTest extends WebTestCase
         $responseData = json_decode($response->getContent(), true);
 
         $this->assertResponseStatusCodeSame(400);
-        $this->assertEquals(['error' => 'Nieprawidłowe dane'], $responseData);
+        $this->assertEquals(['error' => 'Nieprawidłowe hasło'], $responseData);
     }
 
     public function testGetErrorIfInactivateUserTriesToLogInInMobileApp(): void
