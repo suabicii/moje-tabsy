@@ -96,6 +96,7 @@ class UserApiControllerTest extends WebTestCase
 
     public function testLoginInMobileApp(): void
     {
+        $userEmail = 'john@doe.com';
         $this->client->request(
             'POST',
             '/api/login',
@@ -103,7 +104,7 @@ class UserApiControllerTest extends WebTestCase
             [],
             [],
             json_encode([
-                'email' => 'john@doe.com',
+                'email' => $userEmail,
                 'password' => 'Password123!'
             ])
         );
@@ -112,7 +113,13 @@ class UserApiControllerTest extends WebTestCase
         $responseData = json_decode($response->getContent(), true);
 
         $this->assertResponseIsSuccessful();
-        $this->assertEquals(['status' => 200], $responseData);
+        $this->assertEquals(
+            [
+                'status' => 200,
+                'user_id' => $userEmail
+            ],
+            $responseData
+        );
     }
 
     public function testGetErrorIfUserSubmitWrongEmailInMobileApp(): void

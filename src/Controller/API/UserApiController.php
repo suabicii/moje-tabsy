@@ -112,7 +112,10 @@ class UserApiController extends ApiController
                 }
             }
 
-            return $this->json(['status' => 200]);
+            return $this->json([
+                'status' => 200,
+                'user_id' => $user->getEmail()
+            ]);
         } else {
             return $this->json(['error' => 'Method not allowed'], 405);
         }
