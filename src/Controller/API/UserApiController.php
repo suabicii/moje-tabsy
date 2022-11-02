@@ -2,6 +2,7 @@
 
 namespace App\Controller\API;
 
+use App\Entity\MobileAppUser;
 use App\Entity\User;
 use App\Entity\UserDataUpdates;
 use App\Service\EmailService;
@@ -112,10 +113,41 @@ class UserApiController extends ApiController
                 }
             }
 
+            $this->saveMobileUserAppInDb($user);
+
             return $this->json([
                 'status' => 200,
                 'user_id' => $user->getEmail()
             ]);
+        } else {
+            return $this->json(['error' => 'Method not allowed'], 405);
+        }
+    }
+
+    #[Rest('/logout', name: 'logout_in_mobile_app', methods: ['POST'])]
+    public function logoutInMobileApp(Request $request): JsonResponse
+    {
+        $content = json_decode($request->getContent(), true);
+        if ($content) {
+            $user = $this->doctrine->getRepository(User::class)->findOneBy([
+                'email' => $content['email']
+            ]);
+            if (!$user) {
+                return $this->json(['error' => 'User was not found'], 404);
+            }
+
+            $mobileAppUser = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+                'user' => $user
+            ]);
+            if (!$mobileAppUser) {
+                return $this->json(['error' => 'User is already logged out'], 400);
+            }
+
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->remove($mobileAppUser);
+            $entityManager->flush();
+
+            return $this->json(['message' => 'Successfully logged out']);
         } else {
             return $this->json(['error' => 'Method not allowed'], 405);
         }
@@ -326,6 +358,19 @@ class UserApiController extends ApiController
         } else {
             return password_verify($password, $foundUser->getPassword());
         }
+    }
+
+    /**
+     * @param mixed $user
+     * @return void
+     */
+    public function saveMobileUserAppInDb(mixed $user): void
+    {
+        $mobileAppUser = new MobileAppUser();
+        $mobileAppUser->setUser($user);
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->persist($mobileAppUser);
+        $entityManager->flush();
     }
     /** LOGIN BY MOBILE APP AUXILIARY METHODS */
 }

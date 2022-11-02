@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller\API;
 
+use App\Entity\MobileAppUser;
+use App\Entity\User;
 use App\Entity\UserDataUpdates;
 use App\Tests\ApiControllerTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -122,6 +124,31 @@ class UserApiControllerTest extends WebTestCase
         );
     }
 
+    public function testSaveInDbMobileAppUser(): void
+    {
+        $userEmail = 'john@doe.com';
+        $this->client->request(
+            'POST',
+            '/api/login',
+            [],
+            [],
+            [],
+            json_encode([
+                'email' => $userEmail,
+                'password' => 'Password123!'
+            ])
+        );
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'email' => $userEmail
+        ]);
+        $mobileAppUser = $this->entityManager->getRepository(MobileAppUser::class)->findOneBy([
+            'user' => $user
+        ]);
+
+        $this->assertNotNull($mobileAppUser);
+    }
+
     public function testGetErrorIfUserSubmitWrongEmailInMobileApp(): void
     {
         $this->client->request(
@@ -194,6 +221,79 @@ class UserApiControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(405);
         $this->assertEquals(['error' => 'Method not allowed'], $responseData);
+    }
+
+    public function testLogoutInMobileAppAndRemoveMobileUserFromDb(): void
+    {
+        $userEmail = 'john@doe.com';
+        $this->client->request(
+            'POST',
+            '/api/logout',
+            [],
+            [],
+            [],
+            json_encode(['email' => $userEmail])
+        );
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'email' => $userEmail
+        ]);
+        $mobileAppUser = $this->entityManager->getRepository(MobileAppUser::class)->findOneBy([
+            'user' => $user
+        ]);
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['message' => 'Successfully logged out'], $responseData);
+        $this->assertNull($mobileAppUser);
+    }
+
+    public function testGetLogoutErrorIfNoDataWasSent(): void
+    {
+        $this->client->request('POST', '/api/logout');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(405);
+        $this->assertEquals(['error' => 'Method not allowed'], $responseData);
+    }
+
+    public function testGetLogoutErrorIfUserDoesNotExist(): void
+    {
+        $this->client->request(
+            'POST',
+            '/api/logout',
+            [],
+            [],
+            [],
+            json_encode(['email' => 'this.should@fail.com'])
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertEquals(['error' => 'User was not found'], $responseData);
+    }
+
+    public function testGetLogoutErrorIfUserIsAlreadyLoggedOut(): void
+    {
+        $this->client->request(
+            'POST',
+            '/api/logout',
+            [],
+            [],
+            [],
+            json_encode(['email' => 'dummy@email3.com'])
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertEquals(['error' => 'User is already logged out'], $responseData);
     }
 
     /**
