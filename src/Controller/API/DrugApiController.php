@@ -92,6 +92,7 @@ class DrugApiController extends ApiController
             return $this->json(['error' => 'Only logged users can edit drugs'], 401);
         }
     }
+
     /**
      * @param Drug $drug
      * @param string $updateKey Column name in table
@@ -129,7 +130,7 @@ class DrugApiController extends ApiController
      * @param mixed $content
      * @return void
      */
-    public function saveNewDrugInDatabase(UserInterface $user, mixed $content): void
+    private function saveNewDrugInDatabase(UserInterface $user, mixed $content): void
     {
         $drug = new Drug();
         $userFromDb = $this->getUserFromDb($user);
