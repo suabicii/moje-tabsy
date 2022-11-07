@@ -130,7 +130,7 @@ class UserApiController extends ApiController
         $content = json_decode($request->getContent(), true);
         if ($content) {
             $user = $this->doctrine->getRepository(User::class)->findOneBy([
-                'email' => $content['email']
+                'email' => $content['userId']
             ]);
             if (!$user) {
                 return $this->json(['error' => 'User was not found'], 404);

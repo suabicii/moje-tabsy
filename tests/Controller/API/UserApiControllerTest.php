@@ -232,7 +232,7 @@ class UserApiControllerTest extends WebTestCase
             [],
             [],
             [],
-            json_encode(['email' => $userEmail])
+            json_encode(['userId' => $userEmail])
         );
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
