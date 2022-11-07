@@ -147,7 +147,10 @@ class UserApiController extends ApiController
             $entityManager->remove($mobileAppUser);
             $entityManager->flush();
 
-            return $this->json(['message' => 'Successfully logged out']);
+            return $this->json([
+                'status' => 200,
+                'message' => 'Successfully logged out'
+            ]);
         } else {
             return $this->json(['error' => 'Method not allowed'], 405);
         }

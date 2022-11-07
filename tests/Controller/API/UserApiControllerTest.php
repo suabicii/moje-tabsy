@@ -245,7 +245,13 @@ class UserApiControllerTest extends WebTestCase
         $responseData = json_decode($response->getContent(), true);
 
         $this->assertResponseIsSuccessful();
-        $this->assertEquals(['message' => 'Successfully logged out'], $responseData);
+        $this->assertEquals(
+            [
+                'status' => 200,
+                'message' => 'Successfully logged out'
+            ],
+            $responseData
+        );
         $this->assertNull($mobileAppUser);
     }
 
