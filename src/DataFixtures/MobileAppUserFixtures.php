@@ -15,6 +15,7 @@ class MobileAppUserFixtures extends Fixture implements DependentFixtureInterface
         $mobileAppUser = new MobileAppUser();
         $user = $manager->getRepository(User::class)->findOneBy(['email' => 'john@doe.com']);
         $mobileAppUser->setUser($user);
+        $mobileAppUser->setToken('123xyz456abc');
         $manager->persist($mobileAppUser);
         $manager->flush();
     }

@@ -113,7 +113,7 @@ class UserApiController extends ApiController
                 }
             }
 
-            $this->saveMobileUserAppInDb($user);
+            $this->saveMobileUserAppInDb($user, $content['token']);
 
             return $this->json([
                 'status' => 200,
@@ -365,12 +365,14 @@ class UserApiController extends ApiController
 
     /**
      * @param mixed $user
+     * @param string $token
      * @return void
      */
-    public function saveMobileUserAppInDb(mixed $user): void
+    public function saveMobileUserAppInDb(mixed $user, string $token): void
     {
         $mobileAppUser = new MobileAppUser();
         $mobileAppUser->setUser($user);
+        $mobileAppUser->setToken($token);
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($mobileAppUser);
         $entityManager->flush();

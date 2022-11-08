@@ -98,7 +98,7 @@ class UserApiControllerTest extends WebTestCase
 
     public function testLoginInMobileApp(): void
     {
-        $userEmail = 'john@doe.com';
+        $userEmail = 'dummy@email3.com';
         $this->client->request(
             'POST',
             '/api/login',
@@ -107,7 +107,8 @@ class UserApiControllerTest extends WebTestCase
             [],
             json_encode([
                 'email' => $userEmail,
-                'password' => 'Password123!'
+                'password' => 'Password123!',
+                'token' => 'some_token'
             ])
         );
 
@@ -159,7 +160,8 @@ class UserApiControllerTest extends WebTestCase
             [],
             json_encode([
                 'email' => 'this.mail.is@wrong.com',
-                'password' => 'SomePassword123!'
+                'password' => 'SomePassword123!',
+                'token' => 'someToken'
             ])
         );
 
@@ -180,7 +182,8 @@ class UserApiControllerTest extends WebTestCase
             [],
             json_encode([
                 'email' => 'john@doe.com',
-                'password' => 'IncorrectPassword'
+                'password' => 'IncorrectPassword',
+                'token' => 'someToken'
             ])
         );
 
@@ -201,7 +204,8 @@ class UserApiControllerTest extends WebTestCase
             [],
             json_encode([
                 'email' => 'dummy@email.com',
-                'password' => 'Password123!'
+                'password' => 'Password123!',
+                'token' => 'someToken'
             ])
         );
 
@@ -274,7 +278,7 @@ class UserApiControllerTest extends WebTestCase
             [],
             [],
             [],
-            json_encode(['email' => 'this.should@fail.com'])
+            json_encode(['userId' => 'this.should@fail.com'])
         );
 
         $response = $this->client->getResponse();
@@ -292,7 +296,7 @@ class UserApiControllerTest extends WebTestCase
             [],
             [],
             [],
-            json_encode(['email' => 'dummy@email3.com'])
+            json_encode(['userId' => 'dummy@email3.com'])
         );
 
         $response = $this->client->getResponse();
