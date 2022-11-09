@@ -143,13 +143,32 @@ class UserApiController extends ApiController
                 return $this->json(['error' => 'User is already logged out'], 400);
             }
 
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->remove($mobileAppUser);
-            $entityManager->flush();
+            $this->removeFromDbMobileAppUser($mobileAppUser);
 
             return $this->json([
                 'status' => 200,
                 'message' => 'Successfully logged out'
+            ]);
+        } else {
+            return $this->json(['error' => 'Method not allowed'], 405);
+        }
+    }
+
+    #[Rest('/login-auto', name: 'login_in_mobile_app_auto', methods: ['POST'])]
+    public function loginInMobileAppAutomatically(Request $request): JsonResponse
+    {
+        $content = json_decode($request->getContent(), true);
+        if ($content) {
+            $userEmail = $this->getEmailOfMobileAppUserLoggedInCurrentDevice($content['token']);
+            if ($userEmail) {
+                return $this->json([
+                    'status' => 200,
+                    'user_id' => $userEmail
+                ]);
+            }
+            return $this->json([
+                'status' => 200,
+                'message' => 'Mobile app user is not logged in'
             ]);
         } else {
             return $this->json(['error' => 'Method not allowed'], 405);
@@ -364,17 +383,45 @@ class UserApiController extends ApiController
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
      * @param string $token
      * @return void
      */
-    public function saveMobileUserAppInDb(mixed $user, string $token): void
+    private function saveMobileUserAppInDb(User $user, string $token): void
     {
         $mobileAppUser = new MobileAppUser();
         $mobileAppUser->setUser($user);
         $mobileAppUser->setToken($token);
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($mobileAppUser);
+        $entityManager->flush();
+    }
+
+    /**
+     * @param string $token
+     * @return string|null
+     */
+    private function getEmailOfMobileAppUserLoggedInCurrentDevice(string $token): ?string
+    {
+        $mobileAppUser = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+            'token' => $token
+        ]);
+
+        if ($mobileAppUser) {
+            return $mobileAppUser->getUser()->getEmail();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param MobileAppUser $mobileAppUser
+     * @return void
+     */
+    private function removeFromDbMobileAppUser(MobileAppUser $mobileAppUser): void
+    {
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->remove($mobileAppUser);
         $entityManager->flush();
     }
     /** LOGIN BY MOBILE APP AUXILIARY METHODS */

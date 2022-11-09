@@ -127,7 +127,7 @@ class UserApiControllerTest extends WebTestCase
 
     public function testSaveInDbMobileAppUser(): void
     {
-        $userEmail = 'john@doe.com';
+        $userEmail = 'dummy@email3.com';
         $this->client->request(
             'POST',
             '/api/login',
@@ -136,7 +136,8 @@ class UserApiControllerTest extends WebTestCase
             [],
             json_encode([
                 'email' => $userEmail,
-                'password' => 'Password123!'
+                'password' => 'Password123!',
+                'token' => 'another_token'
             ])
         );
 
@@ -304,6 +305,66 @@ class UserApiControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(400);
         $this->assertEquals(['error' => 'User is already logged out'], $responseData);
+    }
+
+    public function testLoginInMobileAppAutomatically(): void
+    {
+        $userEmail = 'john@doe.com';
+        $this->client->request(
+            'POST',
+            '/api/login-auto',
+            [],
+            [],
+            [],
+            json_encode(['token' => '123xyz456abc'])
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(
+            [
+                'status' => 200,
+                'user_id' => $userEmail
+            ],
+            $responseData
+        );
+    }
+
+    public function testDoNotLoginInMobileAppAutomaticallyIfTokenWasNotFound(): void
+    {
+        $this->client->request(
+            'POST',
+            '/api/login-auto',
+            [],
+            [],
+            [],
+            json_encode(['token' => 'this_token_does_not_exist_in_db'])
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(
+            [
+                'status' => 200,
+                'message' => 'Mobile app user is not logged in'
+            ],
+            $responseData
+        );
+    }
+
+    public function testGetAutoMobileAppUserLoginErrorIfRequestDoesNotContainToken(): void
+    {
+        $this->client->request('POST', '/api/login-auto');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(405);
+        $this->assertEquals(['error' => 'Method not allowed'], $responseData);
     }
 
     /**
