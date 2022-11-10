@@ -356,7 +356,7 @@ class UserApiControllerTest extends WebTestCase
         );
     }
 
-    public function testGetAutoMobileAppUserLoginErrorIfRequestDoesNotContainToken(): void
+    public function testGetMobileAppUserAutoLoginErrorIfRequestDoesNotContainToken(): void
     {
         $this->client->request('POST', '/api/login-auto');
 
