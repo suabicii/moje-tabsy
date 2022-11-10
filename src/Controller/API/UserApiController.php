@@ -113,6 +113,13 @@ class UserApiController extends ApiController
                 }
             }
 
+            $mobileAppUserLoggedEarlier = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+                'user' => $user
+            ]);
+            if ($mobileAppUserLoggedEarlier) {
+                $this->removeFromDbMobileAppUser($mobileAppUserLoggedEarlier);
+            }
+
             $this->saveMobileUserAppInDb($user, $content['token']);
 
             return $this->json([

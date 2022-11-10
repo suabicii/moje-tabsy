@@ -151,6 +151,37 @@ class UserApiControllerTest extends WebTestCase
         $this->assertNotNull($mobileAppUser);
     }
 
+    public function testRemoveMobileAppUserBeforeLoginIfUserLoggedEarlierInOtherDevice(): void
+    {
+        $userEmail = 'john@doe.com';
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'email' => $userEmail
+        ]);
+        $mobileAppUserLoggedEarlier = $this->entityManager->getRepository(MobileAppUser::class)->findOneBy([
+            'user' => $user
+        ]);
+
+        $this->client->request(
+            'POST',
+            '/api/login',
+            [],
+            [],
+            [],
+            json_encode([
+                'email' => $userEmail,
+                'password' => 'Password123!',
+                'token' => 'new_token'
+            ])
+        );
+
+        $mobileAppUserLoggedJustNow = $this->entityManager->getRepository(MobileAppUser::class)->findOneBy([
+            'user' => $user
+        ]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertNotEquals($mobileAppUserLoggedJustNow, $mobileAppUserLoggedEarlier);
+    }
+
     public function testGetErrorIfUserSubmitWrongEmailInMobileApp(): void
     {
         $this->client->request(
