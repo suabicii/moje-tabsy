@@ -3,6 +3,8 @@
 namespace App\Controller\API;
 
 use App\Entity\Drug;
+use App\Entity\MobileAppUser;
+use Exception;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,6 +96,26 @@ class DrugApiController extends ApiController
     }
 
     /**
+     * @throws Exception
+     */
+    #[Rest('/drug-notify/{token}', name: 'drug_notify', methods: ['GET'])]
+    public function getDrugDataForNotifications(string $token): JsonResponse
+    {
+        $mobileAppUser = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+            'token' => $token
+        ]);
+        if ($mobileAppUser) {
+            $drugs = $this->doctrine->getRepository(Drug::class)->findDrugsRelatedToUser(
+                $mobileAppUser->getUser()
+            );
+            $response = $this->prepareDrugDataForNotifications($drugs);
+            return $this->json($response);
+        } else {
+            return $this->json(['error' => 'User is not logged in'], 404);
+        }
+    }
+
+    /**
      * @param Drug $drug
      * @param string $updateKey Column name in table
      * @param mixed $updateValue Column value
@@ -145,5 +167,32 @@ class DrugApiController extends ApiController
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($drug);
         $entityManager->flush();
+    }
+
+    /**
+     * @param array $drugs
+     * @return array
+     * @throws Exception
+     */
+    private function prepareDrugDataForNotifications(array $drugs): array
+    {
+        $response = [];
+        $now = $_ENV['APP_ENV'] === 'test' ? new \DateTime('12:00') : new \DateTime();
+        foreach ($drugs as $drug) {
+            $dosingMoments = [];
+            foreach ($drug['dosingMoments'] as $key => $value) {
+                $dosingDateTime = new \DateTime($value);
+                if ($dosingDateTime >= $now) {
+                    $dosingMoments[$key] = $value;
+                }
+            }
+            if (!empty($dosingMoments)) {
+                $response[] = [
+                    'name' => $drug['name'],
+                    'dosingMoments' => $dosingMoments
+                ];
+            }
+        }
+        return $response;
     }
 }

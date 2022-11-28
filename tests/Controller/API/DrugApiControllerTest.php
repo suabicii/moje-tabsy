@@ -217,6 +217,29 @@ class DrugApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'Drug with id: ' . $incorrectDrugId . ' not found'], $responseData);
     }
 
+    public function testGetDrugDataForNotifications(): void
+    {
+        $this->client->request('GET', '/api/drug-notify/123xyz456abc');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+        $drugDataForNotifications = $this->getDrugDataForNotifications();
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals($drugDataForNotifications, $responseData);
+    }
+
+    public function testGetErrorIfUserTriesToGetDrugDataForNotificationsWithIncorrectToken(): void
+    {
+        $this->client->request('GET', '/api/drug-notify/incorrect123Token456xyz');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertEquals(['error' => 'User is not logged in'], $responseData);
+    }
+
     /**
      * @return array
      */
@@ -234,5 +257,33 @@ class DrugApiControllerTest extends WebTestCase
                 'hour3' => '22:00'
             ]
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getDrugDataForNotifications(): array
+    {
+
+        return json_decode('[
+            {
+                "name": "Magnesium",
+                "dosingMoments": {
+                    "hour2": "18:00"
+                }
+            },
+            {
+                "name": "Vit. C",
+                "dosingMoments": {
+                    "hour1": "18:00"
+                }
+            },
+            {
+                "name": "Cough syrup",
+                "dosingMoments": {
+                    "hour1": "18:00"
+                }
+            }
+        ]', true);
     }
 }
