@@ -189,6 +189,8 @@ class DrugApiController extends ApiController
             if (!empty($dosingMoments)) {
                 $response[] = [
                     'name' => $drug['name'],
+                    'dosing' => $drug['dosing'],
+                    'unit' => $drug['unit'],
                     'dosingMoments' => $dosingMoments
                 ];
             }

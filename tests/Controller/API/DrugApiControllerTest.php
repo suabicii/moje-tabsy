@@ -223,7 +223,7 @@ class DrugApiControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
-        $drugDataForNotifications = $this->getDrugDataForNotifications();
+        $drugDataForNotifications = $this->getMockDrugDataForNotifications();
 
         $this->assertResponseIsSuccessful();
         $this->assertEquals($drugDataForNotifications, $responseData);
@@ -262,25 +262,31 @@ class DrugApiControllerTest extends WebTestCase
     /**
      * @return array
      */
-    private function getDrugDataForNotifications(): array
+    private function getMockDrugDataForNotifications(): array
     {
 
         return json_decode('[
             {
                 "name": "Magnesium",
-                "dosingMoments": {
+                "dosing": 1,
+                "unit": "pcs.",
+                "dosingMoments":{
                     "hour2": "18:00"
                 }
             },
             {
                 "name": "Vit. C",
-                "dosingMoments": {
+                "dosing": 2,
+                "unit": "pcs.",
+                "dosingMoments":{
                     "hour1": "18:00"
                 }
             },
             {
                 "name": "Cough syrup",
-                "dosingMoments": {
+                "dosing": 10,
+                "unit": "ml.",
+                "dosingMoments":{
                     "hour1": "18:00"
                 }
             }
