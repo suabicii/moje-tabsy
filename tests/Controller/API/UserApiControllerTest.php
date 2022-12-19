@@ -261,7 +261,7 @@ class UserApiControllerTest extends WebTestCase
 
     public function testLogoutInMobileAppAndRemoveMobileUserFromDb(): void
     {
-        $userEmail = 'john@doe.com';
+        $userEmail = 'dummy@email3.com';
         $this->client->request(
             'POST',
             '/api/logout',
@@ -328,7 +328,7 @@ class UserApiControllerTest extends WebTestCase
             [],
             [],
             [],
-            json_encode(['userId' => 'dummy@email3.com'])
+            json_encode(['userId' => 'john@doe.com'])
         );
 
         $response = $this->client->getResponse();
@@ -340,7 +340,7 @@ class UserApiControllerTest extends WebTestCase
 
     public function testLoginInMobileAppAutomatically(): void
     {
-        $userEmail = 'john@doe.com';
+        $userEmail = 'dummy@email3.com';
         $this->client->request(
             'POST',
             '/api/login-auto',
