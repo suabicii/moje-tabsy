@@ -25,8 +25,8 @@ class Drug
     #[ORM\Column(type: 'string', length: 50)]
     private ?string $unit;
 
-    #[ORM\Column(type: 'integer')]
-    private ?int $dosing;
+    #[ORM\Column(type: 'float')]
+    private ?float $dosing;
 
     #[ORM\Column(type: 'array')]
     private array $dosingMoments = [];
@@ -88,12 +88,12 @@ class Drug
         return $this;
     }
 
-    public function getDosing(): ?int
+    public function getDosing(): ?float
     {
         return $this->dosing;
     }
 
-    public function setDosing(int $dosing): self
+    public function setDosing(float $dosing): self
     {
         $this->dosing = $dosing;
 

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -32,7 +33,7 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         CookieCleanerService        $cookieCleaner,
         TokenGeneratorService       $tokenGenerator,
-        SerializerInterface                  $serializer
+        SerializerInterface         $serializer
     )
     {
         $this->doctrine = $doctrine;
@@ -75,26 +76,23 @@ class UserController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $user = $updates->getUser();
         try {
-            $updatesArray = $this->serializer->normalize($updates);
+            $updatesArray = $this->serializer->normalize(
+                $updates,
+                null,
+                [AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                    'id',
+                    'user',
+                    'token',
+                    'expiresAt'
+                ]]
+            );
             foreach ($updatesArray as $updateKey => $updateValue) {
-                if ($this->isUpdateKeyExcluded($updateKey)) {
-                    continue;
-                }
                 $this->moveUpdateToUserEntity($updateKey, $updateValue, $user);
             }
         } catch (ExceptionInterface $e) {
             exit('Error ' . $e->getCode() . ': ' . $e->getMessage());
         }
         $entityManager->flush();
-    }
-
-    /**
-     * @param string $updateKey
-     * @return bool
-     */
-    private function isUpdateKeyExcluded(string $updateKey): bool
-    {
-        return $updateKey === 'user' || $updateKey === 'id' || $updateKey === 'token' || $updateKey === 'expiresAt';
     }
 
     /**
