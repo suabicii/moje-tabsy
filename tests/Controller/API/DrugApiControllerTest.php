@@ -271,6 +271,7 @@ class DrugApiControllerTest extends WebTestCase
                 "dosing": 1,
                 "unit": "pcs.",
                 "dosingMoments":{
+                    "hour1": "08:00",
                     "hour2": "18:00"
                 }
             },

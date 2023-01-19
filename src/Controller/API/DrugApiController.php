@@ -177,14 +177,10 @@ class DrugApiController extends ApiController
     private function prepareDrugDataForNotifications(array $drugs): array
     {
         $response = [];
-        $now = $_ENV['APP_ENV'] === 'test' ? new \DateTime('12:00') : new \DateTime();
         foreach ($drugs as $drug) {
             $dosingMoments = [];
             foreach ($drug['dosingMoments'] as $key => $value) {
-                $dosingDateTime = new \DateTime($value);
-                if ($dosingDateTime >= $now) {
-                    $dosingMoments[$key] = $value;
-                }
+                $dosingMoments[$key] = $value;
             }
             if (!empty($dosingMoments)) {
                 $response[] = [
