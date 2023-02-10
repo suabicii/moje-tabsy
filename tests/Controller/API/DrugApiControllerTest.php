@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\API;
 
 use App\Entity\Drug;
+use App\Entity\MobileAppUser;
 use App\Entity\User;
 use App\Tests\ApiControllerTestTrait;
 use Doctrine\ORM\EntityManager;
@@ -240,6 +241,43 @@ class DrugApiControllerTest extends WebTestCase
         $this->assertEquals(['error' => 'User is not logged in'], $responseData);
     }
 
+    public function testConfirmThatGivenDrugHasBeenAlreadyTakenByReducingQuantity(): void
+    {
+        $drug = $this->entityManager->getRepository(Drug::class)->find(1);
+        $drugQuantityBeforeConfirmation = $drug->getQuantity();
+        $this->client->request('PUT', '/api/drug-taken/123xyz456abc/1');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['status' => 200], $responseData);
+        $this->assertLessThan($drugQuantityBeforeConfirmation, $drug->getQuantity());
+    }
+
+    public function testGetErrorIfNotLoggedUserTriesToConfirmAboutDose(): void
+    {
+        $this->client->request('PUT', '/api/drug-taken/incorrect123Token456xyz/1');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertEquals(['error' => 'User is not logged in'], $responseData);
+    }
+
+    public function testGetErrorIfUserTriesToConfirmAboutDoseWithIncorrectDrugId(): void
+    {
+        $incorrectDrugId = 1000;
+        $this->client->request('PUT', '/api/drug-taken/123xyz456abc/' . $incorrectDrugId);
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertEquals(['error' => 'Drug related to given user with id: ' . $incorrectDrugId . ' not found'], $responseData);
+    }
+
     /**
      * @return array
      */
@@ -267,6 +305,7 @@ class DrugApiControllerTest extends WebTestCase
 
         return json_decode('[
             {
+                "id": 1,
                 "name": "Magnesium",
                 "dosing": 1,
                 "unit": "pcs.",
@@ -276,6 +315,7 @@ class DrugApiControllerTest extends WebTestCase
                 }
             },
             {
+                "id": 2,
                 "name": "Vit. C",
                 "dosing": 2,
                 "unit": "pcs.",
@@ -284,6 +324,7 @@ class DrugApiControllerTest extends WebTestCase
                 }
             },
             {
+                "id": 3,
                 "name": "Cough syrup",
                 "dosing": 10,
                 "unit": "ml.",
