@@ -77,11 +77,11 @@ class DrugApiController extends ApiController
         if ($user) {
             $drug = $this->doctrine->getRepository(Drug::class)->find($drugId);
             if ($drug) {
-                $entityManager = $this->doctrine->getManager();
                 $content = json_decode($request->getContent(), true);
                 if (!$content) {
                     return $this->json(['error' => 'Method not allowed'], 405);
                 }
+                $entityManager = $this->doctrine->getManager();
                 foreach ($content as $updateKey => $updateValue) {
                     $this->changeDrugData($drug, $updateKey, $updateValue);
                 }
@@ -110,6 +110,30 @@ class DrugApiController extends ApiController
             );
             $response = $this->prepareDrugDataForNotifications($drugs);
             return $this->json($response);
+        } else {
+            return $this->json(['error' => 'User is not logged in'], 404);
+        }
+    }
+
+    #[Rest('/drug-taken/{token}/{drugId}', name: 'drug_taken', methods: ['PUT'])]
+    public function confirmAboutDose(string $token, int $drugId): JsonResponse
+    {
+        $mobileAppUser = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+            'token' => $token
+        ]);
+        if ($mobileAppUser) {
+            $user = $mobileAppUser->getUser();
+            $drug = $this->doctrine->getRepository(Drug::class)->find($drugId);
+            if (!$drug || $user !== $drug->getUser()) {
+                return $this->json(['error' => 'Drug related to given user with id: ' . $drugId . ' not found'], 404);
+            }
+
+            $entityManager = $this->doctrine->getManager();
+            $reducedDrugQuantity = $drug->getQuantity() - $drug->getDosing();
+            $drug->setQuantity($reducedDrugQuantity);
+            $entityManager->flush();
+
+            return $this->json(['status' => 200]);
         } else {
             return $this->json(['error' => 'User is not logged in'], 404);
         }
@@ -177,17 +201,14 @@ class DrugApiController extends ApiController
     private function prepareDrugDataForNotifications(array $drugs): array
     {
         $response = [];
-        $now = $_ENV['APP_ENV'] === 'test' ? new \DateTime('12:00') : new \DateTime();
         foreach ($drugs as $drug) {
             $dosingMoments = [];
             foreach ($drug['dosingMoments'] as $key => $value) {
-                $dosingDateTime = new \DateTime($value);
-                if ($dosingDateTime >= $now) {
-                    $dosingMoments[$key] = $value;
-                }
+                $dosingMoments[$key] = $value;
             }
             if (!empty($dosingMoments)) {
                 $response[] = [
+                    'id' => $drug['id'],
                     'name' => $drug['name'],
                     'dosing' => $drug['dosing'],
                     'unit' => $drug['unit'],
