@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.5",
+        "@reduxjs/toolkit": "^1.9.2",
         "dayjs": "^1.11.4",
         "jest": "^28.1.2",
         "jest-environment-jsdom": "^28.1.2",
@@ -36,6 +37,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-modal": "^3.15.1",
+        "react-redux": "^8.0.5",
         "react-router-dom": "^6.3.0",
         "react-test-renderer": "^18.2.0",
         "unstated-next": "^1.1.0"

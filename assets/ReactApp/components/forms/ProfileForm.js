@@ -1,24 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {sendOrDeleteData} from "../../utils/sendOrDeleteData";
 import Modal from "../modal/Modal";
 import StatusOkModalContent from "../modal/content/profile-form/StatusOkModalContent";
 import StatusFailModalContent from "../modal/content/profile-form/StatusFailModalContent";
+import {useDispatch, useSelector} from "react-redux";
+import {setUserData} from "../../features/user/userSlice";
 
-function ProfileForm({fetchData}) {
-    const [userData, setUserData] = useState({});
-    const [inputValues, setInputValues] = useState({});
+function ProfileForm() {
+    const userData = useSelector(state => state.user);
+    const dispatch = useDispatch();
+    const [inputValues, setInputValues] = useState(userData);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [postRequestStatus, setPostRequestStatus] = useState(undefined);
-
-    useEffect(() => {
-        fetchData.then(data => {
-            setUserData(data);
-            setInputValues(data);
-        }).catch(error => {
-            console.log(error);
-        });
-    }, []);
-
 
     const handleInputChange = event => {
         const name = event.target.name;
@@ -34,6 +27,7 @@ function ProfileForm({fetchData}) {
         await sendOrDeleteData(null, inputValues, 'POST', 'change-user-data').then(response => {
             if (response.status === 200) {
                 setPostRequestStatus('OK');
+                dispatch(setUserData(inputValues));
             } else {
                 setPostRequestStatus('FAIL');
             }

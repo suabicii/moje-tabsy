@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from "react";
 import DosingMomentsInputs from "./special-inputs/DosingMomentsInputs";
-import {DrugListContainer} from "../../container/DrugListContainer";
 import {sendOrDeleteData} from "../../utils/sendOrDeleteData";
+import {useDispatch, useSelector} from "react-redux";
+import {addDrug, editDrug, sortedDrugsSelector} from "../../features/drugs/drugsSlice";
 
 function DrugForm({drug, setIsFormVisible}) {
+    const drugList = useSelector(sortedDrugsSelector);
+    const dispatch = useDispatch();
     const dosingMomentInputDefaultAmount = drug ? Object.keys(drug.dosingMoments).length : 1;
     const dosingMoments = drug ? Object.entries(drug.dosingMoments) : null;
     const [dosingMomentInputAmount, setDosingMomentInputAmount] = useState(dosingMomentInputDefaultAmount);
     const [allInputValues, setAllInputValues] = useState({});
-    const {addDrug, drugList, editDrug} = DrugListContainer.useContainer();
 
     // Because without it if you change any input value in edit form except time input,
     // submit event sends dosingMoments with empty object
@@ -30,18 +32,6 @@ function DrugForm({drug, setIsFormVisible}) {
         }));
     }, [timeInputValues]);
 
-    useEffect(() => {
-        drugList.sort((a, b) => {
-            if (a.name.toLowerCase() > b.name.toLowerCase()) {
-                return 1;
-            } else if (a.name.toLowerCase() < b.name.toLowerCase()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-    }, [drugList]);
-
     /** EVENT HANDLERS */
     const handleDosingInputChange = value => {
         setDosingMomentInputAmount(value);
@@ -61,15 +51,12 @@ function DrugForm({drug, setIsFormVisible}) {
 
     const handleSubmit = async () => {
         if (drug) {
-            editDrug(drug.id, allInputValues);
+            dispatch(editDrug({id: drug.id, ...allInputValues}));
             await sendOrDeleteData(drug.id, allInputValues, 'PUT','edit-drug');
         } else {
             const id = drugList.length > 0 ? drugList[drugList.length - 1].id + 1 : 1;
-            addDrug({id, ...allInputValues});
-            await sendOrDeleteData(null, {id, ...allInputValues}, 'POST', 'add-drug')
-                .then(data => {
-                    console.log(data);
-                });
+            dispatch(addDrug({id, ...allInputValues}));
+            await sendOrDeleteData(null, {id, ...allInputValues}, 'POST', 'add-drug');
         }
         setIsFormVisible(false);
     };

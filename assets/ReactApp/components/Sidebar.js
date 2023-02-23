@@ -4,7 +4,6 @@ import {mainRoute} from "../routers/AppRouter";
 
 function Sidebar() {
     return (
-        // Sidebar -->
         <nav id="sidebarMenu" className="collapse d-lg-block sidebar collapse bg-white">
             <div className="position-sticky">
                 <div className="list-group list-group-flush mx-3 mt-4">
@@ -26,7 +25,6 @@ function Sidebar() {
                 </div>
             </div>
         </nav>
-        //Sidebar -->
     );
 }
 
