@@ -21,8 +21,7 @@ const drugsSlice = createSlice({
             }
         },
         setDrugs: (state, action) => action.payload
-    },
-    sort: true
+    }
 });
 
 const {reducer, actions} = drugsSlice;
