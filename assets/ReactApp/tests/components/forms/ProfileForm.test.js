@@ -6,17 +6,26 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import ProfileForm from "../../../components/forms/ProfileForm";
 import {act, fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {userData} from '../fixtures/apiData';
-import {fetchData} from "../../../utils/fetchData";
+import {Provider} from "react-redux";
+import store from "../../../store";
+import {fetchUserData} from "../../../features/user/userSlice";
 
-const setMockedFetch = mockedResponse => {
+const setMockedFetch = (mockedResponse, isFormSubmit = false) => {
     jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
         json: () => Promise.resolve(mockedResponse)
     }));
+
+    if (!isFormSubmit) {
+        store.dispatch(fetchUserData());
+    }
 };
 
 const renderProfileForm = () => {
-    const fetchUserData = fetchData('/fake-api/user-data');
-    render(<ProfileForm fetchData={fetchUserData}/>);
+    render(
+        <Provider store={store}>
+            <ProfileForm/>
+        </Provider>
+    );
 };
 
 afterAll(() => {
@@ -26,8 +35,11 @@ afterAll(() => {
 
 it('should correctly display ProfileForm', () => {
     const renderer = new ReactShallowRenderer();
-    const fetchData = jest.fn();
-    renderer.render(<ProfileForm fetchData={fetchData}/>);
+    renderer.render(
+        <Provider store={store}>
+            <ProfileForm/>
+        </Provider>
+    );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
@@ -48,7 +60,7 @@ it('should display modal with positive information after form submission if stat
     setMockedFetch(userData);
     renderProfileForm();
 
-    setMockedFetch({status: 200});
+    setMockedFetch({status: 200}, true);
     await act(() => {
         fireEvent.change(screen.getByTestId('email'), {target: {value: 'new@email.com'}});
         fireEvent.submit(screen.getByRole('form'));

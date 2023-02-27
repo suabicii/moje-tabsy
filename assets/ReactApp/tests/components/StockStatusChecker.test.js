@@ -4,37 +4,58 @@
 import React from "react";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 import StockStatusChecker from "../../components/StockStatusChecker";
-import {DrugListContainer} from "../../container/DrugListContainer";
-import {render, screen} from "@testing-library/react";
+import {act, render, screen} from "@testing-library/react";
 import drugs from "./fixtures/drugs";
+import {Provider} from "react-redux";
+import store from "../../store";
+import {fetchDrugs} from "../../features/drugs/drugsSlice";
 
-const renderStockStatusChecker = (initialState = null) => {
+afterAll(() => {
+    global.fetch.mockClear();
+    delete global.fetch;
+});
+
+const renderStockStatusChecker = () => {
     render(
-        <DrugListContainer.Provider initialState={initialState || drugs}>
+        <Provider store={store}>
             <StockStatusChecker/>
-        </DrugListContainer.Provider>
+        </Provider>
     );
 };
 
 it('should correctly render StockStatusChecker component', () => {
     const renderer = new ReactShallowRenderer();
     renderer.render(
-        <DrugListContainer.Provider>
+        <Provider store={store}>
             <StockStatusChecker/>
-        </DrugListContainer.Provider>
+        </Provider>
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
-it('should inform user about running out of stock', () => {
-    renderStockStatusChecker();
+it('should inform user about running out of stock', async () => {
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve(drugs)
+    }));
+    store.dispatch(fetchDrugs());
+
+    await act(() => {
+        renderStockStatusChecker();
+    });
 
     expect(screen.getByTestId('stock-warning')).toBeVisible();
     expect(screen.getByTestId('drug-end').textContent).toContain('Witamina C'); // From fixtures/drug.js, quantity 20/80
 });
 
-it('should inform user that everything is OK if there is enough drugs in storage', () => {
-    renderStockStatusChecker([drugs[0]]);
+it('should inform user that everything is OK if there is enough drugs in storage', async () => {
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve([drugs[0]])
+    }));
+    store.dispatch(fetchDrugs());
+
+    await act(() => {
+        renderStockStatusChecker();
+    });
 
     expect(screen.getByTestId('stock-ok')).toBeVisible();
 });
