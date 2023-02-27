@@ -1,8 +1,8 @@
 import React from "react";
-import {DrugListContainer} from "../container/DrugListContainer";
+import {useSelector} from "react-redux";
 
 function StockStatusChecker() {
-    const {drugList} = DrugListContainer.useContainer();
+    const drugList = useSelector(state => state.drugs);
 
     const runningOutOfStock = [];
     const outOfStock = [];

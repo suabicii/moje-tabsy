@@ -6,14 +6,22 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import DrugForm from "../../../components/forms/DrugForm";
 import {fireEvent, render, screen} from "@testing-library/react";
 import drugs from "../fixtures/drugs";
-import {DrugListContainer} from "../../../container/DrugListContainer";
 import {BrowserRouter} from "react-router-dom";
 import DrugList from "../../../components/DrugList";
 import {act} from "react-dom/test-utils";
+import store from "../../../store";
+import {fetchDrugs} from "../../../features/drugs/drugsSlice";
+import {Provider} from "react-redux";
 
 beforeAll(() => {
     jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve({status: 'OK'})
+        json: () => Promise.resolve(drugs) // For fetch drugs once
+    }));
+
+    store.dispatch(fetchDrugs());
+
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve({status: 'OK'}) // For form submissions
     }));
 });
 
@@ -26,15 +34,15 @@ const renderForm = (drug = null) => {
     const setIsFormVisible = jest.fn();
     if (drug) {
         render(
-            <DrugListContainer.Provider initialState={drugs}>
+            <Provider store={store}>
                 <DrugForm drug={drug} setIsFormVisible={setIsFormVisible}/>
-            </DrugListContainer.Provider>
+            </Provider>
         );
     } else {
         render(
-            <DrugListContainer.Provider initialState={drugs}>
+            <Provider store={store}>
                 <DrugForm setIsFormVisible={setIsFormVisible}/>
-            </DrugListContainer.Provider>
+            </Provider>
         );
     }
 };
@@ -43,11 +51,11 @@ const renderFormWithDrugList = () => {
     const root = document.createElement('div');
     document.body.appendChild(root);
     render(
-        <DrugListContainer.Provider initialState={drugs}>
+        <Provider store={store}>
             <BrowserRouter>
                 <DrugList isEditMode={true} customRoot={root}/>
             </BrowserRouter>
-        </DrugListContainer.Provider>
+        </Provider>
     );
 };
 
@@ -55,9 +63,9 @@ it('should correctly render DrugForm', () => {
     const renderer = new ReactShallowRenderer();
     const setIsFormVisible = jest.fn();
     renderer.render(
-        <DrugListContainer.Provider>
+        <Provider store={store}>
             <DrugForm setIsFormVisible={setIsFormVisible}/>
-        </DrugListContainer.Provider>
+        </Provider>
     );
     expect(renderer.getRenderOutput).toMatchSnapshot();
 });

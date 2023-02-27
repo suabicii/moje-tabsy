@@ -4,7 +4,7 @@ import Profile from "../../components/Profile";
 
 it('should correctly render Profile page', () => {
     const renderer = new ReactShallowRenderer();
-    renderer.render(<Profile fakeApiUrl="/fake-api/user-data"/>);
+    renderer.render(<Profile/>);
 
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });

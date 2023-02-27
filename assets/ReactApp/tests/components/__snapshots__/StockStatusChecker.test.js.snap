@@ -4,10 +4,23 @@ exports[`should correctly render StockStatusChecker component 1`] = `
 <Context.Provider
   value={
     Object {
-      "addDrug": [Function],
-      "drugList": Array [],
-      "editDrug": [Function],
-      "removeDrug": [Function],
+      "getServerState": undefined,
+      "store": Object {
+        "@@observable": [Function],
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      },
+      "subscription": Object {
+        "addNestedSub": [Function],
+        "getListeners": [Function],
+        "handleChangeWrapper": [Function],
+        "isSubscribed": [Function],
+        "notifyNestedSubs": [Function],
+        "trySubscribe": [Function],
+        "tryUnsubscribe": [Function],
+      },
     }
   }
 >

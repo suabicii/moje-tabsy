@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
-import {DrugListContainer} from "../container/DrugListContainer";
 import DrugForm from "./forms/DrugForm";
 import {sendOrDeleteData} from "../utils/sendOrDeleteData";
+import {useDispatch, useSelector} from "react-redux";
+import {removeDrug, sortedDrugsSelector} from "../features/drugs/drugsSlice";
 
-function DrugList(props) {
+function DrugList({isEditMode}) {
     const navigate = useNavigate();
-    const {drugList, removeDrug} = DrugListContainer.useContainer();
+    const dispatch = useDispatch();
+    const drugs = useSelector(sortedDrugsSelector);
     const [isEditFormVisible, setIsEditFormVisible] = useState(false);
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
@@ -21,16 +23,16 @@ function DrugList(props) {
                 <div className="card-body">
                     <h5 className="card-title">Lista leków i suplementów:</h5>
                     <ul className="card-text list-group">
-                        {drugList.map(drug => <li key={drug.id} className="list-group-item" data-testid="drug">
+                        {drugs.map(drug => <li key={drug.id} className="list-group-item" data-testid="drug">
                                 <strong>{drug.name}</strong>: {drug.quantity}/{drug.quantityMax} {`${drug.unit}, `}
                                 <strong>Dzienna
                                     dawka: </strong> {drug.dosing} {drug.unit} {`${Object.keys(drug.dosingMoments).length} raz(-y) dziennie `}
                                 {
                                     // Delete button
-                                    props.isEditMode &&
+                                    isEditMode &&
                                     <button className="btn btn-danger rounded-circle float-md-end"
                                             data-testid={`remove-drug-${drug.id}`} onClick={async () => {
-                                        removeDrug(drug.id);
+                                        dispatch(removeDrug(drug.id));
                                         await sendOrDeleteData(drug.id, null, 'DELETE', 'delete-drug');
                                     }}>
                                         <i className="fa-solid fa-trash-can"></i>
@@ -38,7 +40,7 @@ function DrugList(props) {
                                 }
                                 {
                                     // Edit button
-                                    props.isEditMode &&
+                                    isEditMode &&
                                     <button className="btn btn-info rounded-circle float-md-end"
                                             data-testid={`edit-drug-${drug.id}`} onClick={() => {
                                         setIsEditFormVisible(true);
@@ -52,21 +54,21 @@ function DrugList(props) {
                     </ul>
                     <div className="d-grid">
                         <button className="btn btn-primary mt-2" data-testid="add-drug" onClick={() => {
-                            if (props.isEditMode) {
+                            if (isEditMode) {
                                 setIsAddFormVisible(true);
                             } else {
                                 navigate(`${mainRoute}/drug-list`);
                             }
                         }}>
-                            {props.isEditMode ? 'Dodaj ' : 'Edytuj '}
-                            {props.isEditMode ? <i className="fa-solid fa-plus"></i> :
+                            {isEditMode ? 'Dodaj ' : 'Edytuj '}
+                            {isEditMode ? <i className="fa-solid fa-plus"></i> :
                                 <i className="fa-solid fa-pencil"></i>}
                         </button>
                     </div>
                 </div>
             </div>
             {
-                props.isEditMode &&
+                isEditMode &&
                 <>
                     {
                         isAddFormVisible &&

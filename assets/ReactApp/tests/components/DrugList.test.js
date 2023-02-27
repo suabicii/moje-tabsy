@@ -6,19 +6,32 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import DrugList from "../../components/DrugList";
 import {BrowserRouter} from "react-router-dom";
 import {fireEvent, render, screen} from "@testing-library/react";
-import {DrugListContainer} from "../../container/DrugListContainer";
-import drugs from "./fixtures/drugs";
 import {act} from "react-dom/test-utils";
+import {Provider} from "react-redux";
+import drugs from "./fixtures/drugs";
+import {fetchDrugs} from "../../features/drugs/drugsSlice";
+import store from "../../store";
+
+beforeAll(() => {
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve(drugs)
+    }));
+
+    store.dispatch(fetchDrugs());
+});
+
+afterAll(() => {
+    global.fetch.mockClear();
+    delete global.fetch;
+});
 
 const renderDrugList = () => {
-    const root = document.createElement('div');
-    document.body.appendChild(root);
     render(
-        <DrugListContainer.Provider initialState={drugs}>
+        <Provider store={store}>
             <BrowserRouter>
-                <DrugList isEditMode={true} customRoot={root}/>
+                <DrugList isEditMode={true}/>
             </BrowserRouter>
-        </DrugListContainer.Provider>
+        </Provider>
     );
 };
 
@@ -46,7 +59,7 @@ it('should render edit drug form after clicking edit button', () => {
     expect(screen.getByRole('form')).toBeVisible();
 });
 
-it('should delete drug from list after clicking delete button',  async () => {
+it('should delete drug from list after clicking delete button', async () => {
     await act(() => {
         renderDrugList();
     });

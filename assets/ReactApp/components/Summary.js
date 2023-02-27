@@ -1,11 +1,12 @@
 import React from "react";
 import DrugList from "./DrugList";
-import {DrugListContainer} from "../container/DrugListContainer";
 import dayjs from "dayjs";
 import StockStatusChecker from "./StockStatusChecker";
+import {useSelector} from "react-redux";
+import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
 
 function Summary({customDate}) {
-    const {drugList} = DrugListContainer.useContainer();
+    const drugList = useSelector(sortedDrugsSelector);
     const currentDate = customDate || dayjs(); // custom date is for testing purposes only
 
     const checkIfCurrentTimeIsBeforeDosingMoment = (hour, minute) => {
