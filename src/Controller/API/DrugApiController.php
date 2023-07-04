@@ -129,7 +129,8 @@ class DrugApiController extends ApiController
             }
 
             $entityManager = $this->doctrine->getManager();
-            $reducedDrugQuantity = $drug->getQuantity() - $drug->getDosing();
+            $currentDrugQuantity = $drug->getQuantity();
+            $reducedDrugQuantity = $currentDrugQuantity > 0 ? $currentDrugQuantity - $drug->getDosing() : $currentDrugQuantity;
             $drug->setQuantity($reducedDrugQuantity);
             $entityManager->flush();
 

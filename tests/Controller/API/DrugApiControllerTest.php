@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\API;
 
 use App\Entity\Drug;
-use App\Entity\MobileAppUser;
 use App\Entity\User;
 use App\Tests\ApiControllerTestTrait;
 use Doctrine\ORM\EntityManager;
@@ -255,6 +254,20 @@ class DrugApiControllerTest extends WebTestCase
         $this->assertLessThan($drugQuantityBeforeConfirmation, $drug->getQuantity());
     }
 
+    public function testDoNotReduceDrugQuantityInDrugDoseConfirmationIfQuantityIsNotGreaterThanZero(): void
+    {
+        $drug = $this->entityManager->getRepository(Drug::class)->find(4);
+        $drugQuantityBeforeConfirmation = $drug->getQuantity();
+        $this->client->request('PUT', '/api/drug-taken/123xyz456abc/4');
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(['status' => 200], $responseData);
+        $this->assertEquals($drugQuantityBeforeConfirmation, $drug->getQuantity());
+    }
+
     public function testGetErrorIfNotLoggedUserTriesToConfirmAboutDose(): void
     {
         $this->client->request('PUT', '/api/drug-taken/incorrect123Token456xyz/1');
@@ -330,6 +343,15 @@ class DrugApiControllerTest extends WebTestCase
                 "unit": "ml.",
                 "dosingMoments":{
                     "hour1": "18:00"
+                }
+            },
+            {
+                "id": 4,
+                "name": "Vit. D",
+                "dosing": 1,
+                "unit": "pcs.",
+                "dosingMoments":{
+                    "hour1": "16:00"
                 }
             }
         ]', true);
