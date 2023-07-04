@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class DrugFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $user = $manager->getRepository(User::class)->findOneBy(['email' => 'dummy@email3.com']); // fully logged and activated user from UserFixtures
 
@@ -46,6 +46,16 @@ class DrugFixtures extends Fixture implements DependentFixtureInterface
             'ml.',
             10,
             ['hour1' => '18:00']
+        );
+        $this->setDrugData(
+            $manager,
+            $user,
+            'Vit. D',
+            0,
+            80,
+            'pcs.',
+            1,
+            ['hour1' => '16:00']
         );
 
         $manager->flush();
