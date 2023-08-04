@@ -21,7 +21,7 @@ function Summary({customDate}) {
             <div className="row mt-3">
                 <div className="col-md-6">
                     <div className="card">
-                        <div className="card-header">
+                        <div className="card-header text-center">
                             Dzisiaj muszę zażyć <i className="fa-solid fa-clock"></i>
                         </div>
                         <div className="card-body">
@@ -52,7 +52,7 @@ function Summary({customDate}) {
                 </div>
                 <div className="col-md-6 mt-3 mt-lg-0">
                     <div className="card">
-                        <div className="card-header">
+                        <div className="card-header text-center">
                             Stan zapasów <i className="fa-solid fa-warehouse"></i>
                         </div>
                         <div className="card-body">
