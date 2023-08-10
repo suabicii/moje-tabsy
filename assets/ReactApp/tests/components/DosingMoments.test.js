@@ -34,5 +34,5 @@ it.each`
         </Provider>
     );
 
-    expect(screen.queryByText(hour)).not.toBeFalsy();
+    expect(screen.queryByText(hour)).toBeTruthy();
 });
