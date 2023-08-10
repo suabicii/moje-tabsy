@@ -1,12 +1,12 @@
 import React from "react";
 
-function DosingMoments({content}) {
+function DosingMoments({drugId, content}) {
     const dosingMomentsToDisplay = [];
-    for (const key in content) {
-        if (content.hasOwnProperty(key)) {
-            const [hour, minute] = content[key].split(':');
+    for (const value in content) {
+        if (content.hasOwnProperty(value)) {
+            const [hour, minute] = content[value].split(':');
             dosingMomentsToDisplay.push(
-                <li key={drug.id + key} data-testid="schedule-dosingHour">{hour}:{minute}</li>
+                <li key={drugId + value}>{hour}:{minute}</li>
             );
         }
     }

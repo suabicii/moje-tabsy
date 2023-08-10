@@ -16,19 +16,23 @@ it('should properly render DosingMoments component', () => {
     const renderer = new ReactShallowRenderer();
     renderer.render(
         <Provider store={store}>
-            <DosingMoments content={content}/>
+            <DosingMoments content={content} drugId={drug.id}/>
         </Provider>
     );
 
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
-it('should display proper hours of dosing moments', () => {
+it.each`
+    hour
+    ${Object.values(content)[0]}
+    ${Object.values(content)[1]}
+`('should display proper hours of dosing moments', ({hour}) => {
     render(
         <Provider store={store}>
-            <DosingMoments content={content}/>
+            <DosingMoments content={content} drugId={drug.id}/>
         </Provider>
     );
 
-    // place for assertion
+    expect(screen.queryByText(hour)).not.toBeFalsy();
 });
