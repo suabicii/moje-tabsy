@@ -1,6 +1,5 @@
 import React from "react";
 import DrugList from "./DrugList";
-import dayjs from "dayjs";
 import StockStatusChecker from "./StockStatusChecker";
 import {useSelector} from "react-redux";
 import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
