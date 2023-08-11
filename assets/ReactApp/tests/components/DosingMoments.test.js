@@ -8,9 +8,19 @@ import {render, screen} from "@testing-library/react";
 import store from "../../store";
 import DosingMoments from "../../components/DosingMoments";
 import drugs from "./fixtures/drugs";
+import Mockdate from "mockdate";
+import dayjs from "dayjs";
 
 const drug = drugs[0];
 const content = drug.dosingMoments;
+
+beforeAll(() => {
+    Mockdate.set('2020-01-01');
+});
+
+afterAll(() => {
+    Mockdate.reset();
+});
 
 it('should properly render DosingMoments component', () => {
     const renderer = new ReactShallowRenderer();
@@ -36,3 +46,15 @@ it.each`
 
     expect(screen.queryByText(hour)).toBeTruthy();
 });
+
+it('should not render component if time for taking medicines is up', () => {
+    Mockdate.set(dayjs().hour(23).minute(59).toDate());
+
+    render(
+        <Provider store={store}>
+            <DosingMoments content={content} drugId={drug.id}/>
+        </Provider>
+    );
+
+    expect(screen.queryByTestId('dosing-moments')).toBeFalsy();
+}); 

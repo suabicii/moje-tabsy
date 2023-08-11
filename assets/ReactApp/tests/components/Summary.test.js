@@ -7,12 +7,14 @@ import Summary from "../../components/Summary";
 import {act, render, screen} from "@testing-library/react";
 import drugs from "./fixtures/drugs";
 import {BrowserRouter} from "react-router-dom";
-import dayjs from "dayjs";
 import {Provider} from "react-redux";
 import store from "../../store";
 import {fetchDrugs} from "../../features/drugs/drugsSlice";
+import Mockdate from "mockdate";
+import dayjs from "dayjs";
 
 afterAll(() => {
+    Mockdate.reset();
     global.fetch.mockClear();
     delete global.fetch;
 });
@@ -29,22 +31,26 @@ it('should correctly render summary', () => {
 });
 
 it('should display drug dosing schedule with correct values',  async () => {
+    Mockdate.set(dayjs().hour(16).minute(0).toDate());
+
     jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
         json: () => Promise.resolve(drugs)
     }));
 
     store.dispatch(fetchDrugs());
+    const drug = drugs[0];
+    const dosingMomentsKeys = Object.keys(drug.dosingMoments);
 
     await act(() => {
         render(
             <Provider store={store}>
                 <BrowserRouter>
-                    <Summary customDate={dayjs('2022-01-01T16:00:00')}/>
+                    <Summary/>
                 </BrowserRouter>
             </Provider>
         );
     });
 
-    expect(screen.getByTestId('schedule-drugName').textContent).toContain('Xanax');
-    expect(screen.getByTestId('schedule-dosingHour').textContent).toContain('18:00');
+    expect(screen.getByTestId(`schedule-drugName${drug.id}`).textContent).toContain('Xanax');
+    expect(screen.getByTestId(`schedule-dosingHour-${drug.id}-${dosingMomentsKeys[1]}`).textContent).toContain('18:00');
 });

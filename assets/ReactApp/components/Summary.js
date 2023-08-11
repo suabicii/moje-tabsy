@@ -4,14 +4,10 @@ import dayjs from "dayjs";
 import StockStatusChecker from "./StockStatusChecker";
 import {useSelector} from "react-redux";
 import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
+import DosingMoments from "./DosingMoments";
 
-function Summary({customDate}) {
+function Summary() {
     const drugList = useSelector(sortedDrugsSelector);
-    const currentDate = customDate || dayjs(); // custom date is for testing purposes only
-
-    const checkIfCurrentTimeIsBeforeDosingMoment = (hour, minute) => {
-        return currentDate.isBefore(currentDate.hour(parseInt(hour)).minute(parseInt(minute)), 'minute');
-    };
 
     return (
         <>
@@ -26,26 +22,15 @@ function Summary({customDate}) {
                         </div>
                         <div className="card-body">
                             <ul className="list-unstyled">
-                                {drugList.map(drug => {
-                                    const dosingMomentsToDisplay = [];
-                                    for (const key in drug.dosingMoments) {
-                                        if (drug.dosingMoments.hasOwnProperty(key)) {
-                                            const [hour, minute] = drug.dosingMoments[key].split(':');
-                                            if (checkIfCurrentTimeIsBeforeDosingMoment(hour, minute)) {
-                                                dosingMomentsToDisplay.push(
-                                                    <li key={drug.id + key}>
-                                                        <strong
-                                                            data-testid="schedule-drugName">{drug.name} </strong> – {drug.dosing} {drug.unit}:
-                                                        <ul>
-                                                            <li data-testid="schedule-dosingHour">{hour}:{minute}</li>
-                                                        </ul>
-                                                    </li>
-                                                );
-                                            }
-                                        }
-                                    }
-                                    return dosingMomentsToDisplay;
-                                })}
+                                {drugList.map(({dosing, dosingMoments, id, name, unit}) =>
+                                    (
+                                        <div key={`${name}${id}`}>
+                                            <strong
+                                                data-testid={`schedule-drugName${id}`}>{name} </strong> – {dosing} {unit}:
+                                            <DosingMoments content={dosingMoments} drugId={id}/>
+                                        </div>
+                                    ))
+                                }
                             </ul>
                         </div>
                     </div>
@@ -61,9 +46,11 @@ function Summary({customDate}) {
                     </div>
                 </div>
             </div>
-            {/* SCHEDULE AND STOCK STATUS */}
+            {/* SCHEDULE AND STOCK STATUS */
+            }
         </>
-    );
+    )
+        ;
 }
 
 export default Summary;
