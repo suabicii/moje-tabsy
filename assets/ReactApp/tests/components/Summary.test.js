@@ -54,3 +54,15 @@ it('should display drug dosing schedule with correct values',  async () => {
     expect(screen.getByTestId(`schedule-drugName${drug.id}`).textContent).toContain('Xanax');
     expect(screen.getByTestId(`schedule-dosingHour-${drug.id}-${dosingMomentsKeys[1]}`).textContent).toContain('18:00');
 });
+
+it('should display information about empty drug list in schedule', () => {
+    render(
+        <Provider store={store}>
+            <BrowserRouter>
+                <Summary/>
+            </BrowserRouter>
+        </Provider>
+    );
+
+    expect(screen.getByTestId('drug-list-empty-schedule')).toBeTruthy();
+});
