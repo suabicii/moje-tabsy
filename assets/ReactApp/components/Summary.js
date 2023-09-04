@@ -13,7 +13,7 @@ function Summary() {
     return (
         <>
             <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
-            <DrugList isEditMode={false}/>
+            <DrugList isEditMode={false} isEmpty={!drugList.length}/>
             {/* SCHEDULE AND STOCK STATUS */}
             <div className="row mt-3">
                 <div className="col-md-6">

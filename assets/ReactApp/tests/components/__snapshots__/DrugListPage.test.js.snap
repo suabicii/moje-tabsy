@@ -1,14 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should correctly render DrugListPage 1`] = `
-<React.Fragment>
-  <h1
-    className="text-center mt-5 mt-md-0"
-  >
-    Moje leki i suplementy
-  </h1>
-  <DrugList
-    isEditMode={true}
-  />
-</React.Fragment>
+<Router
+  location={
+    Object {
+      "hash": "",
+      "key": "default",
+      "pathname": "/",
+      "search": "",
+      "state": null,
+    }
+  }
+  navigationType="POP"
+  navigator={
+    Object {
+      "action": "POP",
+      "createHref": [Function],
+      "createURL": [Function],
+      "encodeLocation": [Function],
+      "go": [Function],
+      "listen": [Function],
+      "location": Object {
+        "hash": "",
+        "key": "default",
+        "pathname": "/",
+        "search": "",
+        "state": null,
+      },
+      "push": [Function],
+      "replace": [Function],
+    }
+  }
+>
+  <DrugListPage />
+</Router>
 `;

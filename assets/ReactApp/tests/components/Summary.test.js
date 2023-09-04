@@ -4,7 +4,7 @@
 import React from "react";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 import Summary from "../../components/Summary";
-import {act, render, screen} from "@testing-library/react";
+import {act, cleanup, render, screen} from "@testing-library/react";
 import drugs from "./fixtures/drugs";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
@@ -12,6 +12,10 @@ import store from "../../store";
 import {fetchDrugs} from "../../features/drugs/drugsSlice";
 import Mockdate from "mockdate";
 import dayjs from "dayjs";
+
+afterEach(() => {
+    cleanup();
+});
 
 afterAll(() => {
     Mockdate.reset();

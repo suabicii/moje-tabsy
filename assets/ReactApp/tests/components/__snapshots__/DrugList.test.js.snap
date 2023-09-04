@@ -15,10 +15,9 @@ exports[`should correctly render DrugList 1`] = `
   navigator={
     Object {
       "action": "POP",
-      "back": [Function],
-      "block": [Function],
       "createHref": [Function],
-      "forward": [Function],
+      "createURL": [Function],
+      "encodeLocation": [Function],
       "go": [Function],
       "listen": [Function],
       "location": Object {

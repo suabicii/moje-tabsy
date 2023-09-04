@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {mainRoute} from "../routers/AppRouter";
 import {useNavigate} from "react-router-dom";
 import DrugForm from "./forms/DrugForm";
@@ -6,13 +6,19 @@ import {sendOrDeleteData} from "../utils/sendOrDeleteData";
 import {useDispatch, useSelector} from "react-redux";
 import {removeDrug, sortedDrugsSelector} from "../features/drugs/drugsSlice";
 
-function DrugList({isEditMode}) {
+function DrugList({isEditMode, isEmpty}) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const drugs = useSelector(sortedDrugsSelector);
     const [isEditFormVisible, setIsEditFormVisible] = useState(false);
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
+
+    useEffect(() => {
+        if (isEmpty) {
+            setIsAddFormVisible(true);
+        }
+    }, []);
 
     return (
         <>
@@ -56,12 +62,14 @@ function DrugList({isEditMode}) {
                         <button className="btn btn-primary mt-2" data-testid="add-drug" onClick={() => {
                             if (isEditMode) {
                                 setIsAddFormVisible(true);
+                            } else if (isEmpty) {
+                                navigate(`${mainRoute}/drug-list`, {state: {isEmpty: true}});
                             } else {
                                 navigate(`${mainRoute}/drug-list`);
                             }
                         }}>
-                            {isEditMode ? 'Dodaj ' : 'Edytuj '}
-                            {isEditMode ? <i className="fa-solid fa-plus"></i> :
+                            {isEditMode || isEmpty ? 'Dodaj ' : 'Edytuj '}
+                            {isEditMode || isEmpty ? <i className="fa-solid fa-plus"></i> :
                                 <i className="fa-solid fa-pencil"></i>}
                         </button>
                     </div>
