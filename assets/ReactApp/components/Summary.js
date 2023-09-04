@@ -8,6 +8,8 @@ import DosingMoments from "./DosingMoments";
 function Summary() {
     const drugList = useSelector(sortedDrugsSelector);
 
+    const EmptyDrugListInfo = () => <p className="text-center drug-list-empty">Brak leków i suplementów</p>;
+
     return (
         <>
             <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
@@ -35,7 +37,7 @@ function Summary() {
                                         })}
                                     </ul>
                                     :
-                                    <p className="text-center" data-testid="drug-list-empty-schedule">Brak leków i suplementów</p>
+                                    <EmptyDrugListInfo/>
                             }
                         </div>
                     </div>
@@ -45,8 +47,8 @@ function Summary() {
                         <div className="card-header text-center">
                             Stan zapasów <i className="fa-solid fa-warehouse"></i>
                         </div>
-                        <div className="card-body">
-                            <StockStatusChecker/>
+                        <div className={`card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`}>
+                            {drugList.length > 0 ? <StockStatusChecker/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
                 </div>

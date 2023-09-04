@@ -55,8 +55,8 @@ it('should display drug dosing schedule with correct values',  async () => {
     expect(screen.getByTestId(`schedule-dosingHour-${drug.id}-${dosingMomentsKeys[1]}`).textContent).toContain('18:00');
 });
 
-it('should display information about empty drug list in schedule', () => {
-    render(
+it('should display information about empty drug list in schedule and stock status checker', () => {
+    const {container} = render(
         <Provider store={store}>
             <BrowserRouter>
                 <Summary/>
@@ -64,5 +64,7 @@ it('should display information about empty drug list in schedule', () => {
         </Provider>
     );
 
-    expect(screen.getByTestId('drug-list-empty-schedule')).toBeTruthy();
+    const emptyInfo = container.querySelectorAll('.drug-list-empty');
+
+    expect(emptyInfo.length).toBeGreaterThan(0);
 });
