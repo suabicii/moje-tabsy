@@ -10,6 +10,9 @@ function Schedule() {
     const [drugListReduced, setDrugListReduced] = useState([]);
     const [dosingMomentsContent, setDosingMomentsContent] = useState([]);
 
+    const EmptyDrugListInfo = () => <p className="text-center mt-3 drug-list-empty">Wszystkie leki i suplementy zostały
+        zażyte 💪</p>;
+
     const checkIfCurrentTimeIsBeforeDosingMoment = (hour, minute) => {
         return currentDate.isBefore(currentDate.hour(parseInt(hour)).minute(parseInt(minute)), 'minute');
     };
@@ -29,7 +32,8 @@ function Schedule() {
 
     return (
         <>
-            {drugListReduced.length > 0 &&
+            {drugListReduced.length > 0
+                ?
                 <ul className="list-unstyled">
                     {drugListReduced.map(({dosing, dosingMoments, id, name, unit}, index) => (
                         <div key={`${name}${id}`}>
@@ -39,6 +43,10 @@ function Schedule() {
                         </div>
                     ))}
                 </ul>
+                :
+                <div className="d-flex flex-column justify-content-center py-4">
+                    <EmptyDrugListInfo/>
+                </div>
             }
         </>
     );

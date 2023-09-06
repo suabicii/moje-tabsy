@@ -7,6 +7,7 @@ import Schedule from "../../components/Schedule";
 import {Provider} from "react-redux";
 import store from "../../store";
 import Mockdate from "mockdate";
+import {render} from "@testing-library/react";
 
 beforeAll(() => {
     Mockdate.set('2020-01-01');
@@ -25,4 +26,16 @@ it('should correctly render Schedule component', () => {
     );
 
     expect(renderer.getRenderOutput()).toMatchSnapshot();
+});
+
+it('should display information about empty drug list if all drugs was taken', () => {
+    const {container} = render(
+        <Provider store={store}>
+            <Schedule/>
+        </Provider>
+    );
+
+    const emptyInfo = container.querySelector('.drug-list-empty');
+
+    expect(emptyInfo).toBeTruthy();
 });
