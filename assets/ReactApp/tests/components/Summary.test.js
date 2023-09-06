@@ -9,7 +9,7 @@ import drugs from "./fixtures/drugs";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "../../store";
-import {fetchDrugs} from "../../features/drugs/drugsSlice";
+import {fetchDrugs, setDrugs} from "../../features/drugs/drugsSlice";
 import Mockdate from "mockdate";
 import dayjs from "dayjs";
 
@@ -60,6 +60,7 @@ it('should display drug dosing schedule with correct values',  async () => {
 });
 
 it('should display information about empty drug list in schedule and stock status checker', () => {
+    store.dispatch(setDrugs([]));
     const {container} = render(
         <Provider store={store}>
             <BrowserRouter>

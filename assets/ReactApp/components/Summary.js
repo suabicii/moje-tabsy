@@ -3,7 +3,7 @@ import DrugList from "./DrugList";
 import StockStatusChecker from "./StockStatusChecker";
 import {useSelector} from "react-redux";
 import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
-import DosingMoments from "./DosingMoments";
+import Schedule from "./Schedule";
 
 function Summary() {
     const drugList = useSelector(sortedDrugsSelector);
@@ -23,21 +23,7 @@ function Summary() {
                         </div>
                         <div
                             className={`card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`}>
-                            {
-                                drugList.length > 0
-                                    ?
-                                    <ul className="list-unstyled">
-                                        {drugList.map(({dosing, dosingMoments, id, name, unit}) => (
-                                            <div key={`${name}${id}`}>
-                                                <strong
-                                                    data-testid={`schedule-drugName${id}`}>{name} </strong> – {dosing} {unit}:
-                                                <DosingMoments content={dosingMoments} drugId={id}/>
-                                            </div>
-                                        ))}
-                                    </ul>
-                                    :
-                                    <EmptyDrugListInfo/>
-                            }
+                            {drugList.length > 0 ? <Schedule/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
                 </div>
