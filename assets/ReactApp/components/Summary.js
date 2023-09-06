@@ -27,7 +27,7 @@ function Summary() {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-6 mt-3 mt-lg-0">
+                <div className="col-md-6 mt-3 mt-md-0">
                     <div className="card">
                         <div className="card-header text-center">
                             Stan zapasów <i className="fa-solid fa-warehouse"></i>
