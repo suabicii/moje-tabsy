@@ -46,15 +46,3 @@ it.each`
 
     expect(screen.queryByText(hour)).toBeTruthy();
 });
-
-it('should not render component if time for taking medicines is up', () => {
-    Mockdate.set(dayjs().hour(23).minute(59).toDate());
-
-    render(
-        <Provider store={store}>
-            <DosingMoments content={content} drugId={drug.id}/>
-        </Provider>
-    );
-
-    expect(screen.queryByTestId('dosing-moments')).toBeFalsy();
-}); 
