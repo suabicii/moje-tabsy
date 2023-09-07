@@ -9,7 +9,6 @@ import store from "../../store";
 import DosingMoments from "../../components/DosingMoments";
 import drugs from "./fixtures/drugs";
 import Mockdate from "mockdate";
-import dayjs from "dayjs";
 
 const drug = drugs[0];
 const content = drug.dosingMoments;
