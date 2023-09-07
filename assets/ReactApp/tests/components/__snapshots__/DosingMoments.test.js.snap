@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should properly render DosingMoments component 1`] = `
+<Provider
+  store={
+    Object {
+      "@@observable": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <DosingMoments
+    content={
+      Object {
+        "hour1": "07:00",
+        "hour2": "18:00",
+      }
+    }
+    drugId={1}
+  />
+</Provider>
+`;

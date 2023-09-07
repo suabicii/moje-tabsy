@@ -25,11 +25,11 @@ afterAll(() => {
     delete global.fetch;
 });
 
-const renderDrugList = () => {
+const renderDrugList = (isEmpty = null) => {
     render(
         <Provider store={store}>
             <BrowserRouter>
-                <DrugList isEditMode={true}/>
+                <DrugList isEditMode={true} isEmpty={isEmpty}/>
             </BrowserRouter>
         </Provider>
     );
@@ -49,6 +49,11 @@ it('should correctly render DrugList', () => {
 it('should render add drug form after clicking add button', () => {
     renderDrugList();
     fireEvent.click(screen.getByTestId('add-drug'));
+    expect(screen.getByRole('form')).toBeVisible();
+});
+
+it('should render add drug form if drug list is empty', () => {
+    renderDrugList(true);
     expect(screen.getByRole('form')).toBeVisible();
 });
 

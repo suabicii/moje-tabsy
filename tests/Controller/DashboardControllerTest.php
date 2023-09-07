@@ -46,7 +46,7 @@ class DashboardControllerTest extends WebTestCase
         $this->entityManager = null;
     }
 
-    private function createAuthorizedClient()
+    private function createAuthorizedClient(): void
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email3.com']);
         $this->client->loginUser($user);
