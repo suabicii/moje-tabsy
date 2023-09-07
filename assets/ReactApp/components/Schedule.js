@@ -20,12 +20,19 @@ function Schedule() {
     useEffect(() => {
         drugList.forEach(drug => {
             const dosingMoments = Object.entries(drug.dosingMoments);
+            const dosingMomentsContentPart = {};
 
             for (const [key, value] of dosingMoments) {
                 const [hour, minute] = value.split(':');
                 if (checkIfCurrentTimeIsBeforeDosingMoment(hour, minute)) {
-                    setDrugListReduced([...drugListReduced, drug]);
+                    dosingMomentsContentPart[key] = value;
                 }
+            }
+
+
+            if (Object.entries(dosingMomentsContentPart).length > 0) {
+                setDrugListReduced(prevState => [...prevState, drug]);
+                setDosingMomentsContent(prevState => [...prevState, dosingMomentsContentPart]);
             }
         });
     }, []);
@@ -37,9 +44,8 @@ function Schedule() {
                 <ul className="list-unstyled">
                     {drugListReduced.map(({dosing, dosingMoments, id, name, unit}, index) => (
                         <div key={`${name}${id}`}>
-                            <strong
-                                data-testid={`schedule-drugName${id}`}>{name} </strong> – {dosing} {unit}:
-                            <DosingMoments content={dosingMoments} drugId={id}/>
+                            <strong data-testid={`schedule-drugName${id}`}>{name} </strong> – {dosing} {unit}:
+                            <DosingMoments content={dosingMomentsContent[index]} drugId={id}/>
                         </div>
                     ))}
                 </ul>
