@@ -1,6 +1,6 @@
 import React from "react";
 
-function DosingMoments({drugId, content}) {
+function DosingMoments({drugId, content, className}) {
     const dosingMomentsArray = Object.entries(content);
 
     return dosingMomentsArray.length > 0 ? (
@@ -8,7 +8,7 @@ function DosingMoments({drugId, content}) {
             {Object.entries(content).map(([key, value]) => {
                 const [hour, minute] = value.split(':');
                 return (
-                    <li key={drugId + value} data-testid={`schedule-dosingHour-${drugId}-${key}`}>
+                    <li key={drugId + value} data-testid={`schedule-dosingHour-${drugId}-${key}`} className={className}>
                         {hour}:{minute}
                     </li>
                 );

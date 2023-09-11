@@ -5,6 +5,7 @@ import DrugForm from "./forms/DrugForm";
 import {sendOrDeleteData} from "../utils/sendOrDeleteData";
 import {useDispatch, useSelector} from "react-redux";
 import {removeDrug, sortedDrugsSelector} from "../features/drugs/drugsSlice";
+import DosingMoments from "./DosingMoments";
 
 function DrugList({isEditMode, isEmpty}) {
     const navigate = useNavigate();
@@ -55,6 +56,27 @@ function DrugList({isEditMode, isEmpty}) {
                                         <i className="fa-solid fa-pencil"></i>
                                     </button>
                                 }
+                                <span className="border-start border-dark ml-3 pr-3"
+                                      style={{marginLeft: '0.25rem', paddingRight: '0.25rem'}}
+                                >
+                                </span>
+                                <button
+                                    type="button"
+                                    className="btn dropdown-toggle border-0 pt-0 pb-1 px-1 ml-2"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target={`#collapseHours${drug.id}`}
+                                    aria-expanded="false"
+                                    aria-controls={`#collapseHours${drug.id}`}
+                                >
+                                    Szczegóły
+                                </button>
+                                <div className="list-group collapse mt-2" id={`collapseHours${drug.id}`}>
+                                    <h6>Godziny przyjmowania dawek:</h6>
+                                    <ul className="list-group">
+                                        <DosingMoments drugId={drug.id} content={drug.dosingMoments}
+                                                       className="list-group-item"/>
+                                    </ul>
+                                </div>
                             </li>
                         )}
                     </ul>
