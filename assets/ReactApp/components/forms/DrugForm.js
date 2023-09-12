@@ -136,7 +136,7 @@ function DrugForm({drug, setIsFormVisible}) {
                         </div>
                     </div>
                     <div className="dosing-hours mt-3">
-                        <h4 className="text-center">Godziny przyjęcia dawki</h4>
+                        <h4 className="text-center">Godziny przyjmowania dawek</h4>
                         <DosingMomentsInputs
                             dosingMoments={dosingMoments}
                             inputAmount={dosingMomentInputAmount}
