@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render DrugDetails component 1`] = `
+<React.Fragment>
+  <button
+    aria-controls="#collapseHours1"
+    aria-expanded="false"
+    className="btn dropdown-toggle border-0 pt-0 pb-1 px-1 ml-2"
+    data-bs-target="#collapseHours1"
+    data-bs-toggle="collapse"
+    type="button"
+  >
+    Szczegóły
+  </button>
+  <div
+    className="list-group collapse mt-2"
+    id="collapseHours1"
+  >
+    <h6>
+      Godziny przyjmowania dawek:
+    </h6>
+    <ul
+      className="list-group"
+    >
+      <DosingMoments
+        className="list-group-item"
+        content={
+          Object {
+            "hour1": "07:00",
+            "hour2": "18:00",
+          }
+        }
+        drugId={1}
+      />
+    </ul>
+  </div>
+</React.Fragment>
+`;
