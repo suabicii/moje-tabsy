@@ -5,6 +5,7 @@ import DrugForm from "./forms/DrugForm";
 import {sendOrDeleteData} from "../utils/sendOrDeleteData";
 import {useDispatch, useSelector} from "react-redux";
 import {removeDrug, sortedDrugsSelector} from "../features/drugs/drugsSlice";
+import DrugDetails from "./DrugDetails";
 
 function DrugList({isEditMode, isEmpty}) {
     const navigate = useNavigate();
@@ -55,6 +56,11 @@ function DrugList({isEditMode, isEmpty}) {
                                         <i className="fa-solid fa-pencil"></i>
                                     </button>
                                 }
+                                <span className="border-start border-dark ml-3 pr-3"
+                                      style={{marginLeft: '0.25rem', paddingRight: '0.25rem'}}
+                                >
+                                </span>
+                                <DrugDetails drug={drug}/>
                             </li>
                         )}
                     </ul>
