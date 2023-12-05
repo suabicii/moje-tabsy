@@ -11,6 +11,8 @@ function Summary() {
 
     const EmptyDrugListInfo = () => <p className="text-center drug-list-empty">Brak leków i suplementów</p>;
 
+    const cardBodyClasses = `card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`;
+
     return (
         <>
             <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
@@ -21,8 +23,7 @@ function Summary() {
                         <div className="card-header text-center">
                             Dzisiaj muszę zażyć <i className="fa-solid fa-clock"></i>
                         </div>
-                        <div
-                            className={`card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`}>
+                        <div className={cardBodyClasses}>
                             {drugList.length > 0 ? <Schedule/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
@@ -32,8 +33,7 @@ function Summary() {
                         <div className="card-header text-center">
                             Stan zapasów <i className="fa-solid fa-warehouse"></i>
                         </div>
-                        <div
-                            className={`card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`}>
+                        <div className={cardBodyClasses}>
                             {drugList.length > 0 ? <StockStatusChecker/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
@@ -43,7 +43,7 @@ function Summary() {
                         <div className="card-header text-center">
                             Kiedy zapasy zostaną wyczerpane? <i className="fa-solid fa-calendar-days"></i>
                         </div>
-                        <div className={`card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`}>
+                        <div className={cardBodyClasses}>
                             {drugList.length > 0 ? <OutOfStockDates/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
