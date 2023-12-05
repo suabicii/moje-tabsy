@@ -1,7 +1,10 @@
 import React from "react";
 import dayjs from "dayjs";
+import {useSelector} from "react-redux";
+import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
 
-function OutOfStockDates({drugList}) {
+function OutOfStockDates() {
+    const drugList = useSelector(sortedDrugsSelector);
     const dates = [];
 
     drugList.forEach(({name, dosing, dosingMoments, quantity}) => {

@@ -43,8 +43,8 @@ function Summary() {
                         <div className="card-header text-center">
                             Kiedy zapasy zostaną wyczerpane? <i className="fa-solid fa-calendar-days"></i>
                         </div>
-                        <div className="card-body">
-                            {drugList.length > 0 ? <OutOfStockDates drugList={drugList}/> : <EmptyDrugListInfo/>}
+                        <div className={`card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`}>
+                            {drugList.length > 0 ? <OutOfStockDates/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
                 </div>
