@@ -4,6 +4,7 @@ import StockStatusChecker from "./StockStatusChecker";
 import {useSelector} from "react-redux";
 import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
 import Schedule from "./Schedule";
+import OutOfStockDates from "./OutOfStockDates";
 
 function Summary() {
     const drugList = useSelector(sortedDrugsSelector);
@@ -42,8 +43,8 @@ function Summary() {
                         <div className="card-header text-center">
                             Kiedy zapasy zostaną wyczerpane? <i className="fa-solid fa-calendar-days"></i>
                         </div>
-                        <div className="card-body d-flex flex-column justify-content-center">
-                            <p className="text-center">Miejsce na daty</p>
+                        <div className="card-body">
+                            {drugList.length > 0 ? <OutOfStockDates drugList={drugList}/> : <EmptyDrugListInfo/>}
                         </div>
                     </div>
                 </div>
