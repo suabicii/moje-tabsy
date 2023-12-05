@@ -20,7 +20,7 @@ it('should correctly render summary', () => {
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
-it('should display information about empty drug list in schedule and stock status checker', () => {
+it('should display information about empty drug list in schedule, stock status checker and out of stock dates area', () => {
     const {container} = render(
         <Provider store={store}>
             <BrowserRouter>
