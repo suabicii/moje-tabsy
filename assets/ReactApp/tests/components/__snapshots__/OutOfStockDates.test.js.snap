@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render OutOfStockDates component 1`] = `
+<ul>
+  <li>
+    31-01-2020
+  </li>
+  <li>
+    21-01-2020
+  </li>
+  <li>
+    05-01-2020
+  </li>
+</ul>
+`;
