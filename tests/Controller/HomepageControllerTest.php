@@ -18,12 +18,11 @@ class HomepageControllerTest extends WebTestCase
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
     }
 
-    public function testRenderHomepage(): void
+    public function testRedirectAnonymousUserToLoginPage(): void
     {
-        $crawler = $this->client->request('GET', '/');
+        $this->client->request('GET', '/');
 
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Witaj');
+        $this->assertResponseRedirects('/login');
     }
 
     public function testRedirectLoggedUserToDashboard(): void
