@@ -22,7 +22,7 @@ function NavbarMain() {
                 </button>
 
                 {/*// Brand -->*/}
-                <a className="navbar-brand fst-italic d-none d-lg-block" href="#">Moje-Tabsy.pl <i
+                <a className="navbar-brand fst-italic d-none d-lg-block" href="#">MediMinder <i
                     className="fa-solid fa-pills"></i></a>
                 {/*// Search form -->*/}
                 <form className="d-none d-md-flex input-group w-auto my-auto">
