@@ -22,80 +22,11 @@ function NavbarMain() {
                 </button>
 
                 {/*// Brand -->*/}
-                <a className="navbar-brand fst-italic d-none d-lg-block" href="#">Moje-Tabsy.pl <i
+                <a className="navbar-brand fst-italic d-none d-lg-block" href="#">MediMinder <i
                     className="fa-solid fa-pills"></i></a>
-                {/*// Search form -->*/}
-                <form className="d-none d-md-flex input-group w-auto my-auto">
-                    <input
-                        id="searchInput"
-                        autoComplete="off"
-                        type="search"
-                        className="form-control rounded-start dashboard__search"
-                        placeholder='Wyszukaj'
-                    />
-                    <label htmlFor="searchInput" className="visually-hidden">Wyszukaj</label>
-                    <span className="input-group-text border-0"><i className="fas fa-search"></i></span>
-                </form>
 
                 {/*// Right links -->*/}
                 <ul className="navbar-nav ms-auto d-flex flex-row">
-                    {/*// Notification dropdown -->*/}
-                    <li className="nav-item dropdown">
-                        <a
-                            className="nav-link me-3 me-lg-0 notifications-dropdown dropdown-toggle hidden-arrow"
-                            href="#"
-                            id="notificationDropdown"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <i className="fas fa-bell"></i>
-                            <span className="badge rounded-pill badge-notification bg-danger">1</span>
-                        </a>
-                        <ul
-                            className="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="notificationDropdown"
-                        >
-                            <li>
-                                <a className="dropdown-item" href="#">Some news</a>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#">Another news</a>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#">Something else here</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    {/*// Icon dropdown -->*/}
-                    <li className="nav-item dropdown">
-                        <a
-                            className="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow"
-                            href="#"
-                            id="navbarDropdown"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <i className="m-0">🇵🇱</i>
-                        </a>
-                        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a className="dropdown-item" href="#"
-                                ><i>🇵🇱</i> Polski
-                                    <i className="fa fa-check text-success ms-2"></i
-                                    ></a>
-                            </li>
-                            <li>
-                                <hr className="dropdown-divider"/>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#"><i>🇬🇧</i> English</a>
-                            </li>
-                        </ul>
-                    </li>
-
                     {/*// Avatar -->*/}
                     <li className="nav-item dropdown">
                         <a
