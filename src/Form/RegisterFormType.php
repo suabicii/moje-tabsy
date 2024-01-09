@@ -20,14 +20,6 @@ class RegisterFormType extends AbstractType
         $builder
             ->add('name', TextType::class, ['label' => false])
             ->add('email', EmailType::class, ['label' => false])
-            ->add('tel_prefix', ChoiceType::class, [
-                'choices' => [
-                    '48 🇵🇱' => '48',
-                    '47 🇳🇴' => '47'
-                ],
-                'label' => false
-            ])
-            ->add('tel', TextType::class, ['label' => false])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Hasła w obu polach muszą się zgadzać.'

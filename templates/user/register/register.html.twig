@@ -8,7 +8,12 @@
         <section class="sign-up position-relative">
             <div class="sign-up__overlay position-absolute top-50 start-50 translate-middle text-center bg-white p-4 rounded">
                 <h1>Rejestracja</h1>
-                <a href="{{ path('homepage') }}" class="mb-2">Powrót do strony głównej</a>
+                {# Introduction #}
+                <p class="lead fw-normal">
+                    Witaj w MediMinder! 🤩 Ta intuicyjna aplikacja webowa pomoże Ci regularnie zażywać leki i suplementy, eliminując stres z zapominania.
+                    Zarejestruj się teraz i zainwestuj w zdrowy tryb życia! 💊📅
+                </p>
+                {# Introduction #}
                 {{ form_start(form, {'attr': {'class': 'mt-2'}}) }}
                 <div class="form-floating mb-3">
                     {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Imię'}}) }}
@@ -17,13 +22,6 @@
                 <div class="form-floating mb-3">
                     {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
                     <label for="register_form_email">Email</label>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="input-group input-group--prefix-number">
-                        <span class="input-group-text">+</span>
-                        {{ form_widget(form.tel_prefix, {'attr': {'class': 'form-select', 'aria-label': 'Prefix'}}) }}
-                    </div>
-                    {{ form_widget(form.tel, {'attr': {'class': 'form-control rounded-start', 'placeholder': 'Nr tel (opcjonalnie)'}, 'required': false}) }}
                 </div>
                 <div class="form-floating mb-3">
                     {{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'placeholder': 'Hasło'}}) }}

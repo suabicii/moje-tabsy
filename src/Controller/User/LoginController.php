@@ -199,7 +199,7 @@ class LoginController extends UserController
     {
         $this->emailService->sendMessageToUser(
             $userEmail,
-            'Moje-Tabsy.pl – zmiana hasła',
+            'MediMinder – zmiana hasła',
             'emails/password_reset.txt.twig',
             'emails/password_reset.html.twig',
             ['reset_url' => $_ENV['HOST_URL'] . '/password-change/' . $token]

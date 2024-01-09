@@ -132,7 +132,7 @@ class RegisterController extends UserController
     {
         $this->emailService->sendMessageToUser(
             $userEmail,
-            'Moje-Tabsy.pl – aktywacja konta',
+            'MediMinder – aktywacja konta',
             'emails/signup_confirmation.txt.twig',
             'emails/signup_confirmation.html.twig',
             ['activation_url' => $_ENV['HOST_URL'] . '/activated/' . $token]
@@ -150,10 +150,6 @@ class RegisterController extends UserController
         $user->setRoles(['ROLE_USER']);
         $user->setActivated(false);
         $password = $form->get('password')->getData();
-        $tel = $form->get('tel')->getData();
-        if ($tel === null) {
-            $user->setTelPrefix(null);
-        }
         $hashed_password = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed_password);
         $user->setToken($token);

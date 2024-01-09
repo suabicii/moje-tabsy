@@ -14,6 +14,6 @@ class HomepageController extends AbstractController
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
         }
-        return $this->redirectToRoute('login_page'); // Temporary redirection before homepage redesign
+        return $this->redirectToRoute('register_page'); // Temporary redirection before homepage redesign
     }
 }
