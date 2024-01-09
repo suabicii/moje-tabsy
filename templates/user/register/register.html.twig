@@ -23,13 +23,6 @@
                     {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
                     <label for="register_form_email">Email</label>
                 </div>
-                <div class="input-group mb-3">
-                    <div class="input-group input-group--prefix-number">
-                        <span class="input-group-text">+</span>
-                        {{ form_widget(form.tel_prefix, {'attr': {'class': 'form-select', 'aria-label': 'Prefix'}}) }}
-                    </div>
-                    {{ form_widget(form.tel, {'attr': {'class': 'form-control rounded-start', 'placeholder': 'Nr tel (opcjonalnie)'}, 'required': false}) }}
-                </div>
                 <div class="form-floating mb-3">
                     {{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'placeholder': 'Hasło'}}) }}
                     <label for="register_form_password_first">Hasło</label>

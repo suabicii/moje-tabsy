@@ -24,11 +24,11 @@ class RegisterControllerTest extends WebTestCase
 
     public function testSubmitRegisterForm(): void
     {
-        $crawler = $this->client->request('GET', '/register');
+        $this->client->request('GET', '/register');
 
         $users = $this->entityManager->getRepository(User::class)->findAll();
         $usersCountBeforeFormSubmission = sizeof($users);
-        $crawler = $this->client->submitForm('register_form_submit', [
+        $this->client->submitForm('register_form_submit', [
             'register_form[name]' => 'Adam',
             'register_form[email]' => 'some.dummy@email.com',
             'register_form[password][first]' => 'Qwerty1!',
@@ -43,29 +43,29 @@ class RegisterControllerTest extends WebTestCase
 
     public function testRenderAccountCreatedPageForNewAccountOnly(): void
     {
-        $crawler = $this->client->request('GET', '/account-created/123xyz456abc'); // token taken from DataFixtures/UserFixtures
+        $this->client->request('GET', '/account-created/123xyz456abc'); // token taken from DataFixtures/UserFixtures
 
         $this->assertResponseIsSuccessful();
     }
 
     public function testThrowNotFoundExceptionInAccountCreatedPageWhenTokenWasNotFound(): void
     {
-        $crawler = $this->client->request('GET', '/account-created/this-should-fail');
+        $this->client->request('GET', '/account-created/this-should-fail');
 
         $this->assertResponseStatusCodeSame(404, 'The user account is activated or does not exist');
     }
 
     public function testActivateAccount(): void
     {
-        $crawler = $this->client->request('GET', '/activated/123xyz456abc');
+        $this->client->request('GET', '/activated/123xyz456abc');
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'dummy@email.com']);
 
-        $this->assertEquals(true, $user->isActivated());
+        $this->assertTrue($user->isActivated());
     }
 
     public function testThrowNotFoundExceptionInActivatePageWhenTokenWasNotFound(): void
     {
-        $crawler = $this->client->request('GET', '/activated/this-should-fail');
+        $this->client->request('GET', '/activated/this-should-fail');
 
         $this->assertResponseStatusCodeSame(404, 'The user account is activated or does not exist');
     }
@@ -80,9 +80,9 @@ class RegisterControllerTest extends WebTestCase
 
     public function testSubmitResendActivationEmailForm(): void
     {
-        $crawler = $this->client->request('GET', '/resend-activation-email');
+        $this->client->request('GET', '/resend-activation-email');
 
-        $crawler = $this->client->submitForm('submit', [
+        $this->client->submitForm('submit', [
             'email' => 'dummy@email.com'
         ]);
 
@@ -91,9 +91,9 @@ class RegisterControllerTest extends WebTestCase
 
     public function testSubmitResendActivationEmailFormWithActivatedUserEmailAndRenderAlertDivWithError(): void
     {
-        $crawler = $this->client->request('GET', '/resend-activation-email');
+        $this->client->request('GET', '/resend-activation-email');
 
-        $crawler = $this->client->submitForm('submit', [
+        $this->client->submitForm('submit', [
             'email' => 'dummy@email2.com',
         ]);
         $crawler = $this->client->followRedirect();
