@@ -40,13 +40,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    #[Assert\GreaterThan(0)]
-    #[ORM\Column(type: 'string', length: 3, nullable: true)]
-    private ?string $tel_prefix;
-
-    #[ORM\Column(type: 'string', length: 9, nullable: true)]
-    private ?string $tel;
-
     #[ORM\Column(type: 'boolean')]
     private ?bool $activated;
 
