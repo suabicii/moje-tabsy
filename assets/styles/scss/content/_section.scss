@@ -40,10 +40,14 @@
 }
 
 /** SIGN UP AND SIGN IN PAGES */
+.sign-up {
+    padding: 24rem 0;
+}
+
 .sign-in,
 .sign-up {
     background: url('../../../img/background/signin-bg.jpg') center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .sign-in__overlay,
