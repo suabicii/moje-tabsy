@@ -15,6 +15,22 @@ function DrugList({isEditMode, isEmpty}) {
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
 
+    const toggleAddFormVisibility = () => {
+        if (isAddFormVisible) {
+            setIsAddFormVisible(false);
+        } else {
+            setIsAddFormVisible(true);
+        }
+    };
+
+    const toggleEditFormVisibility = () => {
+        if (isEditFormVisible) {
+            setIsEditFormVisible(false);
+        } else {
+            setIsEditFormVisible(true);
+        }
+    };
+
     useEffect(() => {
         if (isEmpty) {
             setIsAddFormVisible(true);
@@ -50,7 +66,7 @@ function DrugList({isEditMode, isEmpty}) {
                                     isEditMode &&
                                     <button className="btn btn-info rounded-circle float-md-end"
                                             data-testid={`edit-drug-${drug.id}`} onClick={() => {
-                                        setIsEditFormVisible(true);
+                                        toggleEditFormVisibility();
                                         setDrugDataForEdit(drug);
                                     }}>
                                         <i className="fa-solid fa-pencil"></i>
@@ -67,7 +83,7 @@ function DrugList({isEditMode, isEmpty}) {
                     <div className="d-grid">
                         <button className="btn btn-primary mt-2" data-testid="add-drug" onClick={() => {
                             if (isEditMode) {
-                                setIsAddFormVisible(true);
+                                toggleAddFormVisibility();
                             } else if (isEmpty) {
                                 navigate(`${mainRoute}/drug-list`, {state: {isEmpty: true}});
                             } else {
