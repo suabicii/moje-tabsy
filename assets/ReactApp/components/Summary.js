@@ -4,7 +4,6 @@ import StockStatusChecker from "./StockStatusChecker";
 import {useSelector} from "react-redux";
 import {sortedDrugsSelector} from "../features/drugs/drugsSlice";
 import Schedule from "./Schedule";
-import OutOfStockDates from "./OutOfStockDates";
 
 function Summary() {
     const drugList = useSelector(sortedDrugsSelector);
