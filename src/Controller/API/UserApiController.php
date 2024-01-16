@@ -46,9 +46,7 @@ class UserApiController extends ApiController
             $userFromDb = $this->getUserFromDb($user);
             return $this->json([
                 'name' => $userFromDb->getName(),
-                'email' => $userFromDb->getEmail(),
-                'tel_prefix' => $userFromDb->getTelPrefix(),
-                'tel' => $userFromDb->getTel()
+                'email' => $userFromDb->getEmail()
             ]);
         } else {
             return $this->json(['error' => 'Permission denied'], 401);
