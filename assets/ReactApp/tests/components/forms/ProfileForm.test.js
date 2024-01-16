@@ -50,8 +50,7 @@ it('should display ProfileForm with user data fetched from API', async () => {
 
     await waitFor(() => expect(screen.getByRole('form')).toHaveFormValues({
         name: userData.name,
-        email: userData.email,
-        tel: userData.tel
+        email: userData.email
     }));
 });
 

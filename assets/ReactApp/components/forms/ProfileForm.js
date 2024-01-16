@@ -17,10 +17,6 @@ function ProfileForm() {
         const name = event.target.name;
         const value = event.target.value;
         setInputValues(prevState => ({...prevState, [name]: value}));
-        if (name === 'tel') { // set default tel prefix if user didn't choose before
-            const telPrefixSelect = document.getElementById('tel_prefix');
-            setInputValues(prevState => ({...prevState, tel_prefix: telPrefixSelect.value}));
-        }
     };
 
     const handleSubmit = async () => {
