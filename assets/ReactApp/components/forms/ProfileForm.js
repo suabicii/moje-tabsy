@@ -61,23 +61,6 @@ function ProfileForm() {
                             />
                             <label htmlFor="name">Email</label>
                         </div>
-                        <div className="input-group mt-3">
-                            <div className="input-group input-group--prefix-number">
-                                <span className="input-group-text">+</span>
-                                <select id="tel_prefix" name="tel_prefix"
-                                        className="form-select" aria-label="Prefix"
-                                        defaultValue={userData.tel_prefix || "48"}
-                                        onChange={handleInputChange}
-                                >
-                                    <option value="48">48 🇵🇱</option>
-                                    <option value="47">47 🇳🇴</option>
-                                </select>
-                            </div>
-                            <input type="text" id="tel" name="tel"
-                                   className="form-control rounded-start" placeholder="Nr tel"
-                                   defaultValue={userData.tel} onChange={handleInputChange}
-                            />
-                        </div>
                         <div className="form-floating mt-3">
                             <input type="password" className="form-control" id="oldPassword" name="oldPassword"
                                    placeholder="Stare hasło" data-testid="oldPassword" onChange={handleInputChange}
