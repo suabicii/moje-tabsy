@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class UserDataUpdatesFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $userDataUpdates = new UserDataUpdates();
         $user = $manager->getRepository(User::class)->findOneBy(['email' => 'john@doe.com']);
@@ -18,8 +18,6 @@ class UserDataUpdatesFixtures extends Fixture implements DependentFixtureInterfa
         $userDataUpdates->setName('Mike');
         $userDataUpdates->setEmail('my.new@email.com');
         $userDataUpdates->setPassword('Password321!');
-        $userDataUpdates->setTelPrefix('123');
-        $userDataUpdates->setTel('111222333');
         $userDataUpdates->setExpiresAt((new \DateTimeImmutable())->modify('+1 year'));
         $userDataUpdates->setToken('abc123xyz');
 

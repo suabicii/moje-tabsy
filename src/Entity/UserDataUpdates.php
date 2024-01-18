@@ -27,12 +27,6 @@ class UserDataUpdates
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $password;
 
-    #[ORM\Column(type: 'string', length: 3, nullable: true)]
-    private ?string $tel_prefix;
-
-    #[ORM\Column(type: 'string', length: 9, nullable: true)]
-    private ?string $tel;
-
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $expires_at;
 
@@ -88,30 +82,6 @@ class UserDataUpdates
     public function setPassword(?string $password): self
     {
         $this->password = $password;
-
-        return $this;
-    }
-
-    public function getTelPrefix(): ?string
-    {
-        return $this->tel_prefix;
-    }
-
-    public function setTelPrefix(?string $tel_prefix): self
-    {
-        $this->tel_prefix = $tel_prefix;
-
-        return $this;
-    }
-
-    public function getTel(): ?string
-    {
-        return $this->tel;
-    }
-
-    public function setTel(?string $tel): self
-    {
-        $this->tel = $tel;
 
         return $this;
     }
