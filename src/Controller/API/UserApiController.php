@@ -215,7 +215,7 @@ class UserApiController extends ApiController
 
         $this->emailService->sendMessageToUser(
             $userEmail,
-            'Moje-Tabsy.pl – zmiana danych użytkownika',
+            'MediMinder – zmiana danych użytkownika',
             'emails/user_data_change.txt.twig',
             'emails/user_data_change.html.twig',
             [
