@@ -17,10 +17,6 @@ function ProfileForm() {
         const name = event.target.name;
         const value = event.target.value;
         setInputValues(prevState => ({...prevState, [name]: value}));
-        if (name === 'tel') { // set default tel prefix if user didn't choose before
-            const telPrefixSelect = document.getElementById('tel_prefix');
-            setInputValues(prevState => ({...prevState, tel_prefix: telPrefixSelect.value}));
-        }
     };
 
     const handleSubmit = async () => {
@@ -60,23 +56,6 @@ function ProfileForm() {
                                    onChange={handleInputChange} required
                             />
                             <label htmlFor="name">Email</label>
-                        </div>
-                        <div className="input-group mt-3">
-                            <div className="input-group input-group--prefix-number">
-                                <span className="input-group-text">+</span>
-                                <select id="tel_prefix" name="tel_prefix"
-                                        className="form-select" aria-label="Prefix"
-                                        defaultValue={userData.tel_prefix || "48"}
-                                        onChange={handleInputChange}
-                                >
-                                    <option value="48">48 🇵🇱</option>
-                                    <option value="47">47 🇳🇴</option>
-                                </select>
-                            </div>
-                            <input type="text" id="tel" name="tel"
-                                   className="form-control rounded-start" placeholder="Nr tel"
-                                   defaultValue={userData.tel} onChange={handleInputChange}
-                            />
                         </div>
                         <div className="form-floating mt-3">
                             <input type="password" className="form-control" id="oldPassword" name="oldPassword"

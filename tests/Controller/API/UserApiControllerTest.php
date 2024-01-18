@@ -20,9 +20,7 @@ class UserApiControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertEquals([
             'name' => 'Evan',
-            'email' => 'dummy@email3.com',
-            'tel_prefix' => null,
-            'tel' => null
+            'email' => 'dummy@email3.com'
         ], $responseData);
     }
 
@@ -102,8 +100,6 @@ class UserApiControllerTest extends WebTestCase
         return [
             'name' => 'Devan',
             'email' => 'new@email.com',
-            'tel_prefix' => '48',
-            'tel' => '123456789',
             'oldPassword' => 'Password123!',
             'newPassword' => 'Password321!',
             'newPasswordRepeated' => 'Password321!'

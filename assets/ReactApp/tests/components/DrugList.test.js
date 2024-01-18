@@ -52,6 +52,13 @@ it('should render add drug form after clicking add button', () => {
     expect(screen.getByRole('form')).toBeVisible();
 });
 
+it('should hide add drug form after clicking again add button', () => {
+    renderDrugList();
+    fireEvent.click(screen.getByTestId('add-drug'));
+    fireEvent.click(screen.getByTestId('add-drug'));
+    expect(screen.queryByRole('form')).toBeFalsy();
+});
+
 it('should render add drug form if drug list is empty', () => {
     renderDrugList(true);
     expect(screen.getByRole('form')).toBeVisible();
@@ -62,6 +69,13 @@ it('should render edit drug form after clicking edit button', () => {
     // click edit button near first list item
     fireEvent.click(screen.getByTestId('edit-drug-1')); // from data-testid, 1 is id of first item
     expect(screen.getByRole('form')).toBeVisible();
+});
+
+it('should hide edit drug form after clicking again edit button', () => {
+    renderDrugList();
+    fireEvent.click(screen.getByTestId('edit-drug-1'));
+    fireEvent.click(screen.getByTestId('edit-drug-1'));
+    expect(screen.queryByRole('form')).toBeFalsy();
 });
 
 it('should delete drug from list after clicking delete button', async () => {

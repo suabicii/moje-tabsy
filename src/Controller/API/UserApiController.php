@@ -46,9 +46,7 @@ class UserApiController extends ApiController
             $userFromDb = $this->getUserFromDb($user);
             return $this->json([
                 'name' => $userFromDb->getName(),
-                'email' => $userFromDb->getEmail(),
-                'tel_prefix' => $userFromDb->getTelPrefix(),
-                'tel' => $userFromDb->getTel()
+                'email' => $userFromDb->getEmail()
             ]);
         } else {
             return $this->json(['error' => 'Permission denied'], 401);
@@ -148,12 +146,6 @@ class UserApiController extends ApiController
             case 'email':
                 $updates->setEmail($updateValue);
                 break;
-            case 'tel_prefix':
-                $updates->setTelPrefix($updateValue);
-                break;
-            case 'tel':
-                $updates->setTel($updateValue);
-                break;
             default:
                 throw new Error('Column ' . '"' . $updateKey . '"' . ' does not exist in table');
         }
@@ -177,8 +169,6 @@ class UserApiController extends ApiController
         }
         $updates->setName($content['name']);
         $updates->setEmail($content['email']);
-        $updates->setTelPrefix($content['tel_prefix']);
-        $updates->setTel($content['tel']);
         if (array_key_exists('newPassword', $content)) {
             if ($_ENV['APP_ENV'] === 'test') {
                 $updates->setPassword($content['newPassword']);
@@ -225,7 +215,7 @@ class UserApiController extends ApiController
 
         $this->emailService->sendMessageToUser(
             $userEmail,
-            'Moje-Tabsy.pl – zmiana danych użytkownika',
+            'MediMinder – zmiana danych użytkownika',
             'emails/user_data_change.txt.twig',
             'emails/user_data_change.html.twig',
             [
@@ -255,11 +245,6 @@ class UserApiController extends ApiController
             case 'password':
                 if ($updateValue) {
                     $updatesToShow[] = ['Hasło' => '*********'];
-                }
-                break;
-            case 'telPrefix':
-                if ($updateValue) {
-                    $updatesToShow[] = ['Nr tel' => '+' . $updates->getTelPrefix() . ' ' . $updates->getTel()];
                 }
                 break;
             default:
