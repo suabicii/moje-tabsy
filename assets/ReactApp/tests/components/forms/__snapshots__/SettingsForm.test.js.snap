@@ -30,14 +30,16 @@ exports[`should correctly render SettingsForm 1`] = `
         >
           <input
             className="form-check-input"
-            id="messengerCheck"
+            data-testid="dark-mode-switcher"
+            id="dark-mode-switcher"
             name="messengerCheck"
+            onChange={[Function]}
             role="switch"
             type="checkbox"
           />
           <label
             className="form-check-label"
-            htmlFor="messengerCheck"
+            htmlFor="dark-mode-switcher"
           >
             Wyłączony
           </label>
@@ -48,6 +50,7 @@ exports[`should correctly render SettingsForm 1`] = `
       >
         <button
           className="btn btn-primary"
+          data-testid="settings-submit"
         >
           Zapisz 
           <i
