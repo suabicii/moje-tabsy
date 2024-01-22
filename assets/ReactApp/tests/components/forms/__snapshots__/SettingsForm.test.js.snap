@@ -17,76 +17,31 @@ exports[`should correctly render SettingsForm 1`] = `
       onSubmit={[Function]}
       role="form"
     >
-      <label
-        className="form-label"
-        htmlFor="reminderAmount"
-      >
-        Przypomnij o dawce
-      </label>
       <div
-        className="input-group text-center"
-      >
-        <input
-          className="form-control"
-          data-testid="reminderAmount"
-          defaultValue="1"
-          id="reminderAmount"
-          min="1"
-          name="reminderAmount"
-          onChange={[Function]}
-          required={true}
-          type="number"
-        />
-        <span
-          className="input-group-text"
-        >
-          raz(-y)
-        </span>
-      </div>
-      <RemindTimeInputs
-        amount={1}
-        handleUnitInputChange={[Function]}
-      />
-      <div
-        className="notifier-choice mt-3"
+        className="notifier-choice"
       >
         <label
           className="form-label"
         >
-          Otrzymuj powiadomienia poprzez:
+          Ciemny motyw:
         </label>
         <div
           className="form-check form-switch"
         >
           <input
             className="form-check-input"
-            id="messengerCheck"
+            data-testid="dark-mode-switcher"
+            id="dark-mode-switcher"
             name="messengerCheck"
+            onChange={[Function]}
             role="switch"
             type="checkbox"
           />
           <label
             className="form-check-label"
-            htmlFor="messengerCheck"
+            htmlFor="dark-mode-switcher"
           >
-            Messenger
-          </label>
-        </div>
-        <div
-          className="form-check form-switch"
-        >
-          <input
-            className="form-check-input"
-            id="smsCheck"
-            name="smsCheck"
-            role="switch"
-            type="checkbox"
-          />
-          <label
-            className="form-check-label"
-            htmlFor="smsCheck"
-          >
-            SMS
+            Wyłączony
           </label>
         </div>
       </div>
@@ -95,6 +50,7 @@ exports[`should correctly render SettingsForm 1`] = `
       >
         <button
           className="btn btn-primary"
+          data-testid="settings-submit"
         >
           Zapisz 
           <i

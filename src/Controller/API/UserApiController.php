@@ -200,7 +200,6 @@ class UserApiController extends ApiController
             [AbstractNormalizer::IGNORED_ATTRIBUTES => [
                 'id',
                 'user',
-                'tel',
                 'token',
                 'expiresAt'
             ]]
