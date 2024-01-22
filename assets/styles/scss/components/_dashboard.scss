@@ -1,3 +1,10 @@
+.dashboard[data-bs-theme="dark"] {
+  background: #1c1e1f;
+  h1 {
+    color: $gray-300;
+  }
+}
+
 .dashboard {
   background: #f5f7fb;
 }
