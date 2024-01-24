@@ -1,15 +1,18 @@
 import React, {useEffect} from "react";
 import AppRouter from "../routers/AppRouter";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {fetchDrugs} from "../features/drugs/drugsSlice";
 import {fetchUserData} from "../features/user/userSlice";
+import changeTheme from "../utils/changeTheme";
 
 function MainPage() {
     const dispatch = useDispatch();
+    const darkMode = useSelector(state => state.darkMode);
 
     useEffect(() => {
         dispatch(fetchDrugs());
         dispatch(fetchUserData());
+        changeTheme(darkMode);
     }, []);
 
     return (

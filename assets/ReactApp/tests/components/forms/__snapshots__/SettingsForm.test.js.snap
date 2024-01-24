@@ -1,64 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should correctly render SettingsForm 1`] = `
-<div
-  className="card mt-3"
+<Provider
+  store={
+    Object {
+      "@@observable": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
 >
-  <div
-    className="card-header text-center"
-  >
-    Ustawienia ogólne
-  </div>
-  <div
-    className="card-body"
-  >
-    <form
-      name="settings_form"
-      onSubmit={[Function]}
-      role="form"
-    >
-      <div
-        className="notifier-choice"
-      >
-        <label
-          className="form-label"
-        >
-          Ciemny motyw:
-        </label>
-        <div
-          className="form-check form-switch"
-        >
-          <input
-            className="form-check-input"
-            data-testid="dark-mode-switcher"
-            id="dark-mode-switcher"
-            name="messengerCheck"
-            onChange={[Function]}
-            role="switch"
-            type="checkbox"
-          />
-          <label
-            className="form-check-label"
-            htmlFor="dark-mode-switcher"
-          >
-            Wyłączony
-          </label>
-        </div>
-      </div>
-      <div
-        className="d-grid mt-3"
-      >
-        <button
-          className="btn btn-primary"
-          data-testid="settings-submit"
-        >
-          Zapisz 
-          <i
-            className="fa-solid fa-floppy-disk"
-          />
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
+  <SettingsForm />
+</Provider>
 `;
