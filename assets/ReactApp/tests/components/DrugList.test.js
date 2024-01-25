@@ -78,6 +78,14 @@ it('should hide edit drug form after clicking again edit button', () => {
     expect(screen.queryByRole('form')).toBeFalsy();
 });
 
+it('should show dialog modal for remove drug confirmation after clicking delete button', () => {
+    renderDrugList();
+
+    fireEvent.click(screen.getByTestId('remove-drug-1'));
+
+    expect(screen.queryByRole('dialog')).toBeTruthy();
+});
+
 it('should delete drug from list after clicking delete button', async () => {
     await act(() => {
         renderDrugList();

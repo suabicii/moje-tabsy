@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render DeleteConfirmationModalContent 1`] = `
+<div
+  className="container text-center"
+  data-testid="delete-confirmation"
+  role="dialog"
+>
+  <h2
+    className="text-success"
+  >
+    Czy na pewno chcesz usunąć dany lek/suplement?
+  </h2>
+  <button
+    className="btn btn-danger mt-2"
+    onClick={[Function]}
+  >
+    Tak 
+    <i
+      className="fa-solid fa-check"
+    />
+  </button>
+  <button
+    className="btn btn-danger"
+    onClick={[Function]}
+  >
+    Nie 
+    <i
+      className="fa-solid fa-check"
+    />
+  </button>
+</div>
+`;
