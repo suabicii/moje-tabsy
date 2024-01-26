@@ -6,7 +6,6 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import DrugList from "../../components/DrugList";
 import {BrowserRouter} from "react-router-dom";
 import {fireEvent, render, screen} from "@testing-library/react";
-import {act} from "react-dom/test-utils";
 import {Provider} from "react-redux";
 import drugs from "./fixtures/drugs";
 import {fetchDrugs} from "../../features/drugs/drugsSlice";
