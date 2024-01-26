@@ -16,7 +16,8 @@ function DrugList({isEditMode, isEmpty}) {
     const [isEditFormVisible, setIsEditFormVisible] = useState(false);
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
     const [drugDataForEdit, setDrugDataForEdit] = useState(undefined);
-    const [isDialogOpen, setIsDialogOpen] = useState(true);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [drugIdToDelete, setDrugIdToDelete] = useState(undefined);
 
     const toggleAddFormVisibility = () => {
         if (isAddFormVisible) {
@@ -32,6 +33,12 @@ function DrugList({isEditMode, isEmpty}) {
         } else {
             setIsEditFormVisible(true);
         }
+    };
+
+    const confirmDeletion = async drugId => {
+        dispatch(removeDrug(drugId));
+        await sendOrDeleteData(drugId, null, 'DELETE', 'delete-drug');
+        setDrugIdToDelete(undefined);
     };
 
     useEffect(() => {
@@ -58,9 +65,8 @@ function DrugList({isEditMode, isEmpty}) {
                                     isEditMode &&
                                     <button className="btn btn-danger rounded-circle float-md-end"
                                             data-testid={`remove-drug-${drug.id}`} onClick={async () => {
-                                        /*dispatch(removeDrug(drug.id));
-                                        await sendOrDeleteData(drug.id, null, 'DELETE', 'delete-drug');*/
                                         setIsDialogOpen(true);
+                                        setDrugIdToDelete(drug.id);
                                     }}>
                                         <i className="fa-solid fa-trash-can"></i>
                                     </button>
@@ -118,7 +124,16 @@ function DrugList({isEditMode, isEmpty}) {
                     }
                 </>
             }
-            <Modal modalIsOpen={isDialogOpen} content={<DeleteConfirmationModalContent setIsModalOpen={setIsDialogOpen}/>}/>
+            <Modal
+                modalIsOpen={isDialogOpen}
+                content={
+                    <DeleteConfirmationModalContent
+                        setIsModalOpen={setIsDialogOpen}
+                        confirmDeletion={confirmDeletion}
+                        drugId={drugIdToDelete}
+                    />
+                }
+            />
         </>
     );
 }

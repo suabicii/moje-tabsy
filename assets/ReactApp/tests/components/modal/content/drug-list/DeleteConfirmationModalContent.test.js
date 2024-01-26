@@ -28,6 +28,14 @@ it('should correctly render DeleteConfirmationModalContent', () => {
     expect(renderer.getRenderOutput()).toMatchSnapshot();
 });
 
+it('should confirm drug deletion after clicking "Yes"', () => {
+    render(<WrappedComponent/>);
+
+    fireEvent.click(screen.getByTestId('yes'));
+
+    expect(confirmDeletion).toBeCalled();
+});
+
 it('should close modal after clicking "No"', () => {
     render(<WrappedComponent/>);
 

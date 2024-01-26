@@ -9,6 +9,7 @@ function DeleteConfirmationModalContent({setIsModalOpen, confirmDeletion, drugId
             <h2 className="text-danger-emphasis">Czy na pewno chcesz usunąć dany lek/suplement?</h2>
             <div className="grid mt-4">
                 <button className="btn btn-danger me-lg-2" data-testid="yes" onClick={() => {
+                    confirmDeletion(drugId);
                     setIsModalOpen(false);
                 }}>Tak <i className="fa-solid fa-check"></i>
                 </button>
