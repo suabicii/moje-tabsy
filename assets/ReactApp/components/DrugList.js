@@ -38,7 +38,6 @@ function DrugList({isEditMode, isEmpty}) {
     const confirmDeletion = async drugId => {
         dispatch(removeDrug(drugId));
         await sendOrDeleteData(drugId, null, 'DELETE', 'delete-drug');
-        setDrugIdToDelete(undefined);
     };
 
     useEffect(() => {
@@ -46,6 +45,12 @@ function DrugList({isEditMode, isEmpty}) {
             setIsAddFormVisible(true);
         }
     }, []);
+
+    useEffect(() => {
+        if (!isDialogOpen) {
+            setDrugIdToDelete(undefined);
+        }
+    }, [isDialogOpen]);
 
     return (
         <>
