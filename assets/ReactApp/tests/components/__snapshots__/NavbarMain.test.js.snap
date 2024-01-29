@@ -34,7 +34,7 @@ exports[`should correctly render main navbar 1`] = `
       className="navbar-nav ms-auto d-flex flex-row"
     >
       <li
-        className="nav-item dropdown"
+        className="nav-item dropdown avatar"
       >
         <a
           aria-expanded="false"
@@ -50,7 +50,7 @@ exports[`should correctly render main navbar 1`] = `
         </a>
         <ul
           aria-labelledby="navbarDropdownMenuLink"
-          className="dropdown-menu dropdown-menu-end"
+          className="dropdown-menu dropdown-menu-end position-absolute"
         >
           <li>
             <Link
