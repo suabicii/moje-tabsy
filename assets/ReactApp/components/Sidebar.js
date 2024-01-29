@@ -4,10 +4,10 @@ import {mainRoute} from "../routers/AppRouter";
 
 function Sidebar() {
     return (
-        <nav id="sidebarMenu" className="collapse d-lg-block sidebar collapse bg-white">
+        <nav id="sidebarMenu" className="collapse d-lg-block sidebar bg-white">
             <div className="position-sticky">
                 <div className="list-group list-group-flush mx-3 mt-4">
-                    <NavLink to={mainRoute} className="list-group-item list-group-item-action py-2 ripple" end>
+                    <NavLink to={mainRoute} className="list-group-item list-group-item-action py-2 ripple" end data-bs-target="#sidebarMenu">
                         <i className="fas fa-tachometer-alt fa-fw me-3"></i><span>Strona główna</span>
                     </NavLink>
                     <NavLink to={`${mainRoute}/drug-list`} className="list-group-item list-group-item-action py-2 ripple">
