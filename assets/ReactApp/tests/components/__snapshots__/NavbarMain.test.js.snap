@@ -34,7 +34,7 @@ exports[`should correctly render main navbar 1`] = `
       className="navbar-nav ms-auto d-flex flex-row"
     >
       <li
-        className="nav-item dropdown avatar"
+        className="nav-item dropdown"
       >
         <a
           aria-expanded="false"
