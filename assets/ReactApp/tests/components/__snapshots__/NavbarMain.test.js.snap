@@ -50,7 +50,7 @@ exports[`should correctly render main navbar 1`] = `
         </a>
         <ul
           aria-labelledby="navbarDropdownMenuLink"
-          className="dropdown-menu dropdown-menu-end"
+          className="dropdown-menu dropdown-menu-end position-absolute"
         >
           <li>
             <Link

@@ -6,7 +6,6 @@ import ReactShallowRenderer from "react-test-renderer/shallow";
 import DrugList from "../../components/DrugList";
 import {BrowserRouter} from "react-router-dom";
 import {fireEvent, render, screen} from "@testing-library/react";
-import {act} from "react-dom/test-utils";
 import {Provider} from "react-redux";
 import drugs from "./fixtures/drugs";
 import {fetchDrugs} from "../../features/drugs/drugsSlice";
@@ -78,15 +77,12 @@ it('should hide edit drug form after clicking again edit button', () => {
     expect(screen.queryByRole('form')).toBeFalsy();
 });
 
-it('should delete drug from list after clicking delete button', async () => {
-    await act(() => {
-        renderDrugList();
-    });
+it('should delete drug from list after clicking delete button and then confirmation button', async () => {
+    renderDrugList();
     const drugListLengthBeforeDelete = screen.getAllByTestId('drug').length;
 
-    await act(async () => {
-        fireEvent.click(screen.getByTestId('remove-drug-1'));
-    });
+    fireEvent.click(screen.getByTestId('remove-drug-1'));
+    fireEvent.click(screen.getByTestId('yes'));
     const drugListLengthAfterDelete = screen.getAllByTestId('drug').length;
 
     expect(drugListLengthAfterDelete).toBeLessThan(drugListLengthBeforeDelete);

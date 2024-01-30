@@ -40,7 +40,7 @@ function NavbarMain() {
                             <i className="fa-solid fa-circle-user fs-4"></i>
                         </a>
                         <ul
-                            className="dropdown-menu dropdown-menu-end"
+                            className="dropdown-menu dropdown-menu-end position-absolute"
                             aria-labelledby="navbarDropdownMenuLink"
                         >
                             <li>

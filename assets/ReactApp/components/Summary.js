@@ -7,6 +7,7 @@ import Schedule from "./Schedule";
 
 function Summary() {
     const drugList = useSelector(sortedDrugsSelector);
+    const {name} = useSelector(state => state.user);
 
     const EmptyDrugListInfo = () => <p className="text-center drug-list-empty">Brak leków i suplementów</p>;
 
@@ -14,7 +15,7 @@ function Summary() {
 
     return (
         <>
-            <h1 className="text-center mt-5 mt-md-0">Podsumowanie</h1>
+            <h1 className="text-center mt-5 mt-md-0">Witaj {name}, oto podsumowanie:</h1>
             <DrugList isEditMode={false} isEmpty={!drugList.length}/>
             <div className="row mt-3">
                 <div className="col-md-6">

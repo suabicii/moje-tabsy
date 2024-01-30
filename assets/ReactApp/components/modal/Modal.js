@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from "react";
 import ReactModal from "react-modal";
+import {useSelector} from "react-redux";
 
 function Modal({content, customRoot, modalIsOpen}) {
     const root = customRoot || document.getElementById('react'); // customRoot is for test purposes
+    const darkMode = useSelector(state => state.darkMode);
+    const backgroundColor = darkMode ? '#343A40' : '#FFFFF';
     const [showModal, setShowModal] = useState(false);
     const customStyles = {
         content: {
+            backgroundColor,
+            borderColor: backgroundColor,
             top: '50%',
             left: '50%',
             right: 'auto',

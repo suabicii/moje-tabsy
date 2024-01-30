@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render DeleteConfirmationModalContent 1`] = `
+<Provider
+  store={
+    Object {
+      "@@observable": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <DeleteConfirmationModalContent
+    confirmDeletion={[MockFunction]}
+    drugId={1}
+    setIsModalOpen={[MockFunction]}
+  />
+</Provider>
+`;

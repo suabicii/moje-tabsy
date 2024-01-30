@@ -2,8 +2,9 @@
 
 exports[`should correctly render sidebar 1`] = `
 <nav
-  className="collapse d-lg-block sidebar collapse bg-white"
+  className="collapse d-lg-block sidebar bg-white"
   id="sidebarMenu"
+  role="navigation"
 >
   <div
     className="position-sticky"
@@ -13,7 +14,9 @@ exports[`should correctly render sidebar 1`] = `
     >
       <NavLink
         className="list-group-item list-group-item-action py-2 ripple"
+        data-testid="main-route-link"
         end={true}
+        onClick={[Function]}
         to="/dashboard"
       >
         <i
@@ -25,6 +28,7 @@ exports[`should correctly render sidebar 1`] = `
       </NavLink>
       <NavLink
         className="list-group-item list-group-item-action py-2 ripple"
+        onClick={[Function]}
         to="/dashboard/drug-list"
       >
         <i
@@ -36,6 +40,7 @@ exports[`should correctly render sidebar 1`] = `
       </NavLink>
       <NavLink
         className="list-group-item list-group-item-action py-2 ripple"
+        onClick={[Function]}
         to="/dashboard/profile"
       >
         <i
@@ -47,6 +52,7 @@ exports[`should correctly render sidebar 1`] = `
       </NavLink>
       <NavLink
         className="list-group-item list-group-item-action py-2 ripple"
+        onClick={[Function]}
         to="/dashboard/settings"
       >
         <i
