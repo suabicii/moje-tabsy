@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import DrugList from "./DrugList";
 import StockStatusChecker from "./StockStatusChecker";
 import {useSelector} from "react-redux";
@@ -12,6 +12,14 @@ function Summary() {
     const EmptyDrugListInfo = () => <p className="text-center drug-list-empty">Brak leków i suplementów</p>;
 
     const cardBodyClasses = `card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`;
+
+    const getQrCode = async () => (await fetch('/qr-code', {})).text();
+
+    useEffect(() => {
+        getQrCode()
+            .then(res => document.querySelector("#qr-placement").innerHTML = res)
+            .catch(err => console.log(err));
+    }, []);
 
     return (
         <>
@@ -36,6 +44,16 @@ function Summary() {
                         <div className={cardBodyClasses}>
                             {drugList.length > 0 ? <StockStatusChecker/> : <EmptyDrugListInfo/>}
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row mt-3">
+                <div className="col">
+                    <div className="card">
+                        <div className="card-header text-center">
+                            Zaloguj się do aplikacji mobilnej <i className="fa-solid fa-mobile"></i>
+                        </div>
+                        <div id="qr-placement" className="card-body d-flex justify-content-center"></div>
                     </div>
                 </div>
             </div>

@@ -4,10 +4,26 @@
 import React from "react";
 import ReactShallowRenderer from "react-test-renderer/shallow";
 import Summary from "../../components/Summary";
-import {render} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "../../store";
+import exampleQrCodeSrc from "./fixtures/exampleQrCodeSrc";
+
+function WrappedComponent() {
+    return (
+        <Provider store={store}>
+            <BrowserRouter>
+                <Summary/>
+            </BrowserRouter>
+        </Provider>
+    );
+}
+
+afterAll(() => {
+    global.fetch.mockClear();
+    delete global.fetch;
+});
 
 it('should correctly render summary', () => {
     const renderer = new ReactShallowRenderer();
@@ -21,15 +37,31 @@ it('should correctly render summary', () => {
 });
 
 it('should display information about empty drug list in schedule, stock status checker and out of stock dates area', () => {
-    const {container} = render(
-        <Provider store={store}>
-            <BrowserRouter>
-                <Summary/>
-            </BrowserRouter>
-        </Provider>
-    );
+    const {container} = render(<WrappedComponent/>);
 
     const emptyInfo = container.querySelectorAll('.drug-list-empty');
 
     expect(emptyInfo.length).toBeGreaterThan(0);
+});
+
+it('should get QR code', async () => {
+    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+        text: () => Promise.resolve(`<img id="qr-code" src="${exampleQrCodeSrc}" alt="qr code">`)
+    }));
+    const {container} = render(<WrappedComponent/>);
+
+    await waitFor(() => {
+        const qrCode = container.querySelector('#qr-code');
+        expect(qrCode).toBeTruthy();
+    });
+});
+
+it('should get error if fetching QR code failed', async () => {
+    jest.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Cannot fetch QR code'));
+    const {container} = render(<WrappedComponent/>);
+
+    await waitFor(() => {
+        const qrCode = container.querySelector('#qr-code');
+        expect(qrCode).toBeFalsy();
+    });
 });
