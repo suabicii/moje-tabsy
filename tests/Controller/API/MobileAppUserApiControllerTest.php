@@ -4,12 +4,12 @@ namespace App\Tests\Controller\API;
 
 use App\Entity\MobileAppUser;
 use App\Entity\User;
-use App\Tests\ApiControllerTestTrait;
+use App\Tests\ControllerTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MobileAppUserApiControllerTest extends WebTestCase
 {
-    use ApiControllerTestTrait;
+    use ControllerTestTrait;
 
     public function testLoginInMobileApp(): void
     {

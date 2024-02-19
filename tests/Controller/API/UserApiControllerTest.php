@@ -3,12 +3,12 @@
 namespace App\Tests\Controller\API;
 
 use App\Entity\UserDataUpdates;
-use App\Tests\ApiControllerTestTrait;
+use App\Tests\ControllerTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserApiControllerTest extends WebTestCase
 {
-    use ApiControllerTestTrait;
+    use ControllerTestTrait;
 
     public function testGetLoggedUserDataFromApi(): void
     {

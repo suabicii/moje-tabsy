@@ -4,7 +4,7 @@ namespace App\Tests\Controller\API;
 
 use App\Entity\Drug;
 use App\Entity\User;
-use App\Tests\ApiControllerTestTrait;
+use App\Tests\ControllerTestTrait;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class DrugApiControllerTest extends WebTestCase
 {
-    use ApiControllerTestTrait;
+    use ControllerTestTrait;
 
     public function testGetDrugListRelatedToLoggedUser(): void
     {
