@@ -312,4 +312,30 @@ class MobileAppUserApiControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(405);
         $this->assertEquals(['error' => 'Method not allowed'], $responseData);
     }
+
+    public function testLoginInMobileAppByQrCode(): void
+    {
+        $token = '123abc321xyz';
+        $userId = 'john@doe.com';
+        $this->client->request(
+            'POST',
+            "/api/login-qr?token={$token}&userId={$userId}",
+            [],
+            [],
+            ['HTTPS' => true]
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(
+            [
+                'status' => 200,
+                'user_id' => $userId,
+                'token' => $token
+            ],
+            $responseData
+        );
+    }
 }

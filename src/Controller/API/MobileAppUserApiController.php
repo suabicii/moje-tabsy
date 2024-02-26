@@ -99,6 +99,18 @@ class MobileAppUserApiController extends ApiController
         }
     }
 
+    #[Rest('/login-qr', name: 'login_in_mobile_app_qr', methods: ['POST'], schemes: ['https'])]
+    public function loginInMobileAppByQrCode(Request $request): JsonResponse
+    {
+        $token = $request->query->get('token');
+        $userId = $request->query->get('userId');
+
+        return $this->json([
+            'status' => 200,
+            'user_id' => $userId,
+            'token' => $token
+        ]);
+    }
 
     /**
      * @param User $user
