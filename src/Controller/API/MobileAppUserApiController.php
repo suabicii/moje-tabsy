@@ -3,6 +3,7 @@
 namespace App\Controller\API;
 
 use App\Entity\MobileAppUser;
+use App\Entity\QrLoginToken;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -103,13 +104,21 @@ class MobileAppUserApiController extends ApiController
     public function loginInMobileAppByQrCode(Request $request): JsonResponse
     {
         $token = $request->query->get('token');
-        $userId = $request->query->get('userId');
+        $requestedUserId = $request->query->get('userId');
+        $userId = $this->getUser()->getUserIdentifier();
+        $savedToken = $this->doctrine->getRepository(QrLoginToken::class)->findOneBy(['token' => $token]);
 
-        return $this->json([
-            'status' => 200,
-            'user_id' => $userId,
-            'token' => $token
-        ]);
+        if ($userId && $savedToken) {
+            $savedTokenContent = $savedToken->getToken();
+            if ($userId === $requestedUserId && $savedTokenContent === $token) {
+                return $this->json([
+                    'status' => 200,
+                    'user_id' => $userId
+                ]);
+            }
+        }
+
+        return $this->json(['error' => 'Incorrect token or user id'], 400);
     }
 
     /**

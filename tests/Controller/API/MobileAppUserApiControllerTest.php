@@ -317,9 +317,11 @@ class MobileAppUserApiControllerTest extends WebTestCase
     {
         $token = '123abc321xyz';
         $userId = 'john@doe.com';
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userId]);
+        $this->client->loginUser($user);
         $this->client->request(
             'POST',
-            "/api/login-qr?token={$token}&userId={$userId}",
+            "/api/login-qr?token=$token&userId=$userId",
             [],
             [],
             ['HTTPS' => true]
@@ -332,10 +334,28 @@ class MobileAppUserApiControllerTest extends WebTestCase
         $this->assertEquals(
             [
                 'status' => 200,
-                'user_id' => $userId,
-                'token' => $token
+                'user_id' => $userId
             ],
             $responseData
         );
+    }
+
+    public function testGetQrLoginErrorWhenUserIdAndTokenAreIncorrect(): void
+    {
+        $token = 'incorrect_token';
+        $userId = 'incorrect@email.com';
+        $this->client->request(
+            'POST',
+            "/api/login-qr?token=$token&userId=$userId",
+            [],
+            [],
+            ['HTTPS' => true]
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertEquals(['error' => 'Incorrect token or user id'], $responseData);
     }
 }
