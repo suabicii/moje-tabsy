@@ -317,8 +317,6 @@ class MobileAppUserApiControllerTest extends WebTestCase
     {
         $token = '123abc321xyz';
         $userId = 'john@doe.com';
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userId]);
-        $this->client->loginUser($user);
         $this->client->request(
             'POST',
             "/api/login-qr?token=$token&userId=$userId",
@@ -344,8 +342,6 @@ class MobileAppUserApiControllerTest extends WebTestCase
     {
         $token = '123abc321xyz';
         $userId = 'john@doe.com';
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userId]);
-        $this->client->loginUser($user);
         $this->client->request(
             'POST',
             "/api/login-qr?token=$token&userId=$userId",

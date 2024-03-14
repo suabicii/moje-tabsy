@@ -100,13 +100,13 @@ class MobileAppUserApiController extends ApiController
     {
         $token = $request->query->get('token');
         $requestedUserId = $request->query->get('userId');
-        $userId = $this->getUser()->getUserIdentifier();
         $savedToken = $this->doctrine->getRepository(QrLoginToken::class)->findOneBy(['token' => $token]);
 
-        if ($userId && $savedToken) {
+        if ($savedToken) {
+            $userId = $savedToken->getUser()->getEmail();
             $savedTokenContent = $savedToken->getToken();
             if ($userId === $requestedUserId && $savedTokenContent === $token) {
-                $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $userId]);
+                $user = $savedToken->getUser();
                 $this->removeFromDbMobileAppUserLoggedEarlier($user);
 
                 $this->saveMobileAppUserAppInDb($user, $token);
