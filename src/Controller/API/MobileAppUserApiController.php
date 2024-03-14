@@ -31,14 +31,9 @@ class MobileAppUserApiController extends ApiController
                 }
             }
 
-            $mobileAppUserLoggedEarlier = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
-                'user' => $user
-            ]);
-            if ($mobileAppUserLoggedEarlier) {
-                $this->removeFromDbMobileAppUser($mobileAppUserLoggedEarlier);
-            }
+            $this->removeFromDbMobileAppUserLoggedEarlier($user);
 
-            $this->saveMobileUserAppInDb($user, $content['token']);
+            $this->saveMobileAppUserAppInDb($user, $content['token']);
 
             return $this->json([
                 'status' => 200,
@@ -111,6 +106,11 @@ class MobileAppUserApiController extends ApiController
         if ($userId && $savedToken) {
             $savedTokenContent = $savedToken->getToken();
             if ($userId === $requestedUserId && $savedTokenContent === $token) {
+                $user = $this->doctrine->getRepository(User::class)->findOneBy(['email' => $userId]);
+                $this->removeFromDbMobileAppUserLoggedEarlier($user);
+
+                $this->saveMobileAppUserAppInDb($user, $token);
+
                 return $this->json([
                     'status' => 200,
                     'user_id' => $userId
@@ -154,7 +154,7 @@ class MobileAppUserApiController extends ApiController
      * @param string $token
      * @return void
      */
-    private function saveMobileUserAppInDb(User $user, string $token): void
+    private function saveMobileAppUserAppInDb(User $user, string $token): void
     {
         $mobileAppUser = new MobileAppUser();
         $mobileAppUser->setUser($user);
@@ -190,5 +190,19 @@ class MobileAppUserApiController extends ApiController
         $entityManager = $this->doctrine->getManager();
         $entityManager->remove($mobileAppUser);
         $entityManager->flush();
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    private function removeFromDbMobileAppUserLoggedEarlier(User $user): void
+    {
+        $mobileAppUserLoggedEarlier = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+            'user' => $user
+        ]);
+        if ($mobileAppUserLoggedEarlier) {
+            $this->removeFromDbMobileAppUser($mobileAppUserLoggedEarlier);
+        }
     }
 }

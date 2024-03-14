@@ -340,6 +340,26 @@ class MobileAppUserApiControllerTest extends WebTestCase
         );
     }
 
+    public function testSaveUserLoggedByQrCodeInDatabase(): void
+    {
+        $token = '123abc321xyz';
+        $userId = 'john@doe.com';
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $userId]);
+        $this->client->loginUser($user);
+        $this->client->request(
+            'POST',
+            "/api/login-qr?token=$token&userId=$userId",
+            [],
+            [],
+            ['HTTPS' => true]
+        );
+
+        $mobileAppUser = $this->entityManager->getRepository(MobileAppUser::class)->findOneBy(['token' => $token]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertNotNull($mobileAppUser);
+    }
+
     public function testGetQrLoginErrorWhenUserIdAndTokenAreIncorrect(): void
     {
         $token = 'incorrect_token';
