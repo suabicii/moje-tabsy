@@ -24,6 +24,10 @@ class QrCodeGeneratorController extends AbstractController
             $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $userId]);
             $token = $tokenGenerator->generateToken();
 
+            $prevToken = $doctrine->getRepository(QrLoginToken::class)->findOneBy(['user' => $user]);
+            if ($prevToken) {
+                $this->removeFromDbPreviouslyCreatedToken($doctrine, $prevToken);
+            }
             $this->saveQrLoginTokenInDb($token, $user, $doctrine);
 
             $url = $urlGenerator->generate(
@@ -52,11 +56,23 @@ class QrCodeGeneratorController extends AbstractController
      */
     private function saveQrLoginTokenInDb(string $token, User $user, ManagerRegistry $doctrine): void
     {
+        $entityManager = $doctrine->getManager();
         $qrLoginToken = new QrLoginToken();
         $qrLoginToken->setToken($token);
         $qrLoginToken->setUser($user);
-        $entityManager = $doctrine->getManager();
         $entityManager->persist($qrLoginToken);
+        $entityManager->flush();
+    }
+
+    /**
+     * @param ManagerRegistry $doctrine
+     * @param QrLoginToken $prevToken
+     * @return void
+     */
+    public function removeFromDbPreviouslyCreatedToken(ManagerRegistry $doctrine, QrLoginToken $prevToken): void
+    {
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($prevToken);
         $entityManager->flush();
     }
 }
