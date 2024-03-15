@@ -34,17 +34,27 @@ class QrCodeGeneratorControllerTest extends WebTestCase
     public function testRemovePreviouslySavedTokenAndCreateNew(): void
     {
         $tokenContent = '043rehj89fwy';
-        $prevToken = new QrLoginToken();
-        $prevToken->setToken('043rehj89fwy');
-        $prevToken->setUser($this->user);
-        $this->entityManager->persist($prevToken);
-        $this->entityManager->flush();
+        $this->createQrLoginTokenAndSaveInDb($tokenContent);
 
         $crawler = $this->client->request('GET', '/qr-code');
-
         $tokenAfterDeletion = $this->entityManager->getRepository(QrLoginToken::class)->findOneBy(['token' => $tokenContent]);
 
         $this->assertStringContainsString('img', $crawler->html());
         $this->assertNull($tokenAfterDeletion);
+    }
+
+    /**
+     * @param string $tokenContent
+     * @return void
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    private function createQrLoginTokenAndSaveInDb(string $tokenContent): void
+    {
+        $prevToken = new QrLoginToken();
+        $prevToken->setToken($tokenContent);
+        $prevToken->setUser($this->user);
+        $this->entityManager->persist($prevToken);
+        $this->entityManager->flush();
     }
 }
