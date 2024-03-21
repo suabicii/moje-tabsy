@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  * */
 import React from "react";
-import ReactShallowRenderer from "react-test-renderer/shallow";
 import renderer from 'react-test-renderer';
 import {Provider} from "react-redux";
 import store from "../../../../../store";
