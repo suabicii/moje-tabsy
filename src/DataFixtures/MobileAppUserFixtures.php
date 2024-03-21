@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class MobileAppUserFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $mobileAppUser = new MobileAppUser();
         $user = $manager->getRepository(User::class)->findOneBy(['email' => 'dummy@email3.com']);
