@@ -63,7 +63,15 @@ function Summary() {
                     </div>
                 </div>
             </div>
-            <Modal modalIsOpen={isModalOpen} content={<QrCodeModalContent setIsModalOpen={setIsModalOpen}/>}/>
+            <Modal
+                isOpen={isModalOpen}
+                content={
+                    <QrCodeModalContent
+                        isQrCodeRequested={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                    />
+                }
+            />
         </>
     );
 }

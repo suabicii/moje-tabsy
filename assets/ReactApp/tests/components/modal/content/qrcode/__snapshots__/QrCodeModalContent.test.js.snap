@@ -11,17 +11,15 @@ exports[`should correctly render QrCodeModalContent 1`] = `
   >
     Zeskanuj poniższy kod QR w aplikacji 
     <strong>
-      Mediminder Alerts 
+      MediMinder Alerts 
       <i
         className="fa-solid fa-qrcode"
       />
     </strong>
   </h2>
-  <p
-    className="lead"
-  >
-    Miejsce na kod QR
-  </p>
+  <div
+    id="qr-placement"
+  />
   <button
     className="btn btn-dark"
     data-testid="btn-close-modal"

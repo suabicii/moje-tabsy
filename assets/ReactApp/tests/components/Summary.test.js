@@ -44,18 +44,6 @@ it('should display information about empty drug list in schedule, stock status c
     expect(emptyInfo.length).toBeGreaterThan(0);
 });
 
-it('should get QR code', async () => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
-        text: () => Promise.resolve(`<img id="qr-code" src="${exampleQrCodeSrc}" alt="qr code">`)
-    }));
-    const {container} = render(<WrappedComponent/>);
-
-    await waitFor(() => {
-        const qrCode = container.querySelector('#qr-code');
-        expect(qrCode).toBeTruthy();
-    });
-});
-
 it('should get error if fetching QR code failed', async () => {
     jest.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Cannot fetch QR code'));
     const {container} = render(<WrappedComponent/>);
