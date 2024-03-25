@@ -16,14 +16,6 @@ function Summary() {
 
     const cardBodyClasses = `card-body ${drugList.length < 1 ? 'd-flex flex-column justify-content-center' : ''}`;
 
-    const getQrCode = async () => (await fetch('/qr-code', {})).text();
-
-    useEffect(() => {
-        /*getQrCode()
-            .then(res => document.querySelector("#qr-placement").innerHTML = res)
-            .catch(err => console.log(err));*/
-    }, []);
-
     return (
         <>
             <h1 className="text-center mt-5 mt-md-0">Witaj {name}, oto podsumowanie:</h1>
