@@ -9,7 +9,7 @@ it('should correctly render opened modal with some content', () => {
     renderer.render(
         <Provider store={store}>
             <Modal
-                modalIsOpen={true}
+                isOpen={true}
                 content={<p>Some content</p>}
                 customRoot={<div className="custom-root"></div>}
             />

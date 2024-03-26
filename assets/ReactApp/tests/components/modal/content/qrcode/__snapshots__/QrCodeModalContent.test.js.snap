@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly render QrCodeModalContent 1`] = `
+<div
+  className="container text-center"
+  data-testid="qr-code-modal"
+  role="dialog"
+>
+  <h2
+    className="text-dark-emphasis"
+  >
+    Zeskanuj poniższy kod QR w aplikacji 
+    <strong>
+      MediMinder Alerts 
+      <i
+        className="fa-solid fa-qrcode"
+      />
+    </strong>
+  </h2>
+  <div
+    id="qr-placement"
+  />
+  <button
+    className="btn btn-dark"
+    data-testid="btn-close-modal"
+    onClick={[Function]}
+  >
+    Zamknij 
+    <i
+      className="fa-solid fa-close"
+    />
+  </button>
+</div>
+`;

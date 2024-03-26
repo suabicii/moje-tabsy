@@ -4,12 +4,12 @@ namespace App\Tests\Controller\API;
 
 use App\Entity\MobileAppUser;
 use App\Entity\User;
-use App\Tests\ApiControllerTestTrait;
+use App\Tests\ControllerTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MobileAppUserApiControllerTest extends WebTestCase
 {
-    use ApiControllerTestTrait;
+    use ControllerTestTrait;
 
     public function testLoginInMobileApp(): void
     {
@@ -311,5 +311,67 @@ class MobileAppUserApiControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(405);
         $this->assertEquals(['error' => 'Method not allowed'], $responseData);
+    }
+
+    public function testLoginInMobileAppByQrCode(): void
+    {
+        $token = '123abc321xyz';
+        $userId = 'john@doe.com';
+        $this->client->request(
+            'POST',
+            "/api/login-qr?token=$token&userId=$userId",
+            [],
+            [],
+            ['HTTPS' => true]
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertEquals(
+            [
+                'status' => 200,
+                'user_id' => $userId
+            ],
+            $responseData
+        );
+    }
+
+    public function testSaveUserLoggedByQrCodeInDatabase(): void
+    {
+        $token = '123abc321xyz';
+        $userId = 'john@doe.com';
+        $this->client->request(
+            'POST',
+            "/api/login-qr?token=$token&userId=$userId",
+            [],
+            [],
+            ['HTTPS' => true]
+        );
+
+        $mobileAppUser = $this->entityManager->getRepository(MobileAppUser::class)->findOneBy(['token' => $token]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertNotNull($mobileAppUser);
+    }
+
+    public function testGetQrLoginErrorWhenUserIdAndTokenAreIncorrect(): void
+    {
+        $token = 'incorrect_token';
+        $userId = 'incorrect@email.com';
+        $this->client->request(
+            'POST',
+            "/api/login-qr?token=$token&userId=$userId",
+            [],
+            [],
+            ['HTTPS' => true]
+        );
+
+        $response = $this->client->getResponse();
+        $responseData = json_decode($response->getContent(), true);
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertEquals(['error' => 'Incorrect token or user id'], $responseData);
     }
 }

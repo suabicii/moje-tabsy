@@ -3,6 +3,7 @@
 namespace App\Controller\API;
 
 use App\Entity\MobileAppUser;
+use App\Entity\QrLoginToken;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations\Route as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,14 +31,9 @@ class MobileAppUserApiController extends ApiController
                 }
             }
 
-            $mobileAppUserLoggedEarlier = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
-                'user' => $user
-            ]);
-            if ($mobileAppUserLoggedEarlier) {
-                $this->removeFromDbMobileAppUser($mobileAppUserLoggedEarlier);
-            }
+            $this->removeFromDbMobileAppUserLoggedEarlier($user);
 
-            $this->saveMobileUserAppInDb($user, $content['token']);
+            $this->saveMobileAppUserAppInDb($user, $content['token']);
 
             return $this->json([
                 'status' => 200,
@@ -99,6 +95,31 @@ class MobileAppUserApiController extends ApiController
         }
     }
 
+    #[Rest('/login-qr', name: 'login_in_mobile_app_qr', methods: ['POST'], schemes: ['https'])]
+    public function loginInMobileAppByQrCode(Request $request): JsonResponse
+    {
+        $token = $request->query->get('token');
+        $requestedUserId = $request->query->get('userId');
+        $savedToken = $this->doctrine->getRepository(QrLoginToken::class)->findOneBy(['token' => $token]);
+
+        if ($savedToken) {
+            $userId = $savedToken->getUser()->getEmail();
+            $savedTokenContent = $savedToken->getToken();
+            if ($userId === $requestedUserId && $savedTokenContent === $token) {
+                $user = $savedToken->getUser();
+                $this->removeFromDbMobileAppUserLoggedEarlier($user);
+
+                $this->saveMobileAppUserAppInDb($user, $token);
+
+                return $this->json([
+                    'status' => 200,
+                    'user_id' => $userId
+                ]);
+            }
+        }
+
+        return $this->json(['error' => 'Incorrect token or user id'], 400);
+    }
 
     /**
      * @param User $user
@@ -133,7 +154,7 @@ class MobileAppUserApiController extends ApiController
      * @param string $token
      * @return void
      */
-    private function saveMobileUserAppInDb(User $user, string $token): void
+    private function saveMobileAppUserAppInDb(User $user, string $token): void
     {
         $mobileAppUser = new MobileAppUser();
         $mobileAppUser->setUser($user);
@@ -169,5 +190,19 @@ class MobileAppUserApiController extends ApiController
         $entityManager = $this->doctrine->getManager();
         $entityManager->remove($mobileAppUser);
         $entityManager->flush();
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    private function removeFromDbMobileAppUserLoggedEarlier(User $user): void
+    {
+        $mobileAppUserLoggedEarlier = $this->doctrine->getRepository(MobileAppUser::class)->findOneBy([
+            'user' => $user
+        ]);
+        if ($mobileAppUserLoggedEarlier) {
+            $this->removeFromDbMobileAppUser($mobileAppUserLoggedEarlier);
+        }
     }
 }

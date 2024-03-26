@@ -86,8 +86,8 @@ function ProfileForm() {
             </div>
             {
                 postRequestStatus === 'OK' ?
-                    <Modal modalIsOpen={isModalOpen} content={<StatusOkModalContent setIsModalOpen={setIsModalOpen}/>}/> :
-                    <Modal modalIsOpen={isModalOpen} content={<StatusFailModalContent setIsModalOpen={setIsModalOpen}/>}/>
+                    <Modal isOpen={isModalOpen} content={<StatusOkModalContent setIsModalOpen={setIsModalOpen}/>}/> :
+                    <Modal isOpen={isModalOpen} content={<StatusFailModalContent setIsModalOpen={setIsModalOpen}/>}/>
             }
         </>
     );

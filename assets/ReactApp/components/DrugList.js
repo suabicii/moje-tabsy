@@ -130,7 +130,7 @@ function DrugList({isEditMode, isEmpty}) {
                 </>
             }
             <Modal
-                modalIsOpen={isDialogOpen}
+                isOpen={isDialogOpen}
                 content={
                     <DeleteConfirmationModalContent
                         setIsModalOpen={setIsDialogOpen}

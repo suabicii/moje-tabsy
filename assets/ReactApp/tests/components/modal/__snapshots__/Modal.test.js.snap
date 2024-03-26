@@ -37,7 +37,7 @@ exports[`should correctly render opened modal with some content 1`] = `
         className="custom-root"
       />
     }
-    modalIsOpen={true}
+    isOpen={true}
   />
 </Context.Provider>
 `;

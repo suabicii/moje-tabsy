@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import ReactModal from "react-modal";
 import {useSelector} from "react-redux";
 
-function Modal({content, customRoot, modalIsOpen}) {
+function Modal({content, customRoot, isOpen}) {
     const root = customRoot || document.getElementById('react'); // customRoot is for test purposes
     const darkMode = useSelector(state => state.darkMode);
     const backgroundColor = darkMode ? '#343A40' : '#FFFFF';
@@ -21,7 +21,7 @@ function Modal({content, customRoot, modalIsOpen}) {
     };
 
     useEffect(() => {
-        setShowModal(modalIsOpen);
+        setShowModal(isOpen);
     });
 
     ReactModal.defaultStyles.overlay.backgroundColor = 'rgba(0, 0, 0, 0.4)';
