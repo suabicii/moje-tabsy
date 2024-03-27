@@ -22,11 +22,11 @@ function WrappedComponent() {
 }
 
 const changeTheme = require('../../utils/changeTheme');
-let changeThemeMock;
+let changeThemeSpy;
 
 
-beforeEach(() => {
-    changeThemeMock = jest.spyOn(changeTheme, 'default');
+beforeAll(() => {
+    changeThemeSpy = jest.spyOn(changeTheme, 'default');
 });
 
 afterAll(() => {
@@ -47,7 +47,7 @@ it('should correctly render main navbar', () => {
 it('should change theme to light', () => {
     render(<WrappedComponent/>);
 
-    expect(changeThemeMock).toHaveBeenLastCalledWith(false);
+    expect(changeThemeSpy).toHaveBeenLastCalledWith(false);
 });
 
 it('should change theme to dark after clicking toggler', () => {
@@ -55,5 +55,5 @@ it('should change theme to dark after clicking toggler', () => {
 
     fireEvent.click(screen.getByTestId('dark-theme-toggle'));
 
-    expect(changeThemeMock).toBeCalledWith(true);
+    expect(changeThemeSpy).toBeCalledWith(true);
 });
