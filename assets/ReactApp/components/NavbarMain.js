@@ -44,7 +44,7 @@ function NavbarMain() {
                 {/* Right links */}
                 <ul className="navbar-nav ms-auto d-flex flex-row">
                     {/* Dark theme toggler */}
-                    <li className="nav-item">
+                    <li className="nav-item me-2 me-lg-0">
                         <button
                             className="btn btn-link nav-link"
                             type="button"
