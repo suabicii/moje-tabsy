@@ -46,7 +46,7 @@ function NavbarMain() {
                     {/* Dark theme toggler */}
                     <li className="nav-item me-2 me-lg-0">
                         <button
-                            className="btn btn-link nav-link"
+                            className="btn nav-link"
                             type="button"
                             data-testid="dark-theme-toggle"
                             onClick={() => dispatch(setDarkMode(!darkMode))}
