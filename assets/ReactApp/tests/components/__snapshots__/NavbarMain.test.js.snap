@@ -1,84 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should correctly render main navbar 1`] = `
-<nav
-  className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top"
-  id="main-navbar"
+<Context.Provider
+  value={
+    Object {
+      "getServerState": undefined,
+      "noopCheck": "once",
+      "stabilityCheck": "once",
+      "store": Object {
+        "@@observable": [Function],
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      },
+      "subscription": Object {
+        "addNestedSub": [Function],
+        "getListeners": [Function],
+        "handleChangeWrapper": [Function],
+        "isSubscribed": [Function],
+        "notifyNestedSubs": [Function],
+        "trySubscribe": [Function],
+        "tryUnsubscribe": [Function],
+      },
+    }
+  }
 >
-  <div
-    className="container-fluid"
-  >
-    <button
-      aria-controls="sidebarMenu"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-bs-target="#sidebarMenu"
-      data-bs-toggle="collapse"
-      type="button"
-    >
-      <i
-        className="fas fa-bars"
-      />
-    </button>
-    <a
-      className="navbar-brand fst-italic d-none d-lg-block"
-      href="#"
-    >
-      MediMinder 
-      <i
-        className="fa-solid fa-pills"
-      />
-    </a>
-    <ul
-      className="navbar-nav ms-auto d-flex flex-row"
-    >
-      <li
-        className="nav-item dropdown"
-      >
-        <a
-          aria-expanded="false"
-          className="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
-          data-bs-toggle="dropdown"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-        >
-          <i
-            className="fa-solid fa-circle-user fs-4"
-          />
-        </a>
-        <ul
-          aria-labelledby="navbarDropdownMenuLink"
-          className="dropdown-menu dropdown-menu-end position-absolute"
-        >
-          <li>
-            <Link
-              className="dropdown-item"
-              to="/dashboard/profile"
-            >
-              Mój profil
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="dropdown-item"
-              to="/dashboard/settings"
-            >
-              Ustawienia
-            </Link>
-          </li>
-          <li>
-            <a
-              className="dropdown-item"
-              href="/logout"
-            >
-              Wyloguj się
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-</nav>
+  <NavbarMain />
+</Context.Provider>
 `;

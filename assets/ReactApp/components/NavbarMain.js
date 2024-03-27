@@ -1,14 +1,30 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {mainRoute} from "../routers/AppRouter";
+import {useDispatch, useSelector} from "react-redux";
+import {setDarkMode} from "../features/darkMode/darkModeSlice";
+import changeTheme from "../utils/changeTheme";
 
 function NavbarMain() {
+    const darkMode = useSelector(state => state.darkMode);
+    const dispatch = useDispatch();
+    const [darkModeTogglerIcon, setDarkModeTogglerIcon] = useState('');
+
+    useEffect(() => {
+        if (darkMode) {
+            setDarkModeTogglerIcon('fa-solid fa-moon');
+        } else {
+            setDarkModeTogglerIcon('fa-regular fa-sun');
+        }
+        localStorage.setItem('darkMode', `${darkMode}`);
+        changeTheme(darkMode);
+    }, [darkMode]);
+
     return (
-        //Navbar -->
         <nav id="main-navbar" className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-            {/*Container wrapper*/}
+            {/* Container wrapper */}
             <div className="container-fluid">
-                {/*// Toggle button -->*/}
+                {/* Toggle button */}
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -21,13 +37,24 @@ function NavbarMain() {
                     <i className="fas fa-bars"></i>
                 </button>
 
-                {/*// Brand -->*/}
+                {/* Brand */}
                 <a className="navbar-brand fst-italic d-none d-lg-block" href="#">MediMinder <i
                     className="fa-solid fa-pills"></i></a>
 
-                {/*// Right links -->*/}
+                {/* Right links */}
                 <ul className="navbar-nav ms-auto d-flex flex-row">
-                    {/*// Avatar -->*/}
+                    {/* Dark theme toggler */}
+                    <li className="nav-item me-2 me-lg-0">
+                        <button
+                            className="btn nav-link"
+                            type="button"
+                            data-testid="dark-theme-toggle"
+                            onClick={() => dispatch(setDarkMode(!darkMode))}
+                        >
+                            <i className={`${darkModeTogglerIcon} fs-4`}></i>
+                        </button>
+                    </li>
+                    {/* Avatar */}
                     <li className="nav-item dropdown">
                         <a
                             className="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
@@ -56,9 +83,8 @@ function NavbarMain() {
                     </li>
                 </ul>
             </div>
-            {/*// Container wrapper -->*/}
+            {/* Container wrapper */}
         </nav>
-        //Navbar -->
     );
 }
 
