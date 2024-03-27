@@ -18,6 +18,7 @@ exports[`should correctly render QrCodeModalContent 1`] = `
     </strong>
   </h2>
   <div
+    className="mb-2"
     id="qr-placement"
   />
   <button
